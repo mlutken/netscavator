@@ -1,9 +1,9 @@
 #!/bin/bash
 
-CRAWLER_REPOSITORY_ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-CODE_ROOT_DIR="$( dirname "${CRAWLER_REPOSITORY_ROOT_DIR}" )"
+NETSCAVATOR_REPOSITORY_ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CODE_ROOT_DIR="$( dirname "${NETSCAVATOR_REPOSITORY_ROOT_DIR}" )"
 CODE_BUILD_ROOT_DIR="${CODE_ROOT_DIR}/_build"
-CRAWLER_BUILD_ROOT_DIR="${CODE_BUILD_ROOT_DIR}/crawler"
+NETSCAVATOR_BUILD_ROOT_DIR="${CODE_BUILD_ROOT_DIR}/netscavator"
 
 
 REBUILD="n"
@@ -36,10 +36,10 @@ export DISTRIB
 # echo "DISTRIB_ID                    : '${DISTRIB_ID}'"
 # echo "DISTRIB_RELEASE               : '${DISTRIB_RELEASE}'"
 # echo "DISTRIB                       : '${DISTRIB}'"
-# echo "CRAWLER_REPOSITORY_ROOT_DIR   : '${CRAWLER_REPOSITORY_ROOT_DIR}'"
+# echo "NETSCAVATOR_REPOSITORY_ROOT_DIR   : '${NETSCAVATOR_REPOSITORY_ROOT_DIR}'"
 # echo "CODE_ROOT_DIR                 : '${CODE_ROOT_DIR}'"
 # echo "CODE_BUILD_ROOT_DIR           : '${CODE_BUILD_ROOT_DIR}'"
-# echo "CRAWLER_BUILD_ROOT_DIR        : '${CRAWLER_BUILD_ROOT_DIR}'"
+# echo "NETSCAVATOR_BUILD_ROOT_DIR        : '${NETSCAVATOR_BUILD_ROOT_DIR}'"
 
 # -------------------------------------
 # --- Parse command line parameters ---
@@ -84,21 +84,21 @@ done
 if [ "y" == "${REBUILD}" ]
 then
     echo "Rebuilding..."
-    rm -rf ${CRAWLER_BUILD_ROOT_DIR}
-#     mkdir -p ${CRAWLER_BUILD_ROOT_DIR}
-#     pushd ${CRAWLER_BUILD_ROOT_DIR}
-#     cmake -D CMAKE_BUILD_TYPE:STRING=${BUILD_TYPE} ../../crawler
+    rm -rf ${NETSCAVATOR_BUILD_ROOT_DIR}
+#     mkdir -p ${NETSCAVATOR_BUILD_ROOT_DIR}
+#     pushd ${NETSCAVATOR_BUILD_ROOT_DIR}
+#     cmake -D CMAKE_BUILD_TYPE:STRING=${BUILD_TYPE} ../../netscavator
 #     popd
 fi
 
 
-if [ ! -d ${CRAWLER_BUILD_ROOT_DIR} -o ! -f ${CRAWLER_BUILD_ROOT_DIR}/Makefile ]
+if [ ! -d ${NETSCAVATOR_BUILD_ROOT_DIR} -o ! -f ${NETSCAVATOR_BUILD_ROOT_DIR}/Makefile ]
 then
-    echo "Creating build directory '${CRAWLER_BUILD_ROOT_DIR}'"
-    mkdir -p ${CRAWLER_BUILD_ROOT_DIR}
-    echo "Running CMake in '${CRAWLER_BUILD_ROOT_DIR}'"
-    pushd ${CRAWLER_BUILD_ROOT_DIR}
-    cmake -D CMAKE_BUILD_TYPE:STRING=${BUILD_TYPE} ../../crawler
+    echo "Creating build directory '${NETSCAVATOR_BUILD_ROOT_DIR}'"
+    mkdir -p ${NETSCAVATOR_BUILD_ROOT_DIR}
+    echo "Running CMake in '${NETSCAVATOR_BUILD_ROOT_DIR}'"
+    pushd ${NETSCAVATOR_BUILD_ROOT_DIR}
+    cmake -D CMAKE_BUILD_TYPE:STRING=${BUILD_TYPE} ../../netscavator
     popd
 fi
 
@@ -109,15 +109,15 @@ fi
 echo "REBUILD          : '${REBUILD}'"
 echo "BUILD_TYPE       : '${BUILD_TYPE}'"
 
-pushd ${CRAWLER_BUILD_ROOT_DIR}
-echo "Building in: '${CRAWLER_BUILD_ROOT_DIR}'"
+pushd ${NETSCAVATOR_BUILD_ROOT_DIR}
+echo "Building in: '${NETSCAVATOR_BUILD_ROOT_DIR}'"
 make -j
 popd
 
 if [ "y" == "${RUN_TESTS}" ]
 then
     echo "Running tests ..."
-    pushd ${CRAWLER_BUILD_ROOT_DIR}
+    pushd ${NETSCAVATOR_BUILD_ROOT_DIR}
     ctest
     popd
 fi

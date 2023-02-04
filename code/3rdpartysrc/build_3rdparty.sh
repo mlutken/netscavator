@@ -49,15 +49,12 @@ echo "WIDTH             : $WIDTH"
 echo "JOBS              : $JOBS"
 
 cd ${thirdparty_src_dir}
-# ./build_swig_linux.sh --jobs=${JOBS}
+./build_swig_linux.sh --jobs=${JOBS}
 
 ./build_php_linux.sh --build-type=debug --jobs=${JOBS}
 ./build_php_linux.sh --build-type=release --jobs=${JOBS}
 
-./build_qtwebkit_linux.sh --build-type=release --jobs=${JOBS}
 ./build_qscintilla_linux_system_qt.sh --build-type=release --jobs=${JOBS}
-
-./build_qtwebkit_linux.sh --build-type=debug --jobs=${JOBS}
 ./build_qscintilla_linux_system_qt.sh --build-type=debug --jobs=${JOBS}
 
 # For now we use htmlparser version in crawler/code/cpp/htmlparser

@@ -97,11 +97,7 @@ find_package(GTest REQUIRED)
 add_subdirectory(cpaf)
 
 
-if ( NOT (CMAKE_SYSTEM_NAME MATCHES "Emscripten") )
-    add_subdirectory(thehive)
-    add_subdirectory(code)
-    add_subdirectory(moowees)
-endif()
+add_subdirectory(code)
 
 message ("(sleipner)CMAKE_PROJECT_NAME      : '${CMAKE_PROJECT_NAME}'")
 message ("CMAKE_SYSTEM_NAME                 : '${CMAKE_SYSTEM_NAME}'")

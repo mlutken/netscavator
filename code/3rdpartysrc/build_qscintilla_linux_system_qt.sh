@@ -4,8 +4,8 @@
 # objdump -R -x ../3rdparty/QScintilla-gpl-5.3.8/linux_64_release/lib/libphp5ts.so | grep SONAME
 # https://www.riverbankcomputing.com/software/qscintilla/download
 # Build: https://www.riverbankcomputing.com/static/Docs/QScintilla/
-# Source WEBKIT_VERSION information
-. webkit_version.env
+QT_LIBS_DIR="qtlibs"
+QT_LIBS_INSTALL_DIR_BASE="../3rdparty/${QT_LIBS_DIR}"
 
 # --- Version to build ---
 QSCI_VERSION="2.13.3"
@@ -88,35 +88,36 @@ do
   	esac
 done
 
-####WEBKIT_INSTALL_DIR_BASE="../3rdparty/webkit"
+####QT_LIBS_INSTALL_DIR_BASE="../3rdparty/webkit"
 
 
-WEBKIT_LEAF_DIR=${LINUX_DIST}_${WIDTH}_${BUILD_TYPE}
-mkdir -p $WEBKIT_INSTALL_DIR_BASE/$WEBKIT_LEAF_DIR
+QT_LIBS_LEAF_DIR=${LINUX_DIST}_${WIDTH}_${BUILD_TYPE}
+mkdir -p $QT_LIBS_INSTALL_DIR_BASE/$QT_LIBS_LEAF_DIR
 
 
-WEBKIT_INSTALL_DIR_BASE_ABS=`cd $WEBKIT_INSTALL_DIR_BASE && pwd`
-INSTALL_DIR=`cd ${WEBKIT_INSTALL_DIR_BASE}/${WEBKIT_LEAF_DIR} && pwd`
+QT_LIBS_INSTALL_DIR_BASE_ABS=`cd $QT_LIBS_INSTALL_DIR_BASE && pwd`
+INSTALL_DIR=`cd ${QT_LIBS_INSTALL_DIR_BASE}/${QT_LIBS_LEAF_DIR} && pwd`
 WHICH_QMAKE=`which qmake`
 
-echo "LINUX_DIST        : $LINUX_DIST"
-echo "COPY_BUILD        : $COPY_BUILD"
-echo "DO_BUILD          : $DO_BUILD "
-echo "DELETE_SRC        : $DELETE_SRC"
-echo "JOBS              : $JOBS"
-echo "QSCI_DIR          : $QSCI_DIR"
-echo "INSTALL_DIR       : $INSTALL_DIR"
-echo "WEBKIT_INSTALL_DIR_BASE       : $WEBKIT_INSTALL_DIR_BASE"
-echo "WEBKIT_INSTALL_DIR_BASE_ABS: $WEBKIT_INSTALL_DIR_BASE_ABS"
-echo "WEBKIT_LEAF_DIR       : $WEBKIT_LEAF_DIR"
-echo "WHICH_QMAKE       : $WHICH_QMAKE"
+echo "LINUX_DIST                  : $LINUX_DIST"
+echo "COPY_BUILD                  : $COPY_BUILD"
+echo "DO_BUILD                    : $DO_BUILD "
+echo "DELETE_SRC                  : $DELETE_SRC"
+echo "JOBS                        : $JOBS"
+echo "QSCI_DIR                    : $QSCI_DIR"
+echo "INSTALL_DIR                 : $INSTALL_DIR"
+echo "QT_LIBS_INSTALL_DIR_BASE    : $QT_LIBS_INSTALL_DIR_BASE"
+echo "QT_LIBS_INSTALL_DIR_BASE_ABS: $QT_LIBS_INSTALL_DIR_BASE_ABS"
+echo "QT_LIBS_LEAF_DIR            : $QT_LIBS_LEAF_DIR"
+echo "WHICH_QMAKE                 : $WHICH_QMAKE"
 
-#
 
+# exit 0
 
 sleep 5
-# exit 0
 ###########
+
+if [ "n" == ${DO_BUILD} ]; then DELETE_SRC=n; fi
 
 
 # *** --delete source dir if requested ***
@@ -159,9 +160,9 @@ then
 	cp -r libqscintilla2.a ${INSTALL_DIR}/lib/x86_64-linux-gnu
   	popd
 
-	pushd ${WEBKIT_INSTALL_DIR_BASE_ABS}
- 	tar cjvf ${WEBKIT_LEAF_DIR}.tar.bz2 ${WEBKIT_LEAF_DIR}
-	popd
+# 	pushd ${QT_LIBS_INSTALL_DIR_BASE_ABS}
+#  	tar cjvf ${QT_LIBS_LEAF_DIR}.tar.bz2 ${QT_LIBS_LEAF_DIR}
+# 	popd
 
 fi
 

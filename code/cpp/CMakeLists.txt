@@ -30,21 +30,19 @@ set ( CPAF_ROOT_DIR "../../../cpaf" )
 
 set ( CBS_SHARED_LIBRARY_PATH_PREBUILD ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}    ) # For configuring files like netscavator.cfg.in: TODO: Change .in files to use different var than CBS_SHARED_LIBRARY_PATH_PREBUILD
 set ( RESOURCE_DIR  ${CMAKE_CURRENT_LIST_DIR}/data                          )
-# ##    get_filename_component(CRAWLER_CODE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
-# ##    set (CRAWLER_3RD_PARTY_DIR ${CRAWLER_CODE_DIR}/3rdparty)
 
 if ( ${CMAKE_BUILD_TYPE} STREQUAL "Debug"  )
     set ( CUSTOM_PHP_BASE_DIR       ${BASE_3RD_PARTY_DIR}/php-${PHP_VERSION}/linux_64_debug )
     set ( HTMLCXX_LIB_DIR           ${BASE_3RD_PARTY_DIR}/htmlcxx-${HTMLCXX_VERSION}/linux_64_debug/lib                       )
     set ( HTMLCXX_HDR_DIR           ${BASE_3RD_PARTY_DIR}/htmlcxx-${HTMLCXX_VERSION}/linux_64_debug/include                   )
-    set ( QT_WEBKIT_LIB_DIR         ${BASE_3RD_PARTY_DIR}/webkit-${WEBKIT_VERSION}/linux_64_release/lib/x86_64-linux-gnu   )
-    set ( QT_WEBKIT_HDR_DIR         ${BASE_3RD_PARTY_DIR}/webkit-${WEBKIT_VERSION}/linux_64_release/include                )
+    set ( QT_WEBKIT_LIB_DIR         ${BASE_3RD_PARTY_DIR}/qtlibs/linux_64_release/lib/x86_64-linux-gnu   )
+    set ( QT_WEBKIT_HDR_DIR         ${BASE_3RD_PARTY_DIR}/qtlibs/linux_64_release/include                )
 else ()
     set ( CUSTOM_PHP_BASE_DIR       ${BASE_3RD_PARTY_DIR}/php-${PHP_VERSION}/linux_64_release )
     set ( HTMLCXX_LIB_DIR           ${BASE_3RD_PARTY_DIR}/htmlcxx-${HTMLCXX_VERSION}/linux_64_release/lib                     )
     set ( HTMLCXX_HDR_DIR           ${BASE_3RD_PARTY_DIR}/htmlcxx-${HTMLCXX_VERSION}/linux_64_release/include                 )
-    set ( QT_WEBKIT_LIB_DIR         ${BASE_3RD_PARTY_DIR}/webkit-${WEBKIT_VERSION}/linux_64_release/lib/x86_64-linux-gnu   )
-    set ( QT_WEBKIT_HDR_DIR         ${BASE_3RD_PARTY_DIR}/webkit-${WEBKIT_VERSION}/linux_64_release/include                )
+    set ( QT_WEBKIT_LIB_DIR         ${BASE_3RD_PARTY_DIR}/qtlibs/linux_64_release/lib/x86_64-linux-gnu   )
+    set ( QT_WEBKIT_HDR_DIR         ${BASE_3RD_PARTY_DIR}/qtlibs/linux_64_release/include                )
 endif ()
 
 # -----------------------------------------
@@ -58,23 +56,6 @@ set ( PHP_HARDCODED_INI_FILE_PATH   "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/php.ini" 
 configure_file (${CMAKE_CURRENT_LIST_DIR}/scriptcrawl/cpp_crawl/php.ini.in ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/php.ini )
 
 set  ( swig_EXECUTABLE   ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/swig-3.0.12/linux_64/bin/swig )
-#     IF ( ${CMAKE_BUILD_TYPE} STREQUAL "Release"  )
-#         set ( QT_HDR_DIR /usr/include/x86_64-linux-gnu/qt5	)
-#         set ( QT_LIB_DIR /usr/lib/x86_64-linux-gnu         	)
-#         set ( QT_WEBKIT_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/webkit-${WEBKIT_VERSION}/linux_64_release/lib/x86_64-linux-gnu   )
-#         set ( QT_WEBKIT_HDR_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/webkit-${WEBKIT_VERSION}/linux_64_release/include                )
-#         set ( HTMLCXX_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/htmlcxx-${HTMLCXX_VERSION}/linux_64_release/lib                     )
-#         set ( HTMLCXX_HDR_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/htmlcxx-${HTMLCXX_VERSION}/linux_64_release/include                 )
-#     else ()
-#         set ( QT_HDR_DIR /usr/include/x86_64-linux-gnu/qt5	)
-#         set ( QT_LIB_DIR /usr/lib/x86_64-linux-gnu         	)
-#     #    set ( QT_WEBKIT_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/webkit-${WEBKIT_VERSION}/linux_64_debug/lib/x86_64-linux-gnu    )
-#     #    set ( QT_WEBKIT_HDR_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/webkit-${WEBKIT_VERSION}/linux_64_debug/include                 )
-#         set ( QT_WEBKIT_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/webkit-${WEBKIT_VERSION}/linux_64_release/lib/x86_64-linux-gnu   )
-#         set ( QT_WEBKIT_HDR_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/webkit-${WEBKIT_VERSION}/linux_64_release/include                )
-#         set ( HTMLCXX_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/htmlcxx-${HTMLCXX_VERSION}/linux_64_debug/lib                       )
-#         set ( HTMLCXX_HDR_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/htmlcxx-${HTMLCXX_VERSION}/linux_64_debug/include                   )
-#     endif ()
 
 # ---------------------------------------
 # --- Custom PHP Includes and defines ---
@@ -95,10 +76,6 @@ set (QT_WEBKIT_LIBRARIES "")
 add_library(qscintilla2 STATIC IMPORTED)
 set_target_properties(qscintilla2 PROPERTIES IMPORTED_LOCATION "${QT_WEBKIT_LIB_DIR}/libqscintilla2.a")
 add_library(Qt5WebKit SHARED IMPORTED)
-#set_target_properties(Qt5WebKit PROPERTIES IMPORTED_LOCATION "${QT_WEBKIT_LIB_DIR}/libQt5WebKit.so")
-#add_library(Qt5WebKitWidgets SHARED IMPORTED)
-#set_target_properties(Qt5WebKitWidgets PROPERTIES IMPORTED_LOCATION "${QT_WEBKIT_LIB_DIR}/libQt5WebKitWidgets.so")
-
 
 set (LOHMAN_JSON_INCLUDE_DIRS ${BASE_3RD_PARTY_DIR}/json )
 message ("CMAKE_BUILD_TYPE: '${CMAKE_BUILD_TYPE}'")

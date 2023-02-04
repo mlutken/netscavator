@@ -165,9 +165,9 @@ then
 	pushd ${PHP_DIR}
 	make install
 	popd
-	pushd ${DST_DIR_BASE_ABS}
-	tar cjvf ${LEAF_DIR}.tar.bz2 ${LEAF_DIR}
-	popd
+# 	pushd ${DST_DIR_BASE_ABS}
+# 	tar cjvf ${LEAF_DIR}.tar.bz2 ${LEAF_DIR}
+# 	popd
 fi
 
 echo "DST_DIR		: ${DST_DIR}"

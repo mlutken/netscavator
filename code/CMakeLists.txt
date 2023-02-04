@@ -1,0 +1,5 @@
+
+set ( CRAWLER_CODE_DIR ${CMAKE_CURRENT_SOURCE_DIR} )
+set ( BASE_3RD_PARTY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty  )
+
+add_subdirectory(cpp)
