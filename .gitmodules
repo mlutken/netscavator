@@ -1,0 +1,3 @@
+[submodule "cpaf"]
+	path = cpaf
+	url = git@github.com:mlutken/cpaf.git
