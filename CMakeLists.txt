@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(sleipner)
+project(netscavator)
 SET(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP TRUE)
 SET(QT_CREATOR_SKIP_CONAN_SETUP TRUE)
 
