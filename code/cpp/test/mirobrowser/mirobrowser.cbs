@@ -1,0 +1,18 @@
+# -------------------
+# --- Build setup ---
+# -------------------
+ADDX_DEPENDS_ON 	( 	gtk										)
+
+ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR}			)
+ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_INCLUDE_SDK}			)
+ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_INCLUDE}				)
+ADDX_LINK_DIR ( ${XULRUNNER_SDK_MAIN_LIB}				)
+ADDX_LINK_DIR ( ${XULRUNNER_SDK_DEVEL_LIB}				)
+
+
+ADDX_LINK_LIBRARY 	( xpcomglue							)
+ADD_DEFINE ( XPCOM_GLUE								1	)
+ADD_DEFINE ( XULRUNNER_SDK_MAIN_LIB		\\\\"${XULRUNNER_SDK_MAIN_LIB}\\\\"			)
+
+ADD_SOURCE_FILE ( main.cpp				)
+

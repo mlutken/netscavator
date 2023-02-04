@@ -1,0 +1,4 @@
+Simple test.. 
+
+goto \miners\scripts\domains\dk\HomeDk\
+runminer HomeDk.php

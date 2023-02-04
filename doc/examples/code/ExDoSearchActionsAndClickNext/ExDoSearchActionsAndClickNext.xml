@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ROOT>
+	<TIME_SCANNING_START_UTC>20121010T055650</TIME_SCANNING_START_UTC>
+	<TIME_SCANNING_START_LOCAL>2012-Oct-10 07:56:50</TIME_SCANNING_START_LOCAL>
+	<product>
+		<product_name>Shirt</product_name>
+		<product_price>12.75</product_price>
+		<currency_name>EUR</currency_name>
+	</product>
+	<product>
+		<product_name>Socks</product_name>
+		<product_price>2.75</product_price>
+		<currency_name>EUR</currency_name>
+	</product>
+	<product>
+		<product_name>Trousers</product_name>
+		<product_price>35.5</product_price>
+		<currency_name>EUR</currency_name>
+	</product>
+	<product>
+		<product_name>Jacket</product_name>
+		<product_price>50.25</product_price>
+		<currency_name>EUR</currency_name>
+	</product>
+	<TIME_SCANNING_END_UTC>20121010T055650</TIME_SCANNING_END_UTC>
+	<TIME_SCANNING_END_LOCAL>2012-Oct-10 07:56:50</TIME_SCANNING_END_LOCAL>
+	<TIME_SCANNING_ELAPSED>000000</TIME_SCANNING_ELAPSED>
+	<TIME_SCANNING_ELAPSED>00:00:00</TIME_SCANNING_ELAPSED>
+</ROOT>

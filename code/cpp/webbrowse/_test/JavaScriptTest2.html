@@ -1,0 +1,52 @@
+<html><head></head><body>
+
+<!--Place this script in the HEAD section.-->
+<SCRIPT LANGUAGE = "JavaScript">
+<!-- Navigation from http://rainbow.arch.scriptmania.com
+function changePage()
+{
+   var f = document.forms.navigation;
+
+//   var uri = f.pages.options[2].value;
+	var uri = f.pages.options[f.pages.selectedIndex].value;
+	//newPage =
+// These settings describe the pop-up browser
+// window - you can edit them.
+//	window.open(uri,"NewPage","height=480,width=640,location=yes,scrollbars=yes,menubar=no,toolbar=no,resizable=yes,status=yes");
+	
+	document.location.href=uri;
+  	
+   }
+//  -->
+
+function bob(param1)
+{
+//   document.location.href=param1;
+	document.location.href="http://www.doxys.dk";
+	return "bob was called";
+}
+
+</SCRIPT>
+
+
+<!--Insert this anywhere on your page, and customize.-->
+
+<Form name="navigation">
+  <select name="pages" size="1" onChange="changePage();">
+    <option value="http://www.dr.dk">DR
+    <option value="http://www.tv2.dk/">Tv2
+    <option value="http://www.tv3.dk">Tv3
+    <option value="http://www.tv4.se">Tv4
+    <option value="http://www.tv5.fr">Tv5
+  </select>
+</form>
+
+
+</body></html>
+
+
+
+
+
+
+

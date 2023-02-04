@@ -1,0 +1,924 @@
+***********************************************
+*** Basic data mining: domFind, outputValue ***
+***********************************************
+
+--Linearized DOM tree
+Traditional tools for viewing html code or for webmining uses the tree approach when displaying the source code of a webpage. For example as seen in Windows Explorers treeview, in Firebug for Firefox or simply the nested structure of an html or xml document.
+
+In the Sleipner world we mostly use a linerized view of the dom tree. This linear view is very close to what you see when you open an html document in a simple text editor and to a typical Word processor document: 
+All words are lined up one after another starting from the top left word and following left to right, line by line as normal reading order. The following examplification will clarify this.
+
+We use the following html snippet as our example document in the following:
+
+<HTML>
+    <HEADER>
+        <TITLE>Linearized DOM example</TITLE>
+    </HEADER>
+    <BODY class="class1" >
+        <H1>Product listing</H1>
+        <DIV class="product" >
+            <DIV style="color:green;float:left" >Shirt: </DIV><DIV style="float:left" class="class2">12.75 EUR</DIV><BR />
+            <A href="clothing/shirts.php?color=white" >White shirt. View and buy - click here </A> 
+        </DIV>
+        <DIV class="product" >
+            <DIV style="color:green;float:left" >Socks: </DIV><DIV style="float:left" class="class2">2.75 EUR</DIV><BR />
+            <A href="clothing/socks.php?color=black" >Black socks. View and buy - click here </A> 
+        </DIV>
+        <BUTTON style="font-size:20px" >Next</BUTTON>
+    </BODY>
+</HTML>
+
+When making the linear version of this document we simply put every element, including attributes like for example style="font-size", in a long list like shown in the following table.
+
+
+TODO: Make the table
+
+As seen from the table we remove the <>'s around the elements as well as the ""'s surrounding attributes. All elements are assigned an index corresponding to their position in the table, starting with index 1 for the first element (typically <html>).
+
+--Example (XX TODO: "Gennemgående eksempel" hvad hedder det på engelsk? XX)
+We shall develop and expand thruogh the text on a working example. In order for you to have a feeling with where we are heading we shall present the final example here. Don't dwell too much over it now as everything will be properly explained as we go. 
+
+The goal for the first chapters is to mine the data from pages like the above example html. The html represents a typical product listing page as after an initial "search" from the main search page of some site. Often these pages will contain "next-links" from from wich you can traverse the entire list of results matching your search. How to click on the next links are covered in another chapter (XX TODO: Name XX). 
+
+We want the product names and prices written to an XML file with the following content:
+
+\code
+<product>
+    <product_name>Shirt</product_name> 
+    <product_price>12.75</product_price> 
+    <currency_name>EUR</currency_name> 
+</product>
+<product>
+    <product_name>Socks</product_name> 
+    <product_price>2.75</product_price> 
+    <currency_name>EUR</currency_name> 
+</product>
+\endcode
+
+
+What we want our code to do can be described like this:
+  -1. Define short sequences of consequtive nodes (see table and html) which "identifies" 
+      the following 3 positions of interrest on the page:
+      - ProductStartSeq: The start of each product listing.
+      - ProductNameSeq: The position of the name of a product.
+      - ProductNameSeq: The position of the price of a product.
+  -2. Create a MyScript_SearchListing_mine() function that loops through all the products. 
+      (This loop is very generic so it can most probably be reused on any site having a traditional 
+      search listing with results exactly as presented here.)
+  -3. Output the product_name, product_price (and the currency_name).
+
+The complete example in real code follows. Again: Do not spend more that a minute or two looking at the code, since we shall develop it step by step throughout the chapter. 
+
+\code
+// Define dom sequences for the positions we need
+domSeqCreate  ( "ProductStartSeq"   , "DIV, class, product" , "equals"  ); 
+domSeqCreate  ( "ProductNameSeq"    , "color:green"         , "contains", 1 ); 
+domSeqCreate  ( "ProductPriceSeq"   , "EUR"                 , "contains" ); 
+
+
+// Completely general way way of looping thruogh a list of products
+function MyScript_SearchListing_mine()            
+{
+    domNewSearch();
+    while ( domFindNext ( 1, "ProductStartSeq" ) ) {
+        domPointerPush();
+        $iStopPos = domFindNextPos( 1, "ProductStartSeq" );
+        domSetStopPos( $iStopPos );
+        GetProduct();
+        domClearStopPos();
+        domPointerPop();
+    }
+}
+
+function GetProduct()            
+{
+    // Get product name and  product price
+    contextBegin("product");
+    outputValueFindNext( 1, "ProductNameSeq", "product_name", "eraseAll", ":" );
+    outputValueFindNext( 1, "ProductPriceSeq", "product_price", "trimNumber" );
+    outputDirect ( "currency_name" , "EUR" );  
+    contextEnd();
+}
+\endcode
+
+
+
+--Current node/index
+At any given time the working document/webpage will have a current index corresponding to some node. For example if the current node is placed at the #H1# element the current index will be 10. Advancing forward by 1 ( domStep(1) ) we get to #Product listing# at index 11. Note: You can step backwards using negative values.
+
+Most dom related operations use current node as starting point or simply operarates directly on the text data of this. For example domFindNext, outputValue, valueGet. Obious exceptions to this rule are functions that allways start their search from the top of the document (index 1) like domFind and similar.
+
+Using the functions domGetPos you can query for the current index directly like for exmaple # $pos1=domGetPos();#. And then later return to this position by doing #domSetPos ($pos1);#
+
+-Navigating the dom: domFind, domFindNext functions
+These functions (domFindNext in particular) are the very basic workhorses of the Sleipner webmining system.
+If forexample we wanted to navigate to the start of the product listing in our simple example we could use:
+domFind("Product listing", "contains" );
+This would place the current dom position on the text 'Product listing' between the two H1's. The compare function 'contains' simply means that we want to find a node which contains the string 'Product listing' meanining that a node with the text 'Product listing clothes' for example would match also. If you wanted an excact macth you would use 'equals'. Other comparison functions are: 'endsWith', 'startsWith', 'regexSearch' etc. See the reference for the complete listing. 
+
+NOTE: All these functions also exist in versions prepended with an 'i' like 'icontains'. These simply ignore casing in the string. 
+IMPL: However for the time being the ignore case versions only work reliably with chars from the basic (US) ASCII char set. This is a subset of UTF-8 which is the format Sleipner needs it's scriptfiles to be saved in, so everything is ok, just it will be a later version where we support ignore case functions for the full UTF-8 char set.
+
+Refering to the table visualizing our linearized dom tree we can illustrate how the domFind functions works:
+  - 1. Start from position 1
+  - 2. For every node apply the compare function to the node value and the compare string. 
+  - 3. IF ( node-value contains 'Product listing' ) THEN STOP
+
+So at the first matching node the search is terminated and the current dom position is set to this node . Calling valueGet() will now return the string 'Product listing'. In addition the return value from domFind will be the index of the position (index 10 in our example). 
+
+In case the searched for node is not found domFind returns 0 (zero).
+
+Since 0 evaluates to false and everything else evaluates to true in boolean expressions this means you can do code like this:
+\code
+if ( domFind( "EUR", "contains") ) {
+	outputValue("product_price");	// Writes current value to output XML under name 'product_price'. 
+}
+\endcode
+
+NOTE: See later section for more details on outputValueXX functions.
+
+--domFind general form
+A more general form of domFind takes as first parameter the number of occurrences to find before returning true. For example if
+we wanted to find the price of the second product we could do:
+#domFind( 2, "EUR", "contains");#
+This means we want to find the second node that countains the string 'EUR'. And ofcourse:
+#domFind( 1, "EUR", "contains");# is same as our original simpler form #domFind( "EUR", "contains");#
+
+
+--domFindNext
+The domFindNext function works almost identical to domFind. The differences are:
+ - 1. The starting position is current dom position as left from a previous domFind or domFindNext.
+ - 2. I's possible to search backwards using negative values as first parameter. 
+      For example: #domFindNext(-1, "class2", "equals");# assuming current position is not at the top.
+
+If you (like the typical case) simply need to find the first occurrence of something you can do #domFindNext("EUR", "contains");# and #domFindPrev("EUR", "contains")# for backwards direction. 
+
+To illustrate the "power" of domFindNext a small example to get all the product prices on the page:
+
+\code
+domNewSearch(); //Reset current dom position to first node
+while ( domFindNext( 1, "EUR", "contains") ) {
+	outputValue("product_price");
+}
+\endcode
+
+Before proceeding we will expand somewhat on the while loop example, making it more real-world-use like. Most likely we want to find more than one property for each product and then the above approach doesn't scale too well. In our simple clothing store example we now want to get the name and the price of each product. 
+The idea is that the domFindNext within the while clause should find the beginning of a product section. From this position we then apply domFindNext to get to each of the product properties.
+
+
+In pseudocode what we want is:
+\pseudocode
+domNewSearch();
+WHILE ( find-the-start-of-next-product-section ) DO
+    domFindNext ( position-of-product-name );
+    outputValue("product_name");
+        
+    domFindNext ( position-of-product-price );
+    outputValue("product_price");
+ENDWHILE
+\endpseudocode
+
+In real code this looks like the following:
+
+\code
+domNewSearch(); //Reset current dom position to first node
+while ( domFindNext( 1, "product", "equals") ) {
+    domFindNext ( 1, "color:green", "contains" );
+    domStep(1);                     // Goto actual name which is next position
+    outputValue("product_name");
+    
+    domFindNext( 1, "EUR", "contains");
+    outputValue("product_price");
+}
+\endcode
+
+To prepare for the following elaborations of this example we shall transform it to a form which is even more useable in real world scripts:
+
+\code
+function MyScript_SearchListing_mine()            
+{
+    domNewSearch(); //Reset current dom position to first node
+    while ( domFindNext( 1, "product", "equals") ) {
+        GetProduct();
+    }
+}
+
+
+function GetProduct()            
+{
+    domFindNext ( 1, "color:green", "contains" );
+    domStep(1);                     // Goto actual name which is next position
+    outputValue("product_name");
+    
+    domFindNext( 1, "EUR", "contains");
+    outputValue("product_price");
+}
+\endcode
+
+The ".._mine()" function simply loops though all the product "starting points" and calls GetProduct(). This function then assumes that the current dom position is at the beginning of a product listing and then searches each of the properties for one product from that position using domFindNext's.
+
+In a perfect world this works really well, but what if for example the first product did not have any price listed for some reason? In this case the #domFindNext( "EUR", "contains");# would not fail as such but instead of finding the (non existant price) for the Shirt, it would instead find the price for the next item and wrongly record the Shirt as having a price of 2.75 EUR. We can fix this very easy by introducing the "stop position":
+
+
+--Stop position and domFindNextPos
+domFindNextPos works excactly like domFindNext except that it simply returns the index of the position, if any. The actual current dom position is never changed. 
+
+
+This is the perfect find function to use when you want to set the stop position. If you set the stop position using domSetStopPos(), all searches (from a position before the stop position ofcourse) will never try to look beyond that position. It is as if the end of the document is changed, until you call domClearStopPos(). 
+
+Using this information we can now fix the problem described above by changing the code slightly:
+
+\code
+function MyScript_SearchListing_mine()            
+{
+    domNewSearch();
+    while ( domFindNext ( 1, "product", "equals" ) ) {
+        $iStopPos = domFindNextPos( 1, "product", "equals" );
+        domSetStopPos( $iStopPos );
+        GetProduct();
+        domClearStopPos();
+    }
+}
+
+function GetProduct()            
+{
+    domFindNext ( 1, "color:green", "contains" );
+    domStep(1);                     // Goto actual name which is next position
+    outputValue("product_name");
+    
+    domFindNext( 1, "EUR", "contains");
+    outputValue("product_price");
+}
+\endcode
+
+
+This stop position prevents that we accidently get the property value (like the price) of the next product assigned to the current one in case the domFindNext() function fails. This is because the stop position prevents the #domFindNext( "EUR", "contains");# call to continue down to the next product (the Socks in our example page).
+
+We still output the value of the dom position as left by the failing. This position is typically the end of the document, but in any case it's not likely the price of the product we want or even a price at all. Luckily this problem is even easier remedied than the other one. We simply add an if clause around each of the domFindNext() calls for the product:
+
+
+\code
+function MyScript_SearchListing_mine()            
+{
+    domNewSearch();
+    while ( domFindNext ( 1, "product", "equals" ) ) {
+        $iStopPos = domFindNextPos( 1, "product", "equals" );
+        domSetStopPos( $iStopPos );
+        GetProduct();
+        domClearStopPos();
+    }
+}
+
+function GetProduct()            
+{
+    if ( domFindNext ( 1, "color:green", "contains" ) ) {
+        domStep(1);                     // Goto actual name which is next position
+        outputValue("product_name");
+    }
+    
+    if ( domFindNext( 1,  "EUR", "contains") ) {
+        outputValue("product_price");
+    }
+}
+\endcode
+
+Here we see how we take advantage of having a general purpose language as PHP directly at our disposal. Adding an if clause around each product property we want is effective but alsso a bit repetitive since we generally always want to do it. We will fix this very elegantly when we later introduce the outputValueFindNext() function, but for now we have one last thing to do in order to make the finding of product properties robust.
+
+--domPointerPush, domPointerPop
+It is highly recommended always to initiate a domFindNext() call from a well defined/consistent position. This is true for both the while loop and for each of the product properties. We can achive this by saving the dom position before we initiate a search and then we restore it afterwards. An easy way to save the current dom position for later easy retrieval is domPointerPush(). You can then restore later using domPointerPop(). Since the position is pushed on a stack (like a stack of dinner plates) you can call push/pop multiple times nested. Just make sure that you call push and pop an equal number of times. 
+
+Ofcourse if you prefer you can just as well use
+\code
+$iPosSave = domGetPos();
+domFindNext(...);
+...
+domSetPos($iPosSave);
+\endcode
+
+But here we will use push/pop to make our working example very robust indead. Here we go:
+
+
+
+\code
+function MyScript_SearchListing_mine()            
+{
+    domNewSearch();
+    while ( domFindNext ( 1, "product", "equals" ) ) {
+        domPointerPush();
+        $iStopPos = domFindNextPos( 1, "product", "equals" );
+        domSetStopPos( $iStopPos );
+        GetProduct();
+        domClearStopPos();
+        domPointerPop();
+    }
+}
+
+function GetProduct()            
+{
+    // Get product name
+    domPointerPush();
+    if ( domFindNext ( 1, "color:green", "contains" ) ) {
+        domStep(1); // Goto actual name which is next position
+        outputValue("product_name");
+    }
+    domPointerPop();
+    
+    // Get product price
+    domPointerPush();
+    if ( domFindNext ( 1, "EUR", "contains" ) ) {
+       outputValue("product_price");
+    }
+    domPointerPop();
+}
+\endcode
+
+We have added push/pop around each of the code sections getting a product property in our GetProduct() function. This ensures that for each product property we start the seach from the beginning of the product section on the page. This is very important since we are now certain that each domFindNext for the product properties starts from a well defined position. Even if the previous domFindNext did not find anything and/or left the current position completely "off track" we can only it will never mess up the next property. 
+Same goes for the push/pop calls in the while loop. We hereby ensure that each #domFindNext ( "product", "equals" )# call within the while loop starts from the correct position regardless of what happens within the loop. 
+
+
+
+
+--Dom sequences
+Instead of simply matching on the contents of a single node like we have done so far, it is most often needed to match on a short sequence of nodes. The concept is a simple extension of our previous domFindNext (and domFind) calls where we use a comma separated list of node values instead of just a single value.
+For example we could change the # domFindNext ( "product", "equals" )# to look for a sequence like this: 
+#domFindNext ( "DIV, class, product", "equals" )# This dom sequence only matches if all 3 nodes are found after one another. The "equals" function then applies to each of the nodes. 
+
+---Named dom sequences
+Dom sequences are very flexible and easy to use, and one great way to use them are through "named dom sequences", which simply assigns a descriptive name to a dom sequence that can later be used. This approach has many advantages all of which will become apparent by the end of this chapter when we have covered the outputValueXX functions. Hare we will focus on the advantages not related to outputValue functions. 
+To create our #domFindNext ( "DIV, class, product", "equals" )#  and use it simply do:
+
+\code
+domSeqCreate  ( "ProductStartSeq"   , "DIV, class, product" , "equals"  ); 
+...
+while ( domFindNext ( "ProductStartSeq" ) ) {
+...
+}
+\endcode
+
+So we create a named dom sequence using domSeqCreate() giving it a descriptive name and we can now refer to this name instead of writing the sequence out. The domFindXX functions actually always assumes that the sequence argument you supply is a names dom sequence and then looks up the actual sequence and applies that instead of the name. In case no sequence is found the argument is simply used to create a dom sequence which is then used - as we have done it so far.
+
+The current position after calling domFind or domFindNext on a dom sequence will be at the last element in the sequence, which in the above example means at the node containing the string 'product'. In case you are searching backwards the current dom position will be at the first element of the sequence ('DIV' in the above example).
+
+Before enhancing our example we shall introduce the slightly more general form of domSeqCreate:
+#domSeqCreate(SEQ_NAME, SEQUENCE_STRING, COMPARE_OPERATOR, STEPS_AFTER)#
+
+This allows us to easily fine tune the final dom position after a succesfull match by simply moving/stepping nodes forward or backward after the initial final position is found. The dom sequence for finding the product name in our example could be as simple as #domSeqCreate  ( "ProductNameSeq", "color:green", "contains" );# which simply is a names sequence of lenght 1. This is all simple but we still end up one position short of the actual name of the the product, but this can be fixed by adding the last step parameter:
+#domSeqCreate  ( "ProductNameSeq", "color:green", "contains", 1 );# Now after finding the dom position of the ProductNameSeq the domFindNext function does a final adjustment to the current position by stepping one node forward ending up at he actual product name.
+
+Ofcourse you can also step backwards like e.g. #domSeqCreate  ( "ProductNameSeq" , "color:green", "contains", -2 );# stepping to nodes back after matching.
+
+So now we have:
+
+\code
+// Define dom sequences for the positions we need
+domSeqCreate  ( "ProductStartSeq"   , "DIV, class, product" , "equals"  ); 
+domSeqCreate  ( "ProductNameSeq"    , "color:green"         , "contains", 1 ); 
+domSeqCreate  ( "ProductPriceSeq"   , "EUR"                 , "contains" ); 
+
+
+// Completely general way way of looping thruogh a list of products
+function MyScript_SearchListing_mine()            
+{
+    domNewSearch();
+    while ( domFindNext ( 1, "ProductStartSeq" ) ) {
+        domPointerPush();
+        $iStopPos = domFindNextPos( 1, "ProductStartSeq" );
+        domSetStopPos( $iStopPos );
+        GetProduct();
+        domClearStopPos();
+        domPointerPop();
+    }
+}
+
+function GetProduct()            
+{
+    // Get product name
+    domPointerPush();
+    if ( domFindNext ( 1, "ProductNameSeq" ) ) {
+        outputValue("product_name");    // No need for a step since the dom sequence allready specified this.
+    }
+    domPointerPop();
+    
+    // Get product price
+    domPointerPush();
+    if ( domFindNext ( 1, "ProductPriceSeq" ) ) {
+       outputValue("product_price");
+    }
+    domPointerPop();
+}
+\endcode
+
+---domSeqCreate: Operator fine grained control
+Sometimes you need a little finer control over the matching of each node than a single one-size-fits-all like 'equals' or 'contains' can offer. Lets for a second assume that the product css class is not simply called 'product' but alternates between 'productBold' and 'productNormal' because the web designer wanted to display the product in a table with alternating styles (eg. colors) for easier readability. We could ofcourse simply do:
+#domSeqCreate  ( "ProductStartSeq", "DIV, class, product" , "contains"  );# 
+which would work fine, but you could also specify that you only wanted the 'contains' operator used for the last node in the sequence:
+
+#domSeqCreate  ( "ProductStartSeq" , "DIV, class, #contains:product" , "equals"  );# 
+Or using the abbreviated form 'con' for the 'contains' operator:
+#domSeqCreate  ( "ProductStartSeq" , "DIV, class, #con:product" , "equals"  );# 
+
+Notice how we use '#contains:string-to-match' or '#con:string-to-match'.
+
+The most common operators are:
+equals     = eq   : Node must be equal to value, case sensitive.
+iequals    = ieq  : Node must be equal to value, case in-sensitive (IMPL TODO: only a-z for now).
+contains   = con  : Node must contain the value, case sensitive.
+icontains  = icon : Node must contain the value, case in-sensitive (IMPL TODO: only a-z for now).
+
+See the reference for all the operators and their short forms.
+
+
+---dom sequence alternatives
+The example above using alternating styles in table rows are quite common on webpages and somtimes the pages that are in fact more or less identical in structure diffen in such ways. Another popular thing to do on commercial sites is to add a line with "Special discount of 30% on this product" for just a few (seemingly random ) products on a page. Things like that sometimes makes it hard to find a single dom sequence that always finds the right position. 
+
+To remedy this we can simply add a list of prioritized alternatives for finding the correct position like this: 
+
+\code
+// Define dom sequences for the positions we need
+domSeqCreate  ( "ProductStartSeq#1"   , "DIV, class, productBold" , "equals"  ); 
+domSeqCreate  ( "ProductStartSeq#2"   , "DIV, class, productNormal" , "equals"  ); 
+... 
+while ( domFindNext ( 1, "ProductStartSeq" ) ) { // Use normally, first to match 'wins'
+}
+...
+\endcode
+
+They all share the same common name as before and simply adds '#N' to the end of the base sequence name. You can add as many alternatives as you like and they will be evaluated in the order specified - i.e. the numbers #1, #2, #3 ... are simply a convention that we strongly encourage. The first one that macthes 'wins' and the others are not considered. It is equivalent to a logical OR between each of the alternatives.
+When using a dom sequence specified with alternatives there is no difference from the normal case: Simply write the base name of the sequence, before the '#N's' like shown the the above code snippet (#domFindNext ( 1, "ProductStartSeq" )#).
+
+--Wildcards (* and ?) in dom sequences
+Dom sequences also support a match-any-node (?) and a "greedy" match-many-nodes (*) specifier. This is not nearly as complicated as it might sound. 
+
+---Dom sequences using optional args: ? specifier
+The '?' specifier simply states that the node value can be anyting, i.e. we will always mach at this position in the dom sequence regardless of the node value. Let's specify the "ProductPriceSeq" i a different way where we do not assume that the price field contains the string "EUR". So now we assume that the html around the prices looks like this:
+
+\code
+<DIV style="float:left" class="class2">12.75</DIV><br />
+\endcode
+
+\code
+domSeqCreate  ( "ProductPriceSeq", "class2, ?, /DIV", "equals", -1 );  
+\endcode
+
+So here we look for a sequence which is: 'class2', ANY-NODE, '/DIV'.
+We know that the actual price we want is the node where we have the '?' but we have nothing solid to macth on, thus the quetion mark and then the final '/DIV'. We are then one to far and therefore we step one back after we have found the dom position be specifying the '-1' in the domSeqCreate(). 
+
+This example is somwhat contrieved since the use of class2 is unique to the position just before the price in this simple example. So we could have done #domSeqCreate  ( "ProductPriceSeq", "class2", "equals", 1 );# . But the use of '?' in dom sequences is straitforward and is very often "just what the doctor ordered".
+
+---Dom sequences using greedy match: * specifier
+The '?' specifier has a slightly more advanced cousin '*' which matches any number of nodes and actually can be viewed as if it simply splits up the dom sequence into smaller subsequences. An (again somewhat contrieved) example from out sample html code follows:
+
+\code
+domSeqCreate  ( "ProductNameSeq", "class, product, *, /DIV, DIV", "equals", -2 );  
+\endcode
+The above means that we look for a sequence like:
+  -1. Sub-sequence: 'class', 'product'
+  -2. Any number of nodes until we meet
+  -3. Sub-sequence: '/DIV', 'DIV'  (end of DIV-tag, then start of another DIV-tag)
+
+Again to actually end up at the product name we need to take two steps back from the final position at the last 'DIV' that we mach in the sequence.
+
+As mentioned the use of the '*' specifier is equivalent to splitting the whole sequence up into smaller dom sequences which are then searched for in order. So if we do: 
+#domFindNext ( 1, "class, product, *, /DIV, DIV", "equals" )# it is then equivalent to the following code:
+
+
+\code
+if ( domFindNext ( 1, "class, product", "equals" ) ) {
+    domFindNext ( 1, "/DIV, DIV", "equals" );
+}
+\endcode
+
+So using '*' specifier is not hard at all, but often you can do without it. However, for those situations where the html code simply does not allow for matching on a single simple sequence it really is both effective and quite simple to use.
+
+--Custom php function in domFind/domFindNext
+In case a dom sequence for some reason can't give you what you need, it is possible to substitute a named dom sequence for a user defined php function. This php function should then move the current dom position to the node desired.
+
+All you need to do is to define a php function with the same name as the name you are using in your domFind/domFindNext function like this. Let's use this approach to rewrite the example from just above with the dom sequence alternatives. Recap that we assumed the html was in a table where each row had alternating colors using two different css styles 'productBold' and 'productNormal'. This meant that for the ProductStartSeq dom sequence we needed to look for both possibilities. 
+
+Now lets achieve the same effect using a user defined php function with the same name as the dom sequence.
+
+\code
+...
+function ProductStartSeq() 
+( 
+    if ( domFindNext( 1, "DIV, class, productBold" , "equals"  ) ) {
+        return ;
+    }
+    else domFindNext( 1, "DIV, class, productNormal" , "equals"  ) ;
+}
+... 
+while ( domFindNext ( 1, "ProductStartSeq" ) ) { // Use like normal (named) dom sequence
+}
+...
+\endcode
+
+The return value is ignored by the below code so need to worry about returning anything. All that counts is that you have set the current position to some node. So if you by "devine intervention" or some other means know the exact dom position you need you could also just set it directly using #domSetPos( $myPreCalculatedPosition )#.
+
+
+--Dom sequences with parameters domFindNextParams()
+The alternative form of domFindNext, which support dymamic parameters is called domFindNextParams and simply takes an extra parameter which is a comma separated list of arguments to the 'underlying' domFindNext. It might sound a little confusing a first but two things are worth noting:
+ -1. It is currently mainly needed when using the 'DomPosClickState' dom navigator action. See more in the dom navigator chapter. Here the example should make it clear why it is a smart feature in that particular use case.
+ -2. It really is not that hard to understand, if you know for example the printf() function or C#'s Console.print with positional formatting arguments.
+ 
+To create a dom sequence that can be used with domFindNextParams params you simply supply placeholders for the arguments using #1, #2, ... #9. For example:
+ 
+#domSeqCreate("MyDomSeq", "DIV, class, #1, style, #2", "contains" );# 
+
+It can then be used like this:
+#domFindNextParams( 1, "MyDomSeq", "myClass, color:green" );#
+(which is equivalent to having defined the original sequence like this)
+#domSeqCreate("MyDomSeq", "DIV, class, myClass, style, color:green", "contains" );#
+
+So each of the #1, #2, .. are substituted for the actual parameters (myClass, color:green) whom we supply as one comma separated string ("myClass, color:green"). This string is then split into the separate arguments.
+
+Let's try another example just to clarify:
+#domFindNextParams( 1, "MyDomSeq", "anotherClass, font:Arial" );#
+(which is equivalent to having defined the original sequence like this)
+#domSeqCreate("MyDomSeq", "DIV, class, anotherClass, style, font:Arial", "contains" );#
+
+
+--outputValue
+So far we have ued the outputValue function without really introducing it properly. Hopefully it has been clear what it in essence does. It simply writes the value of the current node to the output XML document using the first (and in our previous examples only) parameter as the name of the property. For example the statement:
+\code
+outputValue("product_name"); 
+\endcode
+Assuming that the current node in the dom is at the node containing the string value 'Shirt: ' (note the trailing space)
+
+Will produce a line in the XML output like this:
+\code
+<product_name>Shirt:</product_name> 
+\endcode
+
+Note that the trailing space has been "trimmed" away. In fact, by default, both leading and trailing spaces are trimmed from any output value. As we shall se shortly we have a large number of possibilities when it comes to manipulating the output when using outputValue functions. We shall look at many of these in the following and also show how you can avoid the default trimming if so desired.
+
+
+--outputValue with manipulator functions
+The output of our current script would currently be like this:
+\code
+<product_name>Shirt:</product_name> 
+<product_price>12.75 EUR</product_price> 
+<product_name>Socks:</product_name> 
+<product_price>2.75 EUR</product_price> 
+\endcode
+
+Apart from the default trimming, which removes the trailing spaces from the two name fields this output is probably not what we typically want. Most likely we want the output file to be more like this:
+\code
+<product_name>Shirt</product_name> 
+<product_price>12.75</product_price> 
+<product_name>Socks</product_name> 
+<product_price>2.75</product_price> 
+\endcode
+
+---eraseAll
+Lest's start by fixing the names. The output value function is overloaded in several versions taking a different number of parameters and one of them allows us to erase the ':' from all the names simply by replacing the 
+#outputValue("product_name");#
+with:
+#outputValue("product_name", "eraseAll", ":" );#
+
+Pretty simple - huh? Again the default trimming of spaces is then applied after the erasing, making sure we end up with a nice clean value string. The eraseAll is only one of a family of erase trimming/manipulator functions you can use. Some of the others are: eraseFirst, eraseLast, eraseRegex (regular expresion).
+
+So when using erase manipulators in outputValue functions you need to supply two extra parameters: One that designates the erase function to use and one paramter for the erase function itself specifying what you actually want removed - like the string ":" in the above example. 
+
+---trimDefault, raw
+The erase manipulators needs one parameter in addition to the actual name of the manipulator. We have even simpler ones which does not require any parameters except the name of the trimming function. For example the trimDefault, which is simply an explicit way of doing the default trimming when doing like this:
+#outputValue("product_name", "trimDefault" );#
+
+Not awfully usefull in this example but could be usefull when used as argument to the valueModify() function introduced elsewhere. Another no parameters manipulator is 'raw', which allows us to suppres the default trimming:
+#outputValue("product_name", "raw" );#
+will make somenthing like this in the XML:
+\code
+<product_name>Shirt: </product_name>  
+\endcode
+Note that the trailing space is not trimmed away now.
+
+Other trimming functions that does not take any parameters are: toUpper and toLower (IMPL TODO: only a-z for now), trimLeft, trimRight, trimNumber, trimInteger, trimYear
+
+---trimNumber
+Although pretty straitforward we will explain this a little more. We could ofcourse use:
+#outputValue("product_price", "eraseAll", "EUR" );#
+But we prefer using:
+#outputValue("product_price", "trimNumber" );#
+
+The trimNumber manipulator actually searches through the current value looking for the first substring that can actually represent a decimal (floating point) number. So even if the price node looked for example like this 'price is 12.75 EUR' the trimNumber would pick up and parse the price correctly. 
+
+So now our complete example can be enhanced so we get the "clean values" as exemplified with the XML code above:
+
+
+\code
+// Define dom sequences for the positions we need
+domSeqCreate  ( "ProductStartSeq"   , "DIV, class, product" , "equals"  ); 
+domSeqCreate  ( "ProductNameSeq"    , "color:green"         , "contains", 1 ); 
+domSeqCreate  ( "ProductPriceSeq"   , "EUR"                 , "contains" ); 
+
+
+// Completely general way way of looping thruogh a list of products
+function MyScript_SearchListing_mine()            
+{
+    domNewSearch();
+    while ( domFindNext ( 1, "ProductStartSeq" ) ) {
+        domPointerPush();
+        $iStopPos = domFindNextPos( 1, "ProductStartSeq" );
+        domSetStopPos( $iStopPos );
+        GetProduct();
+        domClearStopPos();
+        domPointerPop();
+    }
+}
+
+function GetProduct()            
+{
+    // Get product name
+    domPointerPush();
+    if ( domFindNext ( 1, "ProductNameSeq" ) ) {
+        outputValue( "product_name", "eraseAll", ":" );  
+    }
+    domPointerPop();
+    
+    // Get product price
+    domPointerPush();
+    if ( domFindNext ( 1, "ProductPriceSeq" ) ) {
+       outputValue( "product_price", "trimNumber" );
+    }
+    domPointerPop();
+}
+\endcode
+
+
+---trimNumber locale settings, decimal point, thousands separator
+One thing you have to know is the "locale convention" used on the page you are mining. By default the Sleipner assumes US/UK style where the '.' is the decimal point and ',' is the thousands separator. If for example you need to parse prices/numbers on a page using danish, german etc... style where the comma ',' is the decimal point and the dot '.' is the thousands separator you need to set that somewhere in your script (for example in MyScript__setRunConfig():
+
+
+\code
+MyScript__setRunConfig()
+{
+    // Set number parsing to danish style
+    configParseDecimalPointSet( "," );
+    configParseThousandsSepSet( "." );
+}
+\endcode
+
+IMPL TODO: Get rid of the need for __setRunConfig() functions by simply allowing to call stuff like this in the top of the script.
+
+Alternatively you can specify the thousands separator and decimal point direcly like:
+\code
+outputValue( "product_price", "trimNumberCustom", ",", "." ); // decimal point, thousands separator
+\endcode
+
+---trimInteger, trimYear
+trimInteger works very similar to trimNumber except it parses until it finds the first integer whitin the string. So if the current node value again is 'price is 12.75 EUR' and we use #outputValue("product_price", "trimInteger" );# we get '12'. 
+
+Again, depending on locale used on the web site you are mining the configParseThousandsSepSet() function affects it's behaviour (configParseDecimalPointSet() has no effect). So if we assume we have set the thousands separator to '.' instead of the default ',' we would get the result '1275' instead of '12'.
+
+trimYear simply looks for a year in the form 'yyyy' like eg. 1989 or 2011.
+
+---prepend, append
+The prepend manipulator is often usefull when you need to grab links to subpages on the site you are crawling since they most often does not contain "http://www.somesite.com/" but just something like "clothing/socks.php?color=black". Suppose we also want to get the URL's where each product is presented (deep links) and we have found the correct dom position. Then all we would need to do is:
+
+#outputValue ( "product_url", "prepend", "http://www.somesite.com/" );#
+
+and then the output would be as expected:
+\code
+<product_url>http://www.somesite.com/clothing/socks.php?color=black</product_url>  
+\endcode
+
+We can show how this might fit into out little example code by adding a dom sequence to find the product_url:
+
+\code
+// Define dom sequences for the positions we need
+...
+domSeqCreate  ( "ProductUrlSeq", "View and buy", "contains", -1 ); 
+
+...
+function GetProduct()            
+{
+    ...
+    // Get product URL
+    domPointerPush();
+    if ( domFindNext ( 1, "ProductUrlSeq" ) ) {
+       outputValue ( "product_url", "prepend", "http://www.somesite.com/" );
+    }
+    domPointerPop();
+}
+\endcode
+
+Note:
+We search for the string "View and buy" which all the text nodes after the actual URL seems to contain. We are then one too far in the linearized dom and therefore we step one back ( -1 ) as specified in the domSeqCreate().
+
+The append manipulator works similar to prepend but natuarally append it's agument to the value being written to the output.
+
+---replace functions
+The replace functions works similar to the erase functions but taking an extra parameter designating what you want replaced for the substring that are removed. Assuming a current node value of "http://www.somesite.com/images/small/socks-black.jpg" containing the URL of the small/thumbnail image of the black socks shown in the seach listing pages. However what you really want is the larger image of the socks from the actual product page. Very often these will have a very predictable name like: "http://www.somesite.com/images/large/socks-black.jpg". We could then do:
+
+\code
+...
+outputValue ( "image_large_url", "replaceFirst", "/small/", "/large/" );
+...
+\endcode
+
+Other replace manipulators include: replaceLast, replaceAll, replaceRegex, replaceAllRegex.
+
+--Using manipulators as normal functions in PHP
+When using a manipulator in a function like outputValue() we need to put them in quotes like for example #outputValue( "product_name", "eraseAll", ":" );# In case you would like to use these functions as part of "normal" PHP code this does ofcourse not work. However it is very simply to use them still. Just skip the quotes and append '_fn' to the name and use as any other built in PHP function.
+
+\code
+$myString = "string with :'s to replace with #'s. One more : here";
+$replaced = replaceAll_fn ( $myString, ":", "#" );
+echo $replaced; // Output: "string with #'s to replace with #'s. One more # here"
+\endcode
+
+/////////////////7
+--Custom php function as manipulator
+Like for dom sequences you can also for manipulators use a custom php function. This is most often needed when you need to do more than a single manipulator can do. Suppose we wanted to output out product name in all uppercase letters (yes ugly I know :-) )
+
+All you need to do is to define a php function which takes a single parameter and returns the manipulated value/string that you want written to the output. Like this:
+
+TODO: Finish this
+
+\code
+// Define dom sequences for the positions we need
+...
+function filterProductName($val)            
+{
+    
+}
+...
+function GetProduct()            
+{
+    ...
+        outputValue( "product_name", "filterProductName" );  
+    ...
+}
+\endcode
+
+////////////
+
+--Simplifying matters: outputValueFindNext()
+Every time we write a product property to the output we go through almost identical commands. 
+It is the 'domPointerPush()/Pop()'  and 'IF ( domFindNext() ) THEN ... outputValue()' like shown here:
+
+\code
+domPointerPush();
+if ( domFindNext ( 1, "ProductNameSeq" ) ) {
+    outputValue( "product_name", "eraseAll", ":" );  
+}
+domPointerPop();
+}
+\endcode
+
+It is this kind of repetitive typing that we can eliminate using the outputValueFindNext() function, which does excatly what the above code snippet does when used like this:
+
+\code
+outputValueFindNext( 1, "ProductNameSeq", "product_name", "eraseAll", ":" );
+\endcode
+
+So it works like a domFindNext() combined with an outputValue(). The dom position is saved and restored like we have done manually so far using domPointerPush() and domPointerPop(). The value is also only written to output if the domFindNext part actually find the position. 
+
+The first two parameters are for the domFindNext part and the rest follows the normal order of the outputValue() functions, where the first parameter is the property name etc.
+
+We can then make our example code much simpler:
+
+\code
+// Define dom sequences for the positions we need
+domSeqCreate  ( "ProductStartSeq"   , "DIV, class, product" , "equals"  ); 
+domSeqCreate  ( "ProductNameSeq"    , "color:green"         , "contains", 1 ); 
+domSeqCreate  ( "ProductPriceSeq"   , "EUR"                 , "contains" ); 
+
+
+// Completely general way way of looping thruogh a list of products
+function MyScript_SearchListing_mine()            
+{
+    domNewSearch();
+    while ( domFindNext ( 1, "ProductStartSeq" ) ) {
+        domPointerPush();
+        $iStopPos = domFindNextPos( 1, "ProductStartSeq" );
+        domSetStopPos( $iStopPos );
+        GetProduct();
+        domClearStopPos();
+        domPointerPop();
+    }
+}
+
+function GetProduct()            
+{
+    // Get product name and  product price
+    outputValueFindNext( 1, "ProductNameSeq", "product_name", "eraseAll", ":" );
+    outputValueFindNext( 1, "ProductPriceSeq", "product_price", "trimNumber" );
+}
+\endcode
+
+
+
+
+--outputDirect
+You often need to write a constant value directly to the output. For example you could need to write the currency of the prices into each record so that when you import into your database you know how to take exchange rates into account. Since the currency most likely will be a constant for the entire website you could write it directly like this:
+
+#outputDirect ( "currency_name" , "EUR" );#
+
+The outputDirect() works exactly like the outputValue functions and can take manipulators also. For example if you had a value in a php variable you could do:
+
+#outputDirect ( "product_price" , "$stringContainingAPrice", "trimNumber" );#  
+
+So now our example looks like this:
+\code
+// Define dom sequences for the positions we need
+domSeqCreate  ( "ProductStartSeq"   , "DIV, class, product" , "equals"  ); 
+domSeqCreate  ( "ProductNameSeq"    , "color:green"         , "contains", 1 ); 
+domSeqCreate  ( "ProductPriceSeq"   , "EUR"                 , "contains" ); 
+
+
+// Completely general way way of looping thruogh a list of products
+function MyScript_SearchListing_mine()            
+{
+    domNewSearch();
+    while ( domFindNext ( 1, "ProductStartSeq" ) ) {
+        domPointerPush();
+        $iStopPos = domFindNextPos( 1, "ProductStartSeq" );
+        domSetStopPos( $iStopPos );
+        GetProduct();
+        domClearStopPos();
+        domPointerPop();
+    }
+}
+
+function GetProduct()            
+{
+    // Get product name and  product price
+    outputValueFindNext( 1, "ProductNameSeq", "product_name", "eraseAll", ":" );
+    outputValueFindNext( 1, "ProductPriceSeq", "product_price", "trimNumber" );
+    outputDirect ( "currency_name" , "EUR" );  
+}
+\endcode
+
+
+--Keeping data for each product separated in the output
+The very last thing we need to do is to make sure that each product has it's own section in the output XML file so they don't get mixed up. So recalling that our output file currently looks like this:
+
+\code
+<product_name>Shirt</product_name> 
+<product_price>12.75</product_price> 
+<currency_name>EUR</currency_name> 
+<product_name>Socks</product_name> 
+<product_price>2.75</product_price> 
+<currency_name>EUR</currency_name> 
+\endcode
+
+We would like it to be structured:
+\code
+<product>
+    <product_name>Shirt</product_name> 
+    <product_price>12.75</product_price> 
+    <currency_name>EUR</currency_name> 
+</product>
+<product>
+    <product_name>Socks</product_name> 
+    <product_price>2.75</product_price> 
+    <currency_name>EUR</currency_name> 
+</product>
+\endcode
+
+We can do the by using the contextBegin() and contextEnd() functions. So if we simply add a #contextBegin("product");# in the beginning of the GetProduct() and then (important) remember to "end" the context again as the last step in the same function.
+
+\code
+// Define dom sequences for the positions we need
+domSeqCreate  ( "ProductStartSeq"   , "DIV, class, product" , "equals"  ); 
+domSeqCreate  ( "ProductNameSeq"    , "color:green"         , "contains", 1 ); 
+domSeqCreate  ( "ProductPriceSeq"   , "EUR"                 , "contains" ); 
+
+
+// Completely general way way of looping thruogh a list of products
+function MyScript_SearchListing_mine()            
+{
+    domNewSearch();
+    while ( domFindNext ( 1, "ProductStartSeq" ) ) {
+        domPointerPush();
+        $iStopPos = domFindNextPos( 1, "ProductStartSeq" );
+        domSetStopPos( $iStopPos );
+        GetProduct();
+        domClearStopPos();
+        domPointerPop();
+    }
+}
+
+function GetProduct()            
+{
+    // Get product name and  product price
+    contextBegin("product");
+    outputValueFindNext( 1, "ProductNameSeq", "product_name", "eraseAll", ":" );
+    outputValueFindNext( 1, "ProductPriceSeq", "product_price", "trimNumber" );
+    outputDirect ( "currency_name" , "EUR" );  
+    contextEnd();
+}
+\endcode
+
+------------------
+------------------
+
+-Getting the value of the current position
+
+--valueGet() vs.  nodeValue()
+TODO: Difference between the two
+
+
+
+
+

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<process_id>3152</process_id>
+	<script_name>Crawler</script_name>
+	<mining_done>1</mining_done>
+	<nav_current_state_indices>0</nav_current_state_indices>
+	<nav_current_state_string>Varese+Sarabande</nav_current_state_string>
+	<nav_current_state_index>0</nav_current_state_index>
+	<nav_num_states>30</nav_num_states>
+	<nav_last_state_index>29</nav_last_state_index>
+	<total_pages_loaded>1</total_pages_loaded>
+	<mining_started_time_iso>20150227T171829</mining_started_time_iso>
+	<mining_started_time_ext_iso>2015-02-27T17:18:29</mining_started_time_ext_iso>
+	<current_url>http://www.walmart.com/</current_url>
+	<latest_loaded_url>http://www.walmart.com/</latest_loaded_url>
+	<latest_loaded_time_iso>20150227T171833</latest_loaded_time_iso>
+	<latest_loaded_time_ext_iso>2015-02-27T17:18:33</latest_loaded_time_ext_iso>
+	<continue_counter>0</continue_counter>
+	<job_name>wallmart.com</job_name>
+	<job_id/>
+	<script_path>/home/ml/code/miners/scripts/thehive/movies/wallmart.com.php</script_path>
+	<script_params/>
+	<script_include_dirs/>
+	<cfg-path>/home/ml/code/crawler/code/cpp/build_cbs/make_debug_static/crawler/crawler.cfg</cfg-path>
+	<run-mode>normal</run-mode>
+	<load-images/>
+	<php-ini-path>/home/ml/code/crawler/code/cpp/build_cbs/libs/shared/Debug/php.ini</php-ini-path>
+	<resource-dir>/usr/share/netscavator</resource-dir>
+	<exit-when-done>yes</exit-when-done>
+	<upload-result/>
+	<upload-handler>uploadFileHttpPost</upload-handler>
+	<no-net-activity-handling/>
+	<no-net-activity-timeout>60</no-net-activity-timeout>
+	<show-output>yes</show-output>
+	<output-name/>
+	<max-pageloads>0</max-pageloads>
+	<win-width>1024</win-width>
+	<win-height>800</win-height>
+	<end-state/>
+	<url-queue-size>0</url-queue-size>
+	<crawler-version>1.5.1</crawler-version>
+</root>

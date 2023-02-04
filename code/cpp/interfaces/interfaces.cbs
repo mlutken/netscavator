@@ -1,0 +1,64 @@
+# -------------------
+# --- Build setup ---
+# -------------------
+CONFIGURE_FILE ( ${CMAKE_CURRENT_SOURCE_DIR}/version_info.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/version_info.cpp     )
+
+
+ADDX_DEPENDS_ON ( script_embedding          )
+ADDX_DEPENDS_ON ( cpaf_concurrent           )
+ADDX_DEPENDS_ON ( cpaf_net                  )
+ADDX_DEPENDS_ON ( cpaf_compression          )
+ADDX_DEPENDS_ON ( cpaf_utils                )
+ADDX_DEPENDS_ON ( cpaf_system               )
+ADDX_DEPENDS_ON ( cpaf_filesystem           )
+ADDX_DEPENDS_ON ( cpaf_math                 )
+ADDX_DEPENDS_ON ( boost_headers             )
+ADDX_DEPENDS_ON ( boost_thread              )
+ADDX_DEPENDS_ON ( boost_filesystem          )
+ADDX_DEPENDS_ON ( boost_program_options     )
+ADDX_DEPENDS_ON ( curl                      )
+ADDX_DEPENDS_ON	( loki                      )
+
+ADDX_INCLUDE_DIR( ${CMAKE_CURRENT_SOURCE_DIR} )
+ADDX_INCLUDE_DIR( ${CMAKE_CURRENT_SOURCE_DIR}/../crawl ) # TODO: Temporary only
+
+VERIQUIN_ADD_QT_LIBS ()
+
+
+ADD_SOURCE_FILE	( ${CMAKE_CURRENT_BINARY_DIR}/version_info.cpp   )
+ADD_SOURCE_FILE	( Factory.cpp           )
+ADD_SOURCE_FILE	( Configuration.cpp     )
+ADD_SOURCE_FILE	( DataWriterIF.cpp      )
+ADD_SOURCE_FILE	( Globals.cpp           )
+ADD_SOURCE_FILE	( ScriptingClassIF.cpp	)
+ADD_SOURCE_FILE_QT4	( ScriptMinerIF.cpp     )
+ADD_SOURCE_FILE_QT4 ( WebBrowserIF.cpp      )
+ADD_SOURCE_FILE ( DomEventIF.cpp        )
+ADD_SOURCE_FILE ( DomMouseEventIF.cpp   )
+ADD_SOURCE_FILE ( DomKeyEventIF.cpp     )
+ADD_SOURCE_FILE_QT4 ( SignalsManagerIF.cpp  )
+ADD_SOURCE_FILE ( DomNodeIF.cpp         )
+ADD_SOURCE_FILE ( LinearDomIF.cpp       )
+ADD_SOURCE_FILE ( BoxObjectIF.cpp       )
+ADD_SOURCE_FILE_QT4 ( SignalsManager.cpp    )
+ADD_SOURCE_FILE ( interfaces_types.cpp  )
+ADD_SOURCE_FILE ( interfaces_utils.cpp  )
+ADD_SOURCE_FILE_QT4 ( MinerWorkerIF.cpp       )
+ADD_SOURCE_FILE_QT4 ( BrowserViewIF.cpp       )
+ADD_SOURCE_FILE	( NetscavatorFactoryIF.cpp  )
+
+ADD_SOURCE_FILE ( url/Url.cpp                           )
+ADD_SOURCE_FILE ( url/url_string_functions.cpp          )
+ADD_SOURCE_FILE ( url/url_functions.cpp                 )
+ADD_SOURCE_FILE ( url/UrlGetter.cpp                     )
+
+ADD_SOURCE_FILE ( utils/CommandLineParser.cpp           )
+ADD_SOURCE_FILE ( utils/string_compare_functions.cpp    )
+ADD_SOURCE_FILE ( utils/string_algorithms.cpp           )
+ADD_SOURCE_FILE ( utils/string_manipulation.cpp         )
+ADD_SOURCE_FILE ( utils/utils.cpp                       )
+ADD_SOURCE_FILE ( utils/StatusFile.cpp                  )
+ADD_SOURCE_FILE ( utils/StringFinder.cpp                )
+ADD_SOURCE_FILE ( utils/QStringFinder.cpp               )
+
+

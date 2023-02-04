@@ -1,0 +1,15 @@
+# -------------------
+# --- Build setup ---
+# -------------------
+ADDX_DEPENDS_ON ( crawl			)
+ADDX_DEPENDS_ON ( cpaf_system	)
+ADDX_DEPENDS_ON ( utf8			)
+ADDX_DEPENDS_ON ( cpaf_utils	)
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE ( powersave.cpp	)
+
+
+

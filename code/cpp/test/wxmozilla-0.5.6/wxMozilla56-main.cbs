@@ -1,0 +1,43 @@
+# -------------------
+# --- Build setup ---
+# -------------------
+ADDX_DEPENDS_ON ( wx_core	)
+ADDX_DEPENDS_ON ( wx_base	)
+#ADDX_DEPENDS_ON ( gtk		)
+
+ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR}			)
+ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_INCLUDE_SDK}			)
+ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_INCLUDE}				)
+ADDX_LINK_DIR ( ${XULRUNNER_SDK_MAIN_LIB}				)
+ADDX_LINK_DIR ( ${XULRUNNER_SDK_DEVEL_LIB}				)
+
+
+ADDX_LINK_LIBRARY ( xpcomglue					)
+
+# # ADDX_LINK_LIBRARY ( xpcomglue_s					)	 
+# # ADDX_LINK_LIBRARY ( nspr4						)
+# # ADDX_LINK_LIBRARY ( embed_base_s				)
+# # ADDX_LINK_LIBRARY ( embed_base_standalone		)
+# # ##ADDX_LINK_LIBRARY ( js3250						)
+# # ADDX_LINK_LIBRARY ( mozreg_s					)
+# # ADDX_LINK_LIBRARY ( plc4						)
+# # ADDX_LINK_LIBRARY ( plds4						)
+# # ADDX_LINK_LIBRARY ( unicharutil_external_s		)
+# # ADDX_LINK_LIBRARY ( xpcom						)
+# # ADDX_LINK_LIBRARY ( xul							)
+
+
+ADD_DEFINE ( XPCOM_GLUE								1			)
+ADD_DEFINE ( __WXGTK__								1	LINUX	)
+ADD_DEFINE ( __WXMSW__								1	WINDOWS	)
+
+ADD_DEFINE ( XULRUNNER_SDK_MAIN_LIB		\\\\"${XULRUNNER_SDK_MAIN_LIB}\\\\"			)
+ADD_DEFINE ( MOZILLA_HOME				\\\\"${XULRUNNER_SDK_MAIN_LIB}\\\\"			)
+# # ADD_DEFINE ( MOZILLA_INTERNAL_API		1											)
+
+
+# --- ---
+ADD_SUBDIR ( src				)
+ADD_SUBDIR ( demo				)
+
+

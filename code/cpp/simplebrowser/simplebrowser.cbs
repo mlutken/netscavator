@@ -1,0 +1,25 @@
+# *** EXECUTABLE: 'wxMinimal' main cbs file. ***
+
+# -------------------
+# --- Build setup ---
+# -------------------
+VERIQUIN_ADD_QT_LIBS ()
+#VERIQUIN_ADD_HTMLCXX_LIBS()
+
+ADDX_DEPENDS_ON ( interfaces    )
+ADDX_DEPENDS_ON ( htmlparser    )
+
+
+ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR})
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE_QT4 ( SimpleBrowser.cpp                 )
+ADD_SOURCE_FILE     ( SimpleDomNode.cpp                 )
+ADD_SOURCE_FILE     ( SimpleDomDocumentLinear.cpp       )
+ADD_SOURCE_FILE_QT4 ( SimpleNetworkAccessManager.cpp    )
+ADD_SOURCE_FILE_QT4 ( CreatorSimpleWebViewUi.cpp        )
+ADD_SOURCE_FILE_QT4 ( SimpleWebView.cpp                 )
+
+

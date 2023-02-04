@@ -1,0 +1,37 @@
+# *** EXECUTABLE: 'wxSampleWidgets' main cbs file. ***
+
+# -------------------
+# --- Build setup ---
+# -------------------
+IF ( WINDOWS )
+ADDX_DEPENDS_ON ( wx_core   )
+ADDX_DEPENDS_ON ( wx_base   )
+ENDIF ( WINDOWS )
+
+IF ( LINUX )
+    ADDX_DEPENDS_ON ( wx_baseu-2.8              )
+    ADDX_DEPENDS_ON ( wx_gtk2u_core-2.8         )
+ENDIF ( LINUX )
+
+#ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR}		)
+
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE ( widgets.cpp )
+ADD_SOURCE_FILE ( button.cpp )
+ADD_SOURCE_FILE ( combobox.cpp )
+ADD_SOURCE_FILE ( gauge.cpp )
+ADD_SOURCE_FILE ( listbox.cpp )
+ADD_SOURCE_FILE ( notebook.cpp )
+ADD_SOURCE_FILE ( radiobox.cpp )
+ADD_SOURCE_FILE ( slider.cpp )
+ADD_SOURCE_FILE ( spinbtn.cpp )
+ADD_SOURCE_FILE ( static.cpp )
+ADD_SOURCE_FILE ( textctrl.cpp )
+
+
+#MESSAGE ( STATUS "My Message " ) 
+
+  

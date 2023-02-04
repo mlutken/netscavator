@@ -1,0 +1,22 @@
+<html><head></head><body>
+<span id="weather" name="hest">Partly cloudy, scattered showers, high 67</span>
+<p id="example3">The quick brown fox jumps <span id="ex3Span">over the lazy dog</span>.</p>
+
+<script type="text/javascript">
+function replaceSpan(){
+
+	var newSpan = document.createElement("span");
+	var newText = document.createTextNode("XXXXXXXXXXXXXXXXXX");
+	newSpan.appendChild(newText);
+
+	var para = document.getElementById("example3");
+	var spanElm = document.getElementById("ex3Span");
+	var replaced = para.replaceChild(newSpan,spanElm);
+}
+</script>Text node
+<FORM id="testform" name="testform">
+<input type="button" class="greystandard" value="GENTAG SIDSTE SØGNING" onclick="replaceSpan();">
+</FORM>
+</body>
+</html>
+

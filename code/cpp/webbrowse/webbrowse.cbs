@@ -1,0 +1,119 @@
+# *** EXECUTABLE: 'gtkmozembed_test' main cbs file. ***
+
+# # SET_DEFAULT ( WEBBROWSE_ENABLE_GTK			""	) 
+# # SET_DEFAULT ( WEBBROWSE_ENABLE_WX			1	) 
+
+# -------------------
+# --- Build setup ---
+# -------------------
+ADDX_DEPENDS_ON ( cpaf_utils							)
+ADDX_DEPENDS_ON ( cpaf_system							)
+ADDX_DEPENDS_ON ( boost_signals							)
+ADDX_DEPENDS_ON ( boost_headers 						)
+ADDX_DEPENDS_ON ( boost_filesystem						)
+ADDX_DEPENDS_ON ( boost_system							)
+ADDX_DEPENDS_ON ( boost_thread							)
+ADDX_DEPENDS_ON ( boost_date_time						)
+ADDX_DEPENDS_ON ( interfaces                            )
+##ADDX_DEPENDS_ON ( gtk			WEBBROWSE_ENABLE_GTK	)
+
+IF ( WINDOWS )
+    ADDX_DEPENDS_ON ( wx_core		WEBBROWSE_ENABLE_WX		)
+    ADDX_DEPENDS_ON ( wx_base		WEBBROWSE_ENABLE_WX		)
+ENDIF ( WINDOWS )
+
+IF ( LINUX )
+    ADDX_DEPENDS_ON ( wx_gtk2u_core-2.8  WEBBROWSE_ENABLE_WX     )
+    ADDX_DEPENDS_ON ( wx_baseu-2.8       WEBBROWSE_ENABLE_WX     )
+ENDIF ( LINUX )
+
+
+ADDX_DEPENDS_ON ( Qt	 		WEBBROWSE_ENABLE_QT		)
+ADDX_DEPENDS_ON ( QtGui 		WEBBROWSE_ENABLE_QT		)
+
+
+ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR}			)
+ADDX_INCLUDE_DIR ( ${cpaf_ROOT_DIR}/cul/boost_process	)
+ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_INCLUDE_SDK}			)
+ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_INCLUDE}				)
+ADDX_LINK_DIR ( ${XULRUNNER_SDK_DEVEL_LIB}				)
+ADDX_LINK_DIR ( ${XULRUNNER_SDK_MAIN_LIB}               )
+
+ADDX_LINK_LIBRARY 	( xpcomglue		)
+#ADDX_LINK_LIBRARY 	( profdirserviceprovidersa_s	WINDOWS	)
+##ADDX_LINK_LIBRARY 	( nspr4							WINDOWS	) # TODO: This might be needed too
+
+ADD_DEFINE ( XULRUNNER_SDK_MAIN_LIB			\\\\"${XULRUNNER_SDK_MAIN_LIB}\\\\"		)
+ADD_DEFINE ( __WXGTK__						1		LINUX							)
+ADD_DEFINE ( __WXMSW__						1		WINDOWS							)
+ADD_DEFINE ( XP_WIN							1		WINDOWS							)
+ADD_DEFINE ( WEBBROWSE_ENABLE_GTK			1		WEBBROWSE_ENABLE_GTK			)
+ADD_DEFINE ( WEBBROWSE_ENABLE_WX			1		WEBBROWSE_ENABLE_WX				)
+ADD_DEFINE ( XPCOM_GLUE                     1                                       )
+
+#ADD_COMPILE_FLAG ( /Zc:wchar_t-				COMPILER_MSVC	)
+
+
+
+# -------------------
+# --- Add sources ---
+# -------------------
+INCLUDE ( ${cpaf_SOURCE_DIR}/cul/boost_new/libs/boost_filesystem_extra_link/boost_filesystem_extra_link.cbs  )
+
+ADD_SOURCE_FILE ( docshell/WebNavigation.cpp									)
+ADD_SOURCE_FILE ( dom/DOMAbstractView.cpp										)
+ADD_SOURCE_FILE ( dom/DOMAttr.cpp												)
+ADD_SOURCE_FILE ( dom/DOMDocument.cpp											)
+ADD_SOURCE_FILE ( dom/DOMDocumentView.cpp										)
+ADD_SOURCE_FILE ( dom/DOMElement.cpp											)
+ADD_SOURCE_FILE ( dom/DOMEvent.cpp												)
+ADD_SOURCE_FILE ( dom/DOMDOMImplementation.cpp									)
+ADD_SOURCE_FILE ( dom/DOMNode.cpp												)
+ADD_SOURCE_FILE ( dom/DOMHTMLFormElement.cpp									)
+ADD_SOURCE_FILE ( dom/DOMHTMLSelectElement.cpp									)
+ADD_SOURCE_FILE ( dom/DOMRange.cpp												)
+ADD_SOURCE_FILE ( dom/DOMWindow.cpp												)
+ADD_SOURCE_FILE ( dom/DOMWindowCollection.cpp									)
+ADD_SOURCE_FILE ( dom/Selection.cpp												)
+ADD_SOURCE_FILE ( dom/ScriptContext.cpp											)
+ADD_SOURCE_FILE ( utils/webbrowse_embedding_utils.cpp							)
+ADD_SOURCE_FILE ( utils/webbrowse_string_utils.cpp								)
+ADD_SOURCE_FILE ( webbrwsr/DefaultChromeEmbed.cpp								)
+ADD_SOURCE_FILE ( webbrwsr/WebBrowser.cpp										)
+ADD_SOURCE_FILE ( webbrwsr/WebBrowserFind.cpp									)
+ADD_SOURCE_FILE ( webbrwsr/DefaultWxBrowserFrame.cpp	WEBBROWSE_ENABLE_WX		)
+# ADD_SOURCE_FILE_QT4 ( webbrwsr/DefaultQtBrowserFrame.cpp WEBBROWSE_ENABLE_QT			)
+#ADD_SOURCE_FILE_QT4 ( webbrwsr/lcdrange.cpp		WEBBROWSE_ENABLE_QT	)
+ADD_SOURCE_FILE ( mozbrowser/DefaultHttpChannel.cpp								)
+ADD_SOURCE_FILE ( mozbrowser/DefaultProgress.cpp								)
+ADD_SOURCE_FILE ( mozbrowser/DefaultContextMenuListener.cpp						)
+ADD_SOURCE_FILE ( mozbrowser/DefaultContentListener.cpp							)
+ADD_SOURCE_FILE ( mozbrowser/DefaultEventListener.cpp							)
+ADD_SOURCE_FILE ( mozbrowser/DefaultHttpActivityObserver.cpp                    )
+ADD_SOURCE_FILE ( mozbrowser/wxBrowserControl.cpp								)
+##ADD_SOURCE_FILE ( gtkbrowser.cpp												)
+##ADD_SOURCE_FILE ( SignalsManager.cpp											)
+ADD_SOURCE_FILE ( SignalsManagerWx.cpp											)
+##ADD_SOURCE_FILE ( MozBrowser.cpp												)
+ADD_SOURCE_FILE ( MozBrowserGtk.cpp						WEBBROWSE_ENABLE_GTK	)
+ADD_SOURCE_FILE ( MozBrowserWx.cpp						WEBBROWSE_ENABLE_WX		)
+ADD_SOURCE_FILE ( MozBrowserQt.cpp						WEBBROWSE_ENABLE_QT		)
+
+ADD_SOURCE_FILE ( mozwebbrowser/MozDomNode.cpp                                  )
+ADD_SOURCE_FILE ( mozwebbrowser/DomDocumentLinear.cpp		)
+
+
+#ADD_SOURCE_FILE_COMPILE_FLAG ( mozbrowser/DefaultContentListener.cpp	-fno-rtti	COMPILER_GCC	)
+#ADD_SOURCE_FILE_COMPILE_FLAG ( mozbrowser/DefaultProgress.cpp			-fno-rtti	COMPILER_GCC	)
+
+
+
+# SET_DEFAULT ( boost_SRC_ROOT	${cpaf_SOURCE_DIR}/unpacked_src/boost_1_46_1 )
+# SET_DEFAULT ( boost_filesystem_SRC_ROOT	${boost_SRC_ROOT}/libs/filesystem_ml )
+# ADD_SOURCE_FILE ( ${boost_filesystem_SRC_ROOT}/v3/src/path.cpp )
+# ADD_SOURCE_FILE ( ${boost_filesystem_SRC_ROOT}/v3/src/windows_file_codecvt.cpp )
+# ADD_SOURCE_FILE ( ${boost_filesystem_SRC_ROOT}/v3/src/path_traits.cpp )
+
+#MESSAGE ( STATUS "My Message " ) 
+
+  

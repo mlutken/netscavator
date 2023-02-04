@@ -1,0 +1,72 @@
+# -------------------
+# --- Build setup ---
+# -------------------
+SET_DEFAULT( WEBMINER_PHP_INCLUDE_PATH		".;${veriquin_cpp_SOURCE_DIR}/scriptcrawl/php_crawl;$ENV{WEBMINER_ROOT_DIR}/scripts/utils;$ENV{WEBMINER_ROOT_DIR}/scripts;${CBS_SHARED_LIBRARY_PATH_PREBUILD}"		WINDOWS	)
+SET_DEFAULT( WEBMINER_PHP_INCLUDE_PATH		".:${veriquin_cpp_SOURCE_DIR}/scriptcrawl/php_crawl:$ENV{WEBMINER_ROOT_DIR}/scripts/utils:$ENV{WEBMINER_ROOT_DIR}/scripts:${CBS_SHARED_LIBRARY_PATH_PREBUILD}"		UNIX	)
+
+CONFIGURE_FILE ( ${CMAKE_CURRENT_SOURCE_DIR}/php.ini.in ${CBS_SHARED_LIBRARY_PATH_PREBUILD}/php.ini 				)
+
+
+ADD_DEFINE ( ZEND_DEBUG						0		CBS_RELEASE					)
+ADD_DEFINE ( ZEND_DEBUG						1		CBS_DEBUG					)
+
+
+ADD_DEFINE ( ZTS							1		ZEND_ZTS_MODE               )
+
+ADD_DEFINE ( _USE_32BIT_TIME_T				1		WINDOWS						)
+ADD_DEFINE ( ZEND_WIN32						1		WINDOWS						)
+ADD_DEFINE ( PHP_WIN32						1		WINDOWS						)
+ADD_DEFINE ( ZEND_WIN32_FORCE_INLINE		1		WINDOWS						)
+ADD_DEFINE ( WIN32							1		WIN32						)
+ADD_DEFINE ( __WIN32__						1		WIN32						)
+ADD_DEFINE ( XPCOM_GLUE                     1                                   )
+
+ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR} )
+ADDX_INCLUDE_DIR ( ${PHP_BASE_INCLUDE_DIR}			)
+ADDX_INCLUDE_DIR ( ${PHP_BASE_INCLUDE_DIR}/Zend 	)
+ADDX_INCLUDE_DIR ( ${PHP_BASE_INCLUDE_DIR}/TSRM 	)
+ADDX_INCLUDE_DIR ( ${PHP_BASE_INCLUDE_DIR}/main		)
+ADDX_INCLUDE_DIR ( ${veriquin_cpp_SOURCE_DIR}		)
+
+
+
+
+IF ( WINDOWS )
+    ADDX_LINK_DIR 		( ${PHP_BASE_DIR}/bin	)
+    ADDX_LINK_LIBRARY 	( php5ts_debug				CBS_DEBUG	)
+    ADDX_LINK_LIBRARY 	( php5ts					CBS_RELEASE	)
+ENDIF ( WINDOWS )
+
+IF ( LINUX )
+    ADDX_LINK_DIR 		( ${PHP_BASE_DIR}/lib	)
+    ADDX_LINK_LIBRARY 	( php-sleipner5         )
+ENDIF ( LINUX )
+
+
+ADDX_DEPENDS_ON ( interfaces	)
+ADDX_DEPENDS_ON ( crawl			)
+ADDX_DEPENDS_ON ( loki				)
+ADDX_DEPENDS_ON ( cpaf_net			)
+ADDX_DEPENDS_ON ( cpaf_compression	)
+ADDX_DEPENDS_ON ( boost_thread		)
+ADDX_DEPENDS_ON ( boost_date_time	)
+ADDX_DEPENDS_ON ( boost_filesystem	)
+ADDX_DEPENDS_ON ( curl			)
+ADDX_DEPENDS_ON ( crypto		)
+ADDX_DEPENDS_ON ( ssl			)
+ADDX_DEPENDS_ON ( scriptfunctions_php	)
+ADDX_DEPENDS_ON ( boost_system          )
+
+# -------------------
+# --- Add sources ---
+# -------------------
+INCLUDE ( ${cpaf_SOURCE_DIR}/cul/boost_new/libs/boost_filesystem_extra_link/boost_filesystem_extra_link.cbs  )
+
+
+ADD_SOURCE_FILE ( ../scriptcrawl.cpp			)
+ADD_SOURCE_FILE ( ../scriptcrawl_private.cpp	)
+ADD_SOURCE_FILE ( scriptcrawl_module_php.cpp	)
+
+ADD_SWIG_SOURCE_CPP ( ../scriptcrawl.i php 	)
+
+

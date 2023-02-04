@@ -1,0 +1,111 @@
+***********************************************
+*** Basic data mining: domFind, outputValue ***
+***********************************************
+
+--Linearized DOM tree
+Traditional tools for viewing html code or for webmining uses the tree approach when displaying the source code of a webpage. For example as seen in Windows Explorers treeview, in Firebug for Firefox or simply the nested structure of an html or xml document.
+
+In the Sleipner world we mostly use a linerized view of the dom tree. This linear view is very close to what you see when you open an html document in a simple text editor and to a typical Word processor document: 
+All words are lined up one after another starting from the top left word and following left to right, line by line as normal reading order. The following examplification will clarify this.
+
+We use the following html snippet as our example document in the following:
+
+<HTML>
+    <HEADER>
+        <TITLE>Linearized DOM example</TITLE>
+    </HEADER>
+    <BODY class="class1" >
+        <H1>Product listing</H1>
+        <DIV class="product" >
+            <DIV style="color:green;float:left" >Shirt: </DIV><DIV style="float:left" class="class2">12.75 EUR</DIV><BR />
+            <A href="clothing/shirts.php?color=white" >White shirt. View and buy - click here </A> 
+        </DIV>
+        <DIV class="product" >
+            <DIV style="color:green;float:left" >Socks: </DIV><DIV style="float:left" class="class2">2.75 EUR</DIV><BR />
+            <A href="clothing/socks.php?color=black" >Black socks. View and buy - click here </A> 
+        </DIV>
+        <BUTTON style="font-size:20px" >Next</BUTTON>
+    </BODY>
+</HTML>
+
+When making the linear version of this document we simply put every element, including attributes like for example style="font-size", in a long list like shown in the following table.
+
+
+TODO: Make the table
+
+As seen from the table we remove the <>'s around the elements as well as the ""'s surrounding attributes. All elements are assigned an index corresponding to their position in the table, starting with index 1 for the first element (typically <html>).
+
+--Example (XX TODO: "Gennemgående eksempel" hvad hedder det på engelsk? XX)
+We shall develop and expand thruogh the text on a working example. In order for you to have a feeling with where we are heading we shall present the final example here. Don't dwell too much over it now as everything will be properly explained as we go. 
+
+The goal for the first chapters is to mine the data from pages like the above example html. The html represents a typical product listing page as after an initial "search" from the main search page of some site. Often these pages will contain "next-links" from from wich you can traverse the entire list of results matching your search. How to click on the next links are covered in another chapter (XX TODO: Name XX). 
+
+We want the product names and prices written to an XML file with the following content:
+
+\code
+<product>
+    <product_name>Shirt</product_name> 
+    <product_price>12.75</product_price> 
+    <currency_name>EUR</currency_name> 
+</product>
+<product>
+    <product_name>Socks</product_name> 
+    <product_price>2.75</product_price> 
+    <currency_name>EUR</currency_name> 
+</product>
+\endcode
+
+
+What we want our code to do can be described like this:
+  -1. Define short sequences of consequtive nodes (see table and html) which "identifies" 
+      the following 3 positions of interrest on the page:
+      - ProductStartSeq: The start of each product listing.
+      - ProductNameSeq: The position of the name of a product.
+      - ProductNameSeq: The position of the price of a product.
+  -2. Create a MyScript_SearchListing_mine() function that loops through all the products. 
+      (This loop is very generic so it can most probably be reused on any site having a traditional 
+      search listing with results exactly as presented here.)
+  -3. Output the product_name, product_price (and the currency_name).
+
+The complete example in real code follows. Again: Do not spend more that a minute or two looking at the code, since we shall develop it step by step throughout the chapter. 
+
+\code
+// Define dom sequences for the positions we need
+domSeqCreate  ( "ProductStartSeq"   , "DIV, class, product" , "equals"  ); 
+domSeqCreate  ( "ProductNameSeq"    , "color:green"         , "contains", 1 ); 
+domSeqCreate  ( "ProductPriceSeq"   , "EUR"                 , "contains" ); 
+
+
+// Completely general way way of looping thruogh a list of products
+function MyScript_SearchListing_mine()            
+{
+    domNewSearch();
+    while ( domFindNext ( 1, "ProductStartSeq" ) ) {
+        domPointerPush();
+        $iStopPos = domFindNextPos( 1, "ProductStartSeq" );
+        domSetStopPos( $iStopPos );
+        GetProduct();
+        domClearStopPos();
+        domPointerPop();
+    }
+}
+
+function GetProduct()            
+{
+    // Get product name and  product price
+    contextBegin("product");
+    outputValueFindNext( 1, "ProductNameSeq", "product_name", "eraseAll", ":" );
+    outputValueFindNext( 1, "ProductPriceSeq", "product_price", "trimNumber" );
+    outputDirect ( "currency_name" , "EUR" );  
+    contextEnd();
+}
+\endcode
+
+
+
+--Current node/index
+At any given time the working document/webpage will have a current index corresponding to some node. For example if the current node is placed at the #H1# element the current index will be 10. Advancing forward by 1 ( domStep(1) ) we get to #Product listing# at index 11. Note: You can step backwards using negative values.
+
+Most dom related operations use current node as starting point or simply operarates directly on the text data of this. For example domFindNext, outputValue, valueGet. Obious exceptions to this rule are functions that allways start their search from the top of the document (index 1) like domFind and similar.
+
+Using the functions domGetPos you can query for the current index directly like for exmaple # $pos1=domGetPos();#. And then later return to this position by doing #domSetPos ($pos1);#

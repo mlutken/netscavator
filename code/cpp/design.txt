@@ -1,0 +1,56 @@
+--- TODO ---
+
+How to handle PHP errors without exiting program...
+
+(153) : Fatal error - Call to undefined function outputHeader()
+/home/ml/code/crawler/code/3rdpartysrc/php-5.5.11/main/main.c(1173) : Bailed out without a bailout address!
+Ini path: /home/ml/code/miners/scripts/thehive/test:/home/ml/code/miners/scripts/thehive/utils:/home/ml/code/miners/scripts/thehive/templates
+BaseOutputName: MoviemusicCom
+
+
+--- Creating self extracting script ---
+
+
+First, tar and gzip the file(s):
+
+tar -cvf archive.tar app_name/ ; gzip -9 archive.tar
+
+Next, create the installer script (here's a basic one):
+
+#!/bin/bash
+function die () { echo "Error!"; exit 1 }
+cd ~/ || die
+
+echo "Installing AppName to ~/app_name..."
+
+The script will have to find the embedded archive. So, we'll find the line number with our "ARCHIVE:" marker:
+
+archive=$(grep --text --line-number 'ARCHIVE:$' $0)
+
+Then the script can tail the file (starting after ARCHIVE:) and pipe the tailed binary output to gzip, then tar. No temporary files are created.
+
+tail -n +$((archive + 1)) $0 | gzip -vdc - | tar -xvf - > /dev/null || die
+
+We have some post installation configuration in our sample application:
+
+./app_name/bin/post_install_configuration.sh || die
+
+echo "Installation complete!"
+exit 0
+
+Don't forget to write the archive marker at the end of the script
+
+ARCHIVE:
+
+Save the file as "installer.sh"
+
+Now we can add the archive to the installer:
+
+cat archive.tar.gz >> installer.sh
+
+Make it executable:
+
+chmod +x ./installer.sh
+
+All done!
+

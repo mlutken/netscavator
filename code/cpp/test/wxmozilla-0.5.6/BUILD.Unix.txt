@@ -1,0 +1,24 @@
+Unix/Linux build instructions:
+
+These instructions assume that you have already built wxWindows. If not, you can get wxWindows from http://www.wxwindows.org. (It was tested with 2.4.0) Now onto the instructions!
+
+From the command line, do the configure/make/make install dance:
+
+./configure
+make
+su root
+make install
+
+If you want or need to use a version of Mozilla other than the system installed version, you can pass in the following flags:
+
+--with-mozilla-libs=/path/to/mozilla/dynamic/libs
+--with-mozilla-includes=/path/to/mozilla/includes
+
+You can also build the wxPython extension by passing in --enable-python to configure.
+
+This will build a wxMozilla static library file and install it to /usr/local/lib directory. It will also build the wxMozillaDemo application in your <WXMOZILLA>/demo directory. 
+
+NOTE: In order for the demo to work properly, it needs to be able to find the Mozilla GRE libraries. To do this, you will need to add the path to your Mozilla GRE directory (located in <WXMOZILLA>/mozilla/gre) to your LD_LIBRARY_PATH environment variable. This ensures that it will not try to load Mozilla libraries from another installation of Mozilla. (RH 8 includes Mozilla 1.0 for example.) If you plan on running the wxMozillaDemo program from a directory other than the wxMozilla GRE directory, you also need to set MOZILLA_FIVE_HOME environment variable to your wxMozilla GRE directory. Once this is done, you should be able to run the demo!
+
+Please report any bugs (or bug fixes =) to wxmozilla-devel@lists.sourceforge.net.
+ 

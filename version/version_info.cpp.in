@@ -1,0 +1,13 @@
+
+#include <string>
+
+std::string versionString ()
+{
+    return "@NETSCAVATOR_VERSION_STRING@";
+}
+
+std::string crawler_php_version_string ()
+{
+    return "@CRAWLER_PHP_VERSION@";
+}
+

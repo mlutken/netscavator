@@ -1,0 +1,96 @@
+# *** EXECUTABLE: 'wxMinimal' main cbs file. ***
+
+
+# -------------------
+# --- Build setup ---
+# -------------------
+ADDX_DEPENDS_ON ( webkitbrowser         )
+ADDX_DEPENDS_ON ( simplebrowser         )
+ADDX_DEPENDS_ON ( script_embedding      )
+ADDX_DEPENDS_ON ( scriptfunctions_php   )
+ADDX_DEPENDS_ON ( interfaces            )
+ADDX_DEPENDS_ON ( cpaf_utils            )
+
+
+ADDX_LINK_LIBRARY ( qscintilla2           )
+ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR})
+
+# -------------------
+# --- Add sources ---
+# -------------------
+#ADD_SOURCE_FILE_QT4 ( UrlInput.cpp         )
+#ADD_SOURCE_FILE_QT4 ( DomTreeTextViewUi.cpp  )
+#ADD_SOURCE_FILE_QT4 ( DomTreeTableViewUi.cpp )
+#ADD_SOURCE_FILE_QT4 ( DomTreeTreeViewUi.cpp )
+#ADD_SOURCE_FILE_QT4 ( DomTreePanelUi.cpp )
+#ADD_SOURCE_FILE_QT4 ( DomTreePopupUi.cpp )
+#ADD_SOURCE_FILE_QT4 ( HandlerDropDownSelect.cpp )
+#ADD_SOURCE_FILE_QT4 ( HandlerTabSelect.cpp )
+#ADD_SOURCE_FILE_QT4 ( HandlerToolBarSelect.cpp )
+
+#ADD_SOURCE_FILE_QT4 ( coreplugin/styleanimator.cpp  )
+#ADD_SOURCE_FILE_QT4 ( coreplugin/manhattanstyle.cpp )
+#ADD_SOURCE_FILE     ( utils/stylehelper.cpp         )
+#ADD_SOURCE_FILE     ( utils/qtcassert.cpp           )
+#ADD_SOURCE_FILE_QT4 ( utils/fancymainwindow.cpp     )
+
+ADD_SOURCE_FILE_QT4 ( BrowserWidgetUi.cpp       )
+ADD_SOURCE_FILE_QT4 ( CrawlerMainWindowUi.cpp   )   # Used in crawler webkit only!
+ADD_SOURCE_FILE_QT4 ( CrawlerSimple.cpp         )   # Used in crawler simple only!
+ADD_SOURCE_FILE_QT4 ( CreatorDomTableView.cpp   )
+ADD_SOURCE_FILE_QT4 ( CreatorLinearDomTableModel.cpp )
+ADD_SOURCE_FILE_QT4 ( CreatorMainWindowUi.cpp   )
+ADD_SOURCE_FILE_QT4 ( CreatorMainWidgetUi.cpp   )
+ADD_SOURCE_FILE_QT4 ( CreatorTextDomTreeView.cpp)
+ADD_SOURCE_FILE_QT4 ( CreatorWebkitWebViewUi.cpp)
+ADD_SOURCE_FILE_QT4 ( DesignWidgetUi.cpp        )
+ADD_SOURCE_FILE_QT4 ( DomSeqWidget.cpp          )
+ADD_SOURCE_FILE_QT4 ( DomSequencesTableModel.cpp)
+ADD_SOURCE_FILE_QT4 ( DomSequencesViewUi.cpp    )
+ADD_SOURCE_FILE_QT4 ( DebugToolBarUI.cpp        )
+ADD_SOURCE_FILE     ( editor_utils.cpp          )
+ADD_SOURCE_FILE_QT4 ( EditorViewUi.cpp          )
+ADD_SOURCE_FILE_QT4 ( EditorWidgetUi.cpp        )
+ADD_SOURCE_FILE     ( gui_utils.cpp             )
+ADD_SOURCE_FILE     ( GuiActionsMgr.cpp         )
+ADD_SOURCE_FILE     ( GuiGlobals.cpp            )
+ADD_SOURCE_FILE_QT4 ( HelpWidgetUi.cpp          )
+ADD_SOURCE_FILE_QT4 ( HtmlSourceWidgetUi.cpp    )
+ADD_SOURCE_FILE_QT4 ( LeftPanelUi.cpp           )
+
+
+ADD_SOURCE_FILE_QT4 ( MainToolBarUI.cpp         )
+ADD_SOURCE_FILE_QT4 ( MinerCtrl.cpp             )
+ADD_SOURCE_FILE_QT4 ( OutputViewUi.cpp          )
+ADD_SOURCE_FILE_QT4 ( OutputViewCtrl.cpp        )
+ADD_SOURCE_FILE_QT4 ( PhpQuickUi.cpp            )
+ADD_SOURCE_FILE_QT4 ( ProjectsViewUi.cpp        )
+ADD_SOURCE_FILE_QT4 ( ProjectTableModel.cpp     )
+ADD_SOURCE_FILE_QT4 ( ScriptCtrl.cpp            )
+#ADD_SOURCE_FILE_QT4 ( TabbedBrowserUi.cpp      )
+ADD_SOURCE_FILE_QT4 ( UrlInputUi.cpp            )
+ADD_SOURCE_FILE_QT4 ( WebkitWebView.cpp         )
+ADD_SOURCE_FILE_QT4 ( WelcomeWidgetUi.cpp       )
+
+
+ADD_SOURCE_FILE ( WebkitCreatorFactory.cpp       )
+ADD_SOURCE_FILE ( SimpleCreatorFactory.cpp       )
+ADD_SOURCE_FILE ( SimpleCrawlerFactory.cpp       )
+
+#ADD_SOURCE_FILE_QT4 ( CodeEdit.cpp             )
+#ADD_SOURCE_FILE_QT4 ( HandlerCodeEdit.cpp      )
+#ADD_SOURCE_FILE_QT4 ( TabbedCodeEditor.cpp     )
+
+#ADD_SOURCE_FILE_QT4 ( MainToolBar.cpp          )
+
+#ADD_SOURCE_FILE_QT4 ( ModifierEdit.cpp )
+#ADD_SOURCE_FILE_QT4 ( DomSeqEdit.cpp )
+
+##message ( "XXXXXXXXXXXXX CBS_rcc_qt4_EXECUTABLE: ${CBS_rcc_qt4_EXECUTABLE}" )
+
+ADD_GENERATED_SOURCE (SRC core.qrc
+ 						OUT	core_qrc.cpp
+ 						CMD ${CBS_rcc_qt4_EXECUTABLE} -no-compress core.qrc > _OUT 
+ 						DUMMY 
+						 )
+

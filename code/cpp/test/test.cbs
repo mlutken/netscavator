@@ -1,0 +1,15 @@
+# *** PROJECT: 'test' main cbs file. ***
+
+
+
+# -----------------------------------------------
+# --- Add subdirectories (targets/subprojects ---
+# -----------------------------------------------
+#ADD_SUBDIR ( simpleCommandLine     )
+ADD_SUBDIR ( qtnetworkdownload      )
+ADD_SUBDIR ( qtminimal              )
+ADD_SUBDIR ( qttestbrowser          )
+##ADD_SUBDIR ( script_updater	        )
+ADD_SUBDIR ( site_maps_getter       )
+
+

@@ -1,0 +1,11 @@
+#manifest chrome/chrome.manifest
+content xulcrawler chrome/content/
+
+binary-component components/libCSpecialThing.so ABI=Linux_x86_64-gcc3
+binary-component components/CSpecialThing.dll ABI=WINNT_x86-msvc
+interfaces components/ISpecialThing.xpt
+
+#binary-component components/windows/mycomponent.dll ABI=WINNT_x86-msvc
+#binary-component components/mac/mycomponent.dylib ABI=Darwin_x86-gcc3
+#binary-component components/mac/mycomponent64.dylib ABI=Darwin_x86_64-gcc3
+#binary-component components/linux/mycomponent.so ABI=Linux_x86-gcc3

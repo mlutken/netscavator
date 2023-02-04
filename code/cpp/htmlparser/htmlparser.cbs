@@ -1,0 +1,22 @@
+# -------------------
+# --- Build setup ---
+# -------------------
+ADDX_DEPENDS_ON ( boost_headers )
+VERIQUIN_ADD_QT_LIBS()
+
+ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR})
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE ( html/CharsetConverter.cc  )
+ADD_SOURCE_FILE ( html/Extensions.cc        )
+ADD_SOURCE_FILE ( html/Node.cc              )
+ADD_SOURCE_FILE ( html/ParserDom.cc         )
+ADD_SOURCE_FILE ( html/ParserSax.cc         )
+ADD_SOURCE_FILE ( html/Uri.cc               )
+ADD_SOURCE_FILE ( html/utils.cc             )
+
+
+
+

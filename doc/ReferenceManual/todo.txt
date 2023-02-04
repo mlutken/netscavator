@@ -1,0 +1,5 @@
+
+----------------------------------
+--- Missing doc for functions: ---
+----------------------------------
+std::string     trimBetween_fn      ( const std::string& sInput, const std::string& sBegin,         const std::string& sEnd );

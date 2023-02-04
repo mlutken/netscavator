@@ -1,0 +1,106 @@
+# -------------------
+# --- Build setup ---
+# -------------------
+IF ( LINUX )
+    set( CMAKE_C_FLAGS_DEBUG "-O0 -g" )
+    set( CMAKE_CXX_FLAGS_DEBUG "-O0 -g" )
+    set( CMAKE_C_FLAGS_RELEASE "-O0 -g" )
+    set( CMAKE_CXX_FLAGS_RELEASE "-O0 -g" )
+ENDIF ( LINUX )
+
+
+IF ( WINDOWS )
+    ADDX_DEPENDS_ON ( wx_aui        )
+    ADDX_DEPENDS_ON ( wx_adv        )
+    ADDX_DEPENDS_ON ( wx_html       )
+    ADDX_DEPENDS_ON ( wx_richtext   )
+ENDIF ( WINDOWS )
+
+IF ( LINUX )
+    ADDX_DEPENDS_ON ( wx_baseu-2.8              )
+    ADDX_DEPENDS_ON ( wx_gtk2u_core-2.8         )
+    ADDX_DEPENDS_ON ( wx_gtk2u_aui-2.8          )
+    ADDX_DEPENDS_ON ( wx_gtk2u_adv-2.8          )
+    ADDX_DEPENDS_ON ( wx_gtk2u_html-2.8         )
+    ADDX_DEPENDS_ON ( wx_gtk2u_richtext-2.8     )
+ENDIF ( LINUX )
+
+ADDX_DEPENDS_ON ( wxutils                   )
+ADDX_DEPENDS_ON ( script_embedding          )
+ADDX_DEPENDS_ON ( crawl                     )
+ADDX_DEPENDS_ON ( scriptfunctions_php       )
+ADDX_DEPENDS_ON ( interfaces                )
+ADDX_DEPENDS_ON ( cpaf_net                  )
+ADDX_DEPENDS_ON ( cpaf_compression          )
+#ADDX_DEPENDS_ON ( boost_filesystem         )
+ADDX_DEPENDS_ON ( curl                      )
+ADDX_DEPENDS_ON ( z                         )
+
+ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR}      )
+ADDX_INCLUDE_DIR ( ${PHP_BASE_INCLUDE_DIR}          )
+ADDX_INCLUDE_DIR ( ${PHP_BASE_INCLUDE_DIR}/Zend     )
+ADDX_INCLUDE_DIR ( ${PHP_BASE_INCLUDE_DIR}/TSRM     )
+ADDX_INCLUDE_DIR ( ${PHP_BASE_INCLUDE_DIR}/main     )
+
+ADDX_LINK_LIBRARY 	( pthread 					LINUX )
+
+IF ( LINUX )
+    ADDX_LINK_DIR 		( ${PHP_BASE_DIR}/lib 		)
+    ADDX_LINK_LIBRARY 	( php5ts					)
+ENDIF ( LINUX )
+
+
+
+IF ( WINDOWS )
+    SET_CONFIG ( Php5LinkLib    php5ts_debug            CBS_DEBUG       ) 
+    SET_CONFIG ( Php5LinkLib    php5ts                  CBS_RELEASE     ) 
+    ADDX_LINK_DIR       ( ${PHP_BASE_DIR}/bin       )
+    ADDX_LINK_LIBRARY   ( php5embed                 )
+    ADDX_LINK_LIBRARY   ( ${Php5LinkLib}            )
+    CONFIGURE_FILE ( ${PHP_BASE_DIR}/bin/${Php5LinkLib}.dll ${CBS_SHARED_LIBRARY_PATH_PREBUILD}/${Php5LinkLib}.dll  COPYONLY    )
+    
+ENDIF ( WINDOWS )
+
+CONFIGURE_FILE ( ${CMAKE_CURRENT_SOURCE_DIR}/robot.cfg.in ${CBS_SHARED_LIBRARY_PATH_PREBUILD}/robot.cfg     )
+CONFIGURE_FILE ( ${CMAKE_CURRENT_SOURCE_DIR}/robot.cfg.in ${CMAKE_CURRENT_BINARY_DIR}/robot.cfg             )
+
+
+# --- Set define for hardcoded php.ini file path. Mostly used for debugging/testing purposes ---
+SET ( PHP_HARDCODED_INI_FILE_PATH   ${CBS_SHARED_LIBRARY_PATH_PREBUILD}/php.ini )
+ADD_DEFINE ( PHP_HARDCODED_INI_FILE_PATH            \\\\"${PHP_HARDCODED_INI_FILE_PATH}\\\\"        )
+
+
+ADD_DEFINE ( ZEND_DEBUG                     0       CBS_RELEASE                 )
+ADD_DEFINE ( ZEND_DEBUG                     1       CBS_DEBUG                   )
+
+ADD_DEFINE ( ZTS                            1       ZEND_ZTS_MODE               )
+ADD_DEFINE ( _USE_32BIT_TIME_T              1       WINDOWS                     )
+ADD_DEFINE ( ZEND_WIN32                     1       WINDOWS                     )
+ADD_DEFINE ( PHP_WIN32                      1       WINDOWS                     )
+ADD_DEFINE ( ZEND_WIN32_FORCE_INLINE        1       WINDOWS                     )
+ADD_DEFINE ( WIN32                          1       WIN32                       )
+ADD_DEFINE ( __WIN32__                      1       WIN32                       )
+
+
+ADD_DEFINE ( XPCOM_GLUE             1          )
+
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE ( base/BasePageCtrl.cpp				)
+ADD_SOURCE_FILE ( base/BasePageWxIF.cpp				)
+ADD_SOURCE_FILE ( wx/CreatorBrowserControlWx.cpp	)
+ADD_SOURCE_FILE ( wx/FindToolBarWx.cpp				)
+ADD_SOURCE_FILE ( wx/UrlToolBarWx.cpp				)
+ADD_SOURCE_FILE ( wx/DomTreeTextWx.cpp				)
+ADD_SOURCE_FILE ( wx/CreatorMainFrameWx.cpp			)
+ADD_SOURCE_FILE ( control/DomTreeTextCtrl.cpp		)
+ADD_SOURCE_FILE ( control/BrowserWindowCtrl.cpp		)
+ADD_SOURCE_FILE ( control/NotebookCtrl.cpp			)
+
+
+
+ADD_SOURCE_FILE ( robot.cpp				        	)
+
+  

@@ -1,0 +1,19 @@
+VERIQUIN_ADD_QT_LIBS()
+
+ADDX_DEPENDS_ON ( interfaces                )
+ADDX_DEPENDS_ON ( cpaf_net                  )
+ADDX_DEPENDS_ON ( cpaf_compression          )
+ADDX_DEPENDS_ON ( cpaf_utils                )
+ADDX_DEPENDS_ON ( cpaf_system               )
+ADDX_DEPENDS_ON ( cpaf_filesystem           )
+ADDX_DEPENDS_ON ( boost_headers             )
+ADDX_DEPENDS_ON ( boost_thread              )
+ADDX_DEPENDS_ON ( boost_filesystem          )
+ADDX_DEPENDS_ON ( boost_program_options     )
+
+
+ADD_SOURCE_FILE ( script_updater.cpp		)
+
+
+MESSAGE ( STATUS "script_updater" )
+

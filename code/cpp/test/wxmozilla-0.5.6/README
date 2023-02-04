@@ -1,0 +1,16 @@
+	wxMozilla - Mozilla Component for wxWindows
+		wxmozilla.sf.net
+
+This is just an initial release to try and capture anyone's
+attention who is looking for a similar device and maybe
+gather some development support.
+
+This release just provides basic Mozilla browser
+embedding into any wxWindows application with not much more
+than basic URL loading.
+
+
+Author
+	Jeremiah Cornelius McCarthy
+	jeremiahmccarthy@roadrunner.nf.net
+	http://neurotoxin.dyn.dhs.org:3080/

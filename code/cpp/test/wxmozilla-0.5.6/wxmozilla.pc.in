@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: wxmozilla
+Description: wxWindows interface to Mozilla
+Version: @VERSION@
+Libs: -L${libdir} -l@WXMOZILLALIB@ @MOZILLA_LIBS@
+Cflags: -I${includedir}/wxmozilla

@@ -1,0 +1,6 @@
+#!/bin/sh
+# export LD_LIBRARY_PATH=@SLEIPNER_BIN_DIR@:$LD_LIBRARY_PATH
+# export QT_PLUGIN_PATH=@SLEIPNER_BIN_DIR@/plugins
+exec @SLEIPNER_BIN_DIR@/netcreator $*
+
+

@@ -1,0 +1,4 @@
+RemoveHandler .php .phtml .php3
+RemoveType .php .phtml .php3
+php_flag engine off
+# The php_flag: Makes MLs apachace php local setup cause 500 error when accessing this dir. Dirrent cgi setup then the server. 

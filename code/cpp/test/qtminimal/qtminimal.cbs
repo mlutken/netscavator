@@ -1,0 +1,19 @@
+# *** EXECUTABLE: 'wxMinimal' main cbs file. ***
+
+ADDX_DEPENDS_ON ( webkitbrowser         )
+##ADDX_DEPENDS_ON ( qttestbrowser         )
+
+# -------------------
+# --- Build setup ---
+# -------------------
+VERIQUIN_ADD_QT_LIBS()
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE ( qtminimal.cpp		)
+#ADD_SOURCE_FILE_QT4 ( WebWidget.cpp		)
+
+
+#MESSAGE ( STATUS "My Message qtminimal" )
+

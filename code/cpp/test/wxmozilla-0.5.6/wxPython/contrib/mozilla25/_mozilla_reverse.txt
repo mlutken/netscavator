@@ -1,0 +1,4 @@
+# Other names that need to be reverse-renamed for the old namespace
+__version__ = (wxMOZ_MAJOR_VERSION, wxMOZ_MINOR_VERSION, wxMOZ_RELEASE_NUMBER)
+
+EVT*

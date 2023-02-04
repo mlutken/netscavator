@@ -1,0 +1,41 @@
+# -------------------
+# --- Build setup ---
+# -------------------
+IF ( LINUX )
+    set( CMAKE_C_FLAGS_DEBUG "-O0 -g" )
+    set( CMAKE_CXX_FLAGS_DEBUG "-O0 -g" )
+    set( CMAKE_C_FLAGS_RELEASE "-O0 -g" )
+    set( CMAKE_CXX_FLAGS_RELEASE "-O0 -g" )
+ENDIF ( LINUX )
+
+
+IF ( WINDOWS )
+    ADDX_DEPENDS_ON ( wx_aui        )
+    ADDX_DEPENDS_ON ( wx_adv        )
+    ADDX_DEPENDS_ON ( wx_html       )
+    ADDX_DEPENDS_ON ( wx_richtext   )
+ENDIF ( WINDOWS )
+
+IF ( LINUX )
+    ADDX_DEPENDS_ON ( wx_baseu-2.8              )
+    ADDX_DEPENDS_ON ( wx_gtk2u_core-2.8         )
+    ADDX_DEPENDS_ON ( wx_gtk2u_aui-2.8          )
+    ADDX_DEPENDS_ON ( wx_gtk2u_adv-2.8          )
+    ADDX_DEPENDS_ON ( wx_gtk2u_html-2.8         )
+    ADDX_DEPENDS_ON ( wx_gtk2u_richtext-2.8     )
+ENDIF ( LINUX )
+
+
+ADDX_DEPENDS_ON ( boost_filesystem          )
+ADDX_DEPENDS_ON ( interfaces                )
+
+ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR}      )
+
+
+# -------------------
+# --- Add sources ---
+# -------------------
+
+ADD_SOURCE_FILE ( wx_command_line.cpp				    )
+
+  

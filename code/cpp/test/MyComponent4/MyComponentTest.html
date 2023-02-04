@@ -1,0 +1,22 @@
+<html>
+<script type="text/javascript">
+function MyComponentTestGo() {
+	try {
+		// normally Firefox extensions implicitly have XPCOM privileges, but since this is a file we have to request it.
+		netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+		const cid = "@example.com/XPCOMSample/MyComponent;1";
+		obj = Components.classes[cid].createInstance();
+		// bind the instance we just created to our interface
+		obj = obj.QueryInterface(Components.interfaces.IMyComponent);
+	} catch (err) {
+		alert(err);
+		return;
+	}
+	var res = obj.Add(3, 4);
+	alert('Performing 3+4. Returned ' + res + '.');
+}
+</script>
+<body>
+<button onclick="MyComponentTestGo();">Go</button>
+</body>
+</html>

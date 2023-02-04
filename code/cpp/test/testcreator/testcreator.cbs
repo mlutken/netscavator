@@ -1,0 +1,41 @@
+# *** EXECUTABLE: 'wxMinimal' main cbs file. ***
+IF ( LINUX )
+    set( CMAKE_C_FLAGS_DEBUG "-O0 -g" )
+    set( CMAKE_CXX_FLAGS_DEBUG "-O0 -g" )
+    set( CMAKE_C_FLAGS_RELEASE "-O0 -g" )
+    set( CMAKE_CXX_FLAGS_RELEASE "-O0 -g" )
+ENDIF ( LINUX )
+
+CONFIGURE_FILE ( ${CMAKE_CURRENT_SOURCE_DIR}/testcreator.cfg.in ${CBS_SHARED_LIBRARY_PATH_PREBUILD}/testcreator.cfg     )
+CONFIGURE_FILE ( ${CMAKE_CURRENT_SOURCE_DIR}/testcreator.cfg.in ${CMAKE_CURRENT_BINARY_DIR}/testcreator.cfg             )
+
+# -------------------
+# --- Build setup ---
+# -------------------
+
+#ADDX_DEPENDS_ON ( Qt                    )
+ADDX_DEPENDS_ON ( QtCore                )
+ADDX_DEPENDS_ON ( QtGui                 )
+ADDX_DEPENDS_ON ( QtWebKit              )
+ADDX_DEPENDS_ON ( qscintilla2           )
+ADDX_DEPENDS_ON ( script_embedding      )
+ADDX_DEPENDS_ON ( scriptfunctions_php   )
+ADDX_DEPENDS_ON ( crawl                 )
+ADDX_DEPENDS_ON ( webkitbrowser         )
+ADDX_DEPENDS_ON ( gui                   )
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE_QT4 ( tabdialog.cpp             )
+ADD_SOURCE_FILE_QT4 ( lcdrange.cpp              )
+ADD_SOURCE_FILE_QT4 ( EditorWidget.cpp          )
+ADD_SOURCE_FILE_QT4 ( CreatorWebView.cpp        )
+ADD_SOURCE_FILE_QT4 ( MyWidget.cpp              )
+ADD_SOURCE_FILE_QT4	( testcreator.cpp           )
+
+
+
+#ADD_SOURCE_FILE_QT4 ( CreatorMainWidget.cpp		)
+#MESSAGE ( STATUS "My Message " )
+  

@@ -1,0 +1,21 @@
+# -------------------
+# --- Build setup ---
+# -------------------
+
+ADDX_DEPENDS_ON ( cpaf_net                  )
+ADDX_DEPENDS_ON ( cpaf_compression          )
+ADDX_DEPENDS_ON ( cpaf_utils                )
+ADDX_DEPENDS_ON ( cpaf_system               )
+ADDX_DEPENDS_ON ( cpaf_filesystem           )
+ADDX_DEPENDS_ON ( boost_headers             )
+ADDX_DEPENDS_ON ( boost_thread              )
+ADDX_DEPENDS_ON ( boost_filesystem          )
+ADDX_DEPENDS_ON ( boost_program_options     )
+ADDX_DEPENDS_ON	( loki                      )
+
+ADDX_INCLUDE_DIR( ${CMAKE_CURRENT_SOURCE_DIR} )
+
+ADD_SOURCE_FILE ( phpdocument_utils.cpp  )
+
+
+

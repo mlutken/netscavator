@@ -1,0 +1,8 @@
+# -------------------
+# --- Build setup ---
+# -------------------
+ADDX_DEPENDS_ON ( minmozembed					)
+ADD_DEFINE ( XPCOM_GLUE						1	)
+
+ADD_SOURCE_FILE ( TestGtkEmbed.cpp	)
+

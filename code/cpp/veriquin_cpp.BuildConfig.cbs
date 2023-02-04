@@ -1,0 +1,78 @@
+# - Possible values: BUILD, PREBUILT, DISABLED -
+
+SET_CONFIG 	( CPAF_ROOT_DIR "../../../cpaf" )
+
+SET_CONFIG 	( swig_EXECUTABLE	${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/swigwin-3.0.0/swig    		WINDOWS 	)
+SET_CONFIG  ( ICU_BASE_DIR    	${CMAKE_CURRENT_SOURCE_DIR}/../3rdpartysrc/icu4c-53_1-src/icu       WINDOWS       )
+
+SET_CONFIG  ( PHP_VERSION       "5.6.12" )
+SET_CONFIG  ( QT_VERSION       "5.5.0" )
+SET_CONFIG  ( WEBKIT_VERSION   "git" )  # 2017-04-05, 2017-05-26, 2018-01-06
+SET_CONFIG  ( HTMLCXX_VERSION  "0.87" )
+
+
+SET_CONFIG  ( swig_EXECUTABLE   ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/swig-3.0.7/linux_64/bin/swig    LINUX       )
+IF ( ${CMAKE_BUILD_TYPE} STREQUAL "Release"  )
+    SET_CONFIG ( QT_HDR_DIR /usr/include/x86_64-linux-gnu/qt5	)
+    SET_CONFIG ( QT_LIB_DIR /usr/lib/x86_64-linux-gnu         	)
+    SET_CONFIG ( QT_WEBKIT_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/webkit-${WEBKIT_VERSION}/linux_64_release/lib/x86_64-linux-gnu   )
+    SET_CONFIG ( QT_WEBKIT_HDR_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/webkit-${WEBKIT_VERSION}/linux_64_release/include                )
+    SET_CONFIG ( HTMLCXX_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/htmlcxx-${HTMLCXX_VERSION}/linux_64_release/lib                     )
+    SET_CONFIG ( HTMLCXX_HDR_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/htmlcxx-${HTMLCXX_VERSION}/linux_64_release/include                 )
+else ()
+    SET_CONFIG ( QT_HDR_DIR /usr/include/x86_64-linux-gnu/qt5	)
+    SET_CONFIG ( QT_LIB_DIR /usr/lib/x86_64-linux-gnu         	)
+#    SET_CONFIG ( QT_WEBKIT_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/webkit-${WEBKIT_VERSION}/linux_64_debug/lib/x86_64-linux-gnu    )
+#    SET_CONFIG ( QT_WEBKIT_HDR_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/webkit-${WEBKIT_VERSION}/linux_64_debug/include                 )
+    SET_CONFIG ( QT_WEBKIT_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/webkit-${WEBKIT_VERSION}/linux_64_release/lib/x86_64-linux-gnu   )
+    SET_CONFIG ( QT_WEBKIT_HDR_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/webkit-${WEBKIT_VERSION}/linux_64_release/include                )
+    SET_CONFIG ( HTMLCXX_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/htmlcxx-${HTMLCXX_VERSION}/linux_64_debug/lib                       )
+    SET_CONFIG ( HTMLCXX_HDR_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/htmlcxx-${HTMLCXX_VERSION}/linux_64_debug/include                   )
+endif ()
+
+IF (LINUX_DIST_NAME MATCHES "Fedora")
+	SET_CONFIG ( QT_HDR_DIR /usr/include/qt5	)
+	SET_CONFIG ( QT_LIB_DIR /usr/lib64         	)
+ENDIF()
+
+
+#SET_CONFIG ( moc_qt4_EXECUTABLE ${QT_BASE_DIR}/bin/moc )
+SET_CONFIG ( moc_qt4_EXECUTABLE ${CBS_moc_qt4_EXECUTABLE} )
+
+SET_CONFIG ( CBS_PRE_BUILT_LIBRARY_ROOT_DIR	$ENV{CPAF_ROOT_DIR}/build_cbs )
+
+
+SET_CONFIG ( veriquin_cpp_USE			BUILD    	)
+SET_CONFIG ( cpaf_USE					PREBUILT 	)
+
+
+# Veriquin native libraries
+SET_CONFIG ( script_embedding_USE           BUILD       )
+SET_CONFIG ( crawl_USE                      BUILD       )
+SET_CONFIG ( scriptfunctions_php_USE    	BUILD		)
+SET_CONFIG ( scriptcrawl_USE			    BUILD		)
+
+
+# Veriquin test
+SET_CONFIG ( test_USE					BUILD		)
+SET_CONFIG ( qtminimal_USE				BUILD       )
+SET_CONFIG ( script_updater_USE		    BUILD       )
+
+SET_CONFIG ( DEVELOP_BUILD				1			)
+SET_CONFIG ( INSTALL_BUILD				"" 			)
+
+# --- INSTALL targets ---
+SET_CONFIG ( script_embedding_INSTALL	ENABLED )
+SET_CONFIG ( cpp_crawl_INSTALL			ENABLED )
+SET_CONFIG ( minercreator_INSTALL		ENABLED )
+IF    ( "${PACKAGE_MODE}" STREQUAL "Full" )
+    SET_CONFIG ( crawler_INSTALL		    ENABLED )
+ENDIF ( "${PACKAGE_MODE}" STREQUAL "Full" )
+
+
+
+# # # MESSAGE ( "%%%%%%%%%%%% 1 qtminimal_USE: ${qtminimal_USE}" )
+
+# # svn merge https://cpaf.svn.sourceforge.net/svnroot/cpaf/vendor/wxWidgets/2.8.7 https://cpaf.svn.sourceforge.net/svnroot/cpaf/vendor/wxWidgets/current wxWidgets
+
+

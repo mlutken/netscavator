@@ -1,0 +1,174 @@
+
+---------------------------------------------------------
+--- String Manipulation Functions (eg. for modifiers) --- 
+---------------------------------------------------------
+
+--- 0 parameters ---
+"trimDefault",         
+"raw",                 
+"toUpper",             
+"toLower",             
+"trimEnds",            
+"trimLeft",            
+"trimRight",           
+"trimYear",            
+"trimInteger",         
+"trimFloat",           
+"trimNumber",          
+
+--- 1 parameters ---
+"trimCharsEnds",       
+"trimCharsLeft",       
+"trimCharsRight",      
+"trimRegex",           
+"itrimRegex",          
+"append",              
+"prepend",             
+"eraseFirst",          
+"ieraseFirst",         
+"eraseLast",           
+"ieraseLast",          
+"eraseAll",            
+"ieraseAll",           
+"eraseRegex",          
+"eraseAllRegex",       
+
+--- 2 parameters ---
+"trimIntegerCustom",   
+"trimNumberCustom",    
+"replaceFirst",        
+"ireplaceFirst",       
+"replaceLast",         
+"ireplaceLast",        
+"replaceAll",          
+"ireplaceAll",         
+"replaceRegex",        
+"replaceAllRegex",     
+
+--- 3 parameters ---
+"eraseNth",            
+"ieraseNth",           
+
+"replaceNth",          
+"ireplaceNth",         
+
+-------------------------------------
+--- String manipulation functions ---
+-------------------------------------
+NOTE: These are normal callable PHP functions. Use same names without _fn
+      when using as modifiers in outputXX() functions, valueModify(), valueGet(),
+      valueCompare(), nodeCompare(), nodeValueParent(), nodeValuePos()
+/* --- 0 parameters --- */
+std::string     trimDefault_fn      ( const std::string& sInput     );
+std::string     raw_fn              ( const std::string& sInput     );
+std::string     toUpper_fn          ( const std::string& sInput     );
+std::string     toLower_fn          ( const std::string& sInput     );
+std::string     trimEnds_fn         ( const std::string& sInput     );
+std::string     trimLeft_fn         ( const std::string& sInput     );
+std::string     trimRight_fn        ( const std::string& sInput     );
+std::string     trimYear_fn         ( const std::string& sInput     );
+std::string     trimInteger_fn      ( const std::string& sInput     );
+std::string     trimFloat_fn        ( const std::string& sInput     );
+std::string     trimNumber_fn       ( const std::string& sInput     );
+
+/* --- 1 parameters --- */
+std::string     trimCharsEnds_fn    ( const std::string& sInput, const std::string& sCharsToTrim )  ;
+std::string     trimCharsLeft_fn    ( const std::string& sInput, const std::string& sCharsToTrim )  ;
+std::string     trimCharsRight_fn   ( const std::string& sInput, const std::string& sCharsToTrim )  ;
+std::string     trimRegex_fn        ( const std::string& sInput, const std::string& sRegex )                                                ;
+std::string     itrimRegex_fn       ( const std::string& sInput, const std::string& sRegex )                                                ;
+std::string     append_fn           ( const std::string& sInput, const std::string& sString )   ;
+std::string     prepend_fn          ( const std::string& sInput, const std::string& sString )   ;
+std::string     eraseFirst_fn       ( const std::string& sInput, const std::string& sSearchFor  )   ;
+std::string     ieraseFirst_fn      ( const std::string& sInput, const std::string& sSearchFor  )   ;
+std::string     eraseLast_fn        ( const std::string& sInput, const std::string& sSearchFor  )   ;
+std::string     ieraseLast_fn       ( const std::string& sInput, const std::string& sSearchFor  )   ;
+std::string     eraseAll_fn         ( const std::string& sInput, const std::string& sSearchFor  )   ;
+std::string     ieraseAll_fn        ( const std::string& sInput, const std::string& sSearchFor  )   ;
+std::string     eraseRegex_fn       ( const std::string& sInput, const std::string& sSearchFor  )   ;
+std::string     eraseAllRegex_fn    ( const std::string& sInput, const std::string& sSearchFor  )   ;
+
+/* --- 2 parameters --- */
+std::string     trimIntegerCustom_fn( const std::string& sInput, const std::string& iBase,          const std::string& sThousandsSep);
+std::string     trimNumberCustom_fn ( const std::string& sInput, const std::string& sDecimalPoint,  const std::string& sThousandsSep);
+std::string     replaceFirst_fn     ( const std::string& sInput, const std::string& sSearchFor,     const std::string& sReplaceWith );
+std::string     ireplaceFirst_fn    ( const std::string& sInput, const std::string& sSearchFor,     const std::string& sReplaceWith );
+std::string     replaceLast_fn      ( const std::string& sInput, const std::string& sSearchFor,     const std::string& sReplaceWith );
+std::string     ireplaceLast_fn     ( const std::string& sInput, const std::string& sSearchFor,     const std::string& sReplaceWith );
+std::string     replaceAll_fn       ( const std::string& sInput, const std::string& sSearchFor,     const std::string& sReplaceWith )   ;
+std::string     ireplaceAll_fn      ( const std::string& sInput, const std::string& sSearchFor,     const std::string& sReplaceWith )   ;
+std::string     replaceRegex_fn     ( const std::string& sInput, const std::string& sSearchFor,     const std::string& sReplaceWith )   ;
+std::string     replaceAllRegex_fn  ( const std::string& sInput, const std::string& sSearchFor,     const std::string& sReplaceWith )   ;
+
+/* --- 2 parameters (last is an integer ) --- */
+std::string     eraseNth_fn         ( const std::string& sInput, const std::string& sSearchFor, int iNth    )   ;
+std::string     ieraseNth_fn        ( const std::string& sInput, const std::string& sSearchFor, int iNth    )   ;
+
+/* --- 3 parameters (last is an integer ) --- */
+std::string     replaceNth_fn       ( const std::string& sInput, const std::string& sSearchFor, const std::string& sReplaceWith, int iNth   )   ;
+std::string     ireplaceNth_fn      ( const std::string& sInput, const std::string& sSearchFor, const std::string& sReplaceWith, int iNth   )   ;
+
+---------------------------------------------------
+--- String Compare Functions (eg. domSeqCreate) --- 
+---------------------------------------------------
+("am",alwaysMatch)("alwaysMatch",alwaysMatch)
+("nm",neverMatch)("neverMatch",neverMatch)
+// --- Normal functions ---
+("eq",equals)("equals",equals)
+("ieq",iequals)("iequals",iequals)
+("con",contains)("contains",contains)
+("icon",icontains)("icontains",icontains)
+("sw",startsWith)("startsWith",startsWith)
+("isw",istartsWith)("istartsWith",istartsWith)
+("ew",endsWith)("endsWith",endsWith)
+("iew",iendsWith)("iendsWith",iendsWith)
+("lt",lessThan)("lessThan",lessThan)
+("ilt",ilessThan)("ilessThan",ilessThan)
+("gt",greaterThan)("greaterThan",greaterThan)
+("igt",igreaterThan)("igreaterThan",igreaterThan)
+("re",regexSearch)("regexSearch",regexSearch)
+// --- Negated functions ---
+("neq",nequals)("nequals",nequals)
+("nieq",niequals)("niequals",niequals)
+("ncon",ncontains)("ncontains",ncontains)
+("nicon",nicontains)("nicontains",nicontains)
+("nsw",nstartsWith)("nstartsWith",nstartsWith)
+("nisw",nistartsWith)("nistartsWith",nistartsWith)
+("new",nendsWith)("nendsWith",nendsWith)
+("niew",niendsWith)("niendsWith",niendsWith)
+("nlt",nlessThan)("nlessThan",nlessThan)
+("nilt",nilessThan)("nilessThan",nilessThan)
+("ngt",ngreaterThan)("ngreaterThan",ngreaterThan)
+("nigt",nigreaterThan)("nigreaterThan",nigreaterThan)
+("nre",nregexSearch)("nregexSearch",nregexSearch)
+
+-------------------------------------
+--- Dom built-in actions overview --- 
+-------------------------------------
+
+|"click"| nodeClick()|Do simple (left) click on current element
+|"mouseEvent"| nodeMouseEvent()|Send named mouseevent to current element. See below table for events
+|"loadUrl"| urlLoad()|Load the url specified in parameter1
+|"inputValue"| inputSet()|Input the value specified in parameter1 into current INPUT element
+|"formSubmit"| formSubmit()|Assuming current dom element is a FORM, do a submit.
+|"formReset"| formReset()|Assuming current dom element is a FORM, do a reset of the form
+|"selectIndex"| selectSelect()| Assuming current dom element is a SELECT, do select index specified in parameter1
+|"selectOption"| selectOption()| Assuming current dom element is an OPTION, do select this option
+
+!Dom event names
+Events
+    Covers all event types.
+HTMLEvents
+    Covers 'abort', 'blur', 'change', 'error', 'focus', 'load', 'reset', 'resize', 
+    'scroll', 'select', 'submit', and 'unload'.
+UIEvents
+    Covers 'DOMActivate', 'DOMFocusIn', 'DOMFocusOut', 
+    and (since they do not have their own key events module in DOM 2) it also covers 'keydown', 
+    'keypress', and 'keyup'. 
+    Also indirectly covers MouseEvents.
+MouseEvents
+    Covers 'click', 'mousedown', 'mousemove', 'mouseout', 'mouseover', and 'mouseup'.
+MutationEvents
+    Covers 'DOMAttrModified', 'DOMNodeInserted', 'DOMNodeRemoved', 'DOMCharacterDataModified', 
+    'DOMNodeInsertedIntoDocument', 'DOMNodeRemovedFromDocument', and 'DOMSubtreeModified'.
+

@@ -1,0 +1,531 @@
+# sudo apt-get install libqt5webkit5-dev libqt5v8-dev qtmultimedia5-dev
+
+ERROR ERROR sdkljfkdsgkjdsghjkh DO NOT USE !!!!
+
+# ADDX_LINK_LIBRARY ( pthread           )
+MACRO ( VERIQUIN_ADD_QT_LIBS )
+
+#     message ("XXXXXXXXXXX, QT_HDR_DIR: ${QT_HDR_DIR}" )
+    #ADDX_LINK_DIR       ( ${QT_WEBKIT_LIB_DEBUG_DIR}  )
+
+	ADDX_LINK_DIR       ( ${QT_WEBKIT_LIB_DIR}  			)
+  	ADDX_LINK_DIR       ( ${QT_LIB_DIR}                     )
+    ADDX_INCLUDE_DIR    ( ${QT_WEBKIT_HDR_DIR} 				)
+    ADDX_INCLUDE_DIR    ( ${QT_WEBKIT_HDR_DIR}/QtWebKit            )
+    ADDX_INCLUDE_DIR    ( ${QT_WEBKIT_HDR_DIR}/QtWebKitWidgets     )
+    ADDX_INCLUDE_DIR    ( ${QT_HDR_DIR}                     )
+    ADDX_INCLUDE_DIR    ( ${QT_HDR_DIR}/QXml                )
+    ADDX_INCLUDE_DIR    ( ${QT_HDR_DIR}/WebCore             )
+    ADDX_INCLUDE_DIR    ( ${QT_HDR_DIR}/QtCore              )
+    ADDX_INCLUDE_DIR    ( ${QT_HDR_DIR}/QtGui               )
+    ADDX_INCLUDE_DIR    ( ${QT_HDR_DIR}/QtWidgets           )
+    ADDX_INCLUDE_DIR    ( ${QT_HDR_DIR}/QtNetwork           )
+    ADDX_INCLUDE_DIR    ( ${QT_HDR_DIR}/QtANGLE           	)
+
+    ADDX_LINK_LIBRARY ( Qt5Core             )
+    ADDX_LINK_LIBRARY ( Qt5Gui              )
+    ADDX_LINK_LIBRARY ( Qt5Widgets          )
+    ADDX_LINK_LIBRARY ( Qt5WebKit           )
+    ADDX_LINK_LIBRARY ( Qt5WebKitWidgets    )
+    ADDX_LINK_LIBRARY ( Qt5Network          )
+    ADDX_LINK_LIBRARY ( Qt5Test             )
+    ADDX_LINK_LIBRARY ( Qt5OpenGL           )
+    ADDX_LINK_LIBRARY ( Qt5Xml              )
+
+    ADDX_LINK_LIBRARY ( Qt5Positioning )
+    ADDX_LINK_LIBRARY ( Qt5Qml )
+    ADDX_LINK_LIBRARY ( Qt5Sql )
+#    ADDX_LINK_LIBRARY ( Qt5Multimedia )
+#    ADDX_LINK_LIBRARY ( Qt5MultimediaWidgets )
+    ADDX_LINK_LIBRARY ( Qt5PrintSupport )
+    ADDX_LINK_LIBRARY ( Qt5Quick )
+
+    IF(WINDOWS)
+
+		# --- Copy Qt libs ---
+		SET ( dstDynBuildDir  "${CBS_LIBRARY_ROOT_DIR}/shared/${CMAKE_BUILD_TYPE}" )
+		CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/qscintilla2.dll ${dstDynBuildDir}/qscintilla2.dll COPYONLY )
+		CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/libEGL.dll ${dstDynBuildDir}/libEGL.dll COPYONLY )
+		CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/libGLESv2.dll ${dstDynBuildDir}/libGLESv2.dll COPYONLY )
+		#CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5CLucene.dll ${dstDynBuildDir}/Qt5CLucene.dll COPYONLY )
+		#CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Concurrent.dll ${dstDynBuildDir}/Qt5Concurrent.dll COPYONLY )
+		CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Core.dll ${dstDynBuildDir}/Qt5Core.dll COPYONLY )
+		#CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Declarative.dll ${dstDynBuildDir}/Qt5Declarative.dll COPYONLY )
+		#CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Designer.dll ${dstDynBuildDir}/Qt5Designer.dll COPYONLY )
+		#CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5DesignerComponents.dll ${dstDynBuildDir}/Qt5DesignerComponents.dll COPYONLY )
+		CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Gui.dll ${dstDynBuildDir}/Qt5Gui.dll COPYONLY )
+		#CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Help.dll ${dstDynBuildDir}/Qt5Help.dll COPYONLY )
+		CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Multimedia.dll ${dstDynBuildDir}/Qt5Multimedia.dll COPYONLY )
+		#CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5MultimediaQuick_p.dll ${dstDynBuildDir}/Qt5MultimediaQuick_p.dll COPYONLY )
+		CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5MultimediaWidgets.dll ${dstDynBuildDir}/Qt5MultimediaWidgets.dll COPYONLY )
+		CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Network.dll ${dstDynBuildDir}/Qt5Network.dll COPYONLY )
+		CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5OpenGL.dll ${dstDynBuildDir}/Qt5OpenGL.dll COPYONLY )
+
+		CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Positioning.dll ${dstDynBuildDir}/Qt5Positioning.dll COPYONLY )
+		CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5PrintSupport.dll ${dstDynBuildDir}/Qt5PrintSupport.dll COPYONLY )
+		CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Qml.dll ${dstDynBuildDir}/Qt5Qml.dll COPYONLY )
+		CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Quick.dll ${dstDynBuildDir}/Qt5Quick.dll COPYONLY )
+		#CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5QuickParticles.dll ${dstDynBuildDir}/Qt5QuickParticles.dll COPYONLY )
+		#CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5QuickTest.dll ${dstDynBuildDir}/Qt5QuickTest.dll COPYONLY )
+		#CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Script.dll ${dstDynBuildDir}/Qt5Script.dll COPYONLY )
+		#CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5ScriptTools.dll ${dstDynBuildDir}/Qt5ScriptTools.dll COPYONLY )
+		CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Sensors.dll ${dstDynBuildDir}/Qt5Sensors.dll COPYONLY )
+		#CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5SerialPort.dll ${dstDynBuildDir}/Qt5SerialPort.dll COPYONLY )
+		#CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5SerialPort.dll ${dstDynBuildDir}/Qt5SerialPort.dll COPYONLY )
+		CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Sql.dll ${dstDynBuildDir}/Qt5Sql.dll COPYONLY )
+		#CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Svg.dll ${dstDynBuildDir}/Qt5Svg.dll COPYONLY )
+		#CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Test.dll ${dstDynBuildDir}/Qt5Test.dll COPYONLY )
+		#CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5V8.dll ${dstDynBuildDir}/Qt5V8.dll COPYONLY )
+		CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5WebKit.dll ${dstDynBuildDir}/Qt5WebKit.dll COPYONLY )
+		CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5WebKitWidgets.dll ${dstDynBuildDir}/Qt5WebKitWidgets.dll COPYONLY )
+		CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Widgets.dll ${dstDynBuildDir}/Qt5Widgets.dll COPYONLY )
+		#CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Xml.dll ${dstDynBuildDir}/Qt5Xml.dll COPYONLY )
+        #CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5XmlPatterns.dll ${dstDynBuildDir}/Qt5XmlPatterns.dll COPYONLY )
+        CONFIGURE_FILE ( ${QT_BASE_DIR}/bin/Qt5Test.dll ${dstDynBuildDir}/Qt5Test.dll COPYONLY )
+
+		# --- Copy ICU libs ---
+		SET ( dstDynBuildDir  "${CBS_LIBRARY_ROOT_DIR}/shared/${CMAKE_BUILD_TYPE}" )
+		CONFIGURE_FILE ( ${ICU_BASE_DIR}/bin/icudt53.dll ${dstDynBuildDir}/icudt53.dll COPYONLY )
+		CONFIGURE_FILE ( ${ICU_BASE_DIR}/bin/icuin53.dll ${dstDynBuildDir}/icuin53.dll COPYONLY )
+		CONFIGURE_FILE ( ${ICU_BASE_DIR}/bin/icuio53.dll ${dstDynBuildDir}/icuio53.dll COPYONLY )
+		CONFIGURE_FILE ( ${ICU_BASE_DIR}/bin/icule53.dll ${dstDynBuildDir}/icule53.dll COPYONLY )
+		CONFIGURE_FILE ( ${ICU_BASE_DIR}/bin/iculx53.dll ${dstDynBuildDir}/iculx53.dll COPYONLY )
+		CONFIGURE_FILE ( ${ICU_BASE_DIR}/bin/icutu53.dll ${dstDynBuildDir}/icutu53.dll COPYONLY )
+		CONFIGURE_FILE ( ${ICU_BASE_DIR}/bin/icuuc53.dll ${dstDynBuildDir}/icuuc53.dll COPYONLY )
+
+    ELSE(WINDOWS)
+    # Linux
+        IF (LINUX_DIST_NAME MATCHES "Fedora")
+            ADDX_LINK_LIBRARY ( /usr/lib64/libQt5Multimedia.so.5 )
+            ADDX_LINK_LIBRARY ( /usr/lib64/libQt5MultimediaWidgets.so.5 )
+        ELSE()
+            ADDX_LINK_LIBRARY ( /usr/lib/x86_64-linux-gnu/libQt5Multimedia.so.5 )
+            ADDX_LINK_LIBRARY ( /usr/lib/x86_64-linux-gnu/libQt5MultimediaWidgets.so.5 )
+        ENDIF()
+
+#    ADDX_LINK_LIBRARY ( libQt5Multimedia.so.5 )
+#    ADDX_LINK_LIBRARY ( libQt5MultimediaWidgets.so.5 )
+#    ADDX_LINK_LIBRARY ( Qt5MultimediaWidgets )
+#    ADDX_LINK_LIBRARY ( /home/ml/x86_64-linux-gnu/libQt5Multimedia.so.5 )
+    # 
+    
+    ENDIF (WINDOWS)
+ENDMACRO( VERIQUIN_ADD_QT_LIBS )
+
+
+#MACRO ( VERIQUIN_ADD_HTMLCXX_LIBS )
+#    ADDX_LINK_DIR       ( ${HTMLCXX_LIB_DIR} )
+#    ADDX_INCLUDE_DIR    ( ${HTMLCXX_HDR_DIR} )
+#    ADDX_LINK_LIBRARY   ( htmlcxx            )
+#    ADDX_LINK_LIBRARY   ( css_parser_pp      )
+#    ADDX_LINK_LIBRARY   ( css_parser         )
+#ENDMACRO( VERIQUIN_ADD_HTMLCXX_LIBS )
+
+
+message ("CBS_moc_qt4_EXECUTABLE: ${CBS_moc_qt4_EXECUTABLE}")
+
+SET_CONFIG ( BASE_3RDPARTY_DIR           ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty )
+
+IF ( LINUX )
+
+    IF ( "${CBS_SYSTEM_WIDTH}" STREQUAL "32" )
+        SET_CONFIG ( PHP_BASE_DIR           ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/php-${PHP_VERSION}/linux_32_release          CBS_RELEASE )
+        SET_CONFIG ( PHP_BASE_DIR           ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/php-${PHP_VERSION}/linux_32_debug            CBS_DEBUG   )
+	ELSE ( "${CBS_SYSTEM_WIDTH}" STREQUAL "32" )
+        # 64 bit
+        SET_CONFIG ( PHP_BASE_DIR           ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/php-${PHP_VERSION}/linux_64_release          CBS_RELEASE )
+        SET_CONFIG ( PHP_BASE_DIR           ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/php-${PHP_VERSION}/linux_64_debug            CBS_DEBUG   )
+	ENDIF ( "${CBS_SYSTEM_WIDTH}" STREQUAL "32" )
+ENDIF ( LINUX )
+
+IF ( WINDOWS )
+	SET_CONFIG ( PHP_BASE_DIR			${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/php-${PHP_VERSION}/win_vc12_release					CBS_RELEASE	)
+	SET_CONFIG ( PHP_BASE_DIR			${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/php-${PHP_VERSION}/win_vc12_debug					CBS_DEBUG	)
+ENDIF ( WINDOWS )
+
+ADD_COMPILE_FLAG ( -fPIC      LINUX   )
+ADD_COMPILE_FLAG ( -g         LINUX   )
+
+
+IF   ( CBS_QT4 )
+ELSE ( CBS_QT4 )
+	ADD_COMPILE_FLAG ( -fPIC      LINUX   )
+ENDIF( CBS_QT4 )
+
+SET_DEFAULT( XULDIR    ${XULRUNNER_SDK_BASE}/xulrunner )
+
+SET_CONFIG ( PHP_BASE_INCLUDE_DIR	${PHP_BASE_DIR}/include/php	)
+SET_DEFAULT	( RESOURCE_DIR	${veriquin_cpp_SOURCE_DIR}/data		)
+
+
+SET_DEFAULT ( XULRUNNER_SDK_INCLUDE_SDK		"${XULRUNNER_SDK_BASE}/sdk/include")
+SET_DEFAULT ( XULRUNNER_SDK_INCLUDE			"${XULRUNNER_SDK_BASE}/include")
+SET_DEFAULT ( XULRUNNER_SDK_MAIN_LIB		"${XULRUNNER_SDK_BASE}/xulrunner/")
+SET_DEFAULT ( XULRUNNER_SDK_DEVEL_LIB		"${XULRUNNER_SDK_BASE}/sdk/lib")
+
+SET_DEFAULT ( ZEND_ZTS_MODE                     1           )
+SET_DEFAULT ( WEBBROWSE_ENABLE_GTK              ""          )
+SET_DEFAULT ( WEBBROWSE_ENABLE_WX				""           )
+SET_DEFAULT ( WEBBROWSE_ENABLE_QT				"" WINDOWS	)
+SET_DEFAULT ( WEBBROWSE_ENABLE_QT				"" LINUX	)
+
+SET_DEFAULT ( veriquin_cpp_LINK_TYPE	    	STATIC	)
+SET_DEFAULT ( webbrowse_LINK_TYPE		    	STATIC	)
+SET_DEFAULT ( crawl_LINK_TYPE			    	STATIC	)
+SET_DEFAULT ( script_embedding_LINK_TYPE        SHARED      LINUX   )
+
+SET_DEFAULT ( boost_LINK_TYPE			    	STATIC	)
+
+SET_DEFAULT ( QtCore_LINK_TYPE               SHARED        		)
+SET_DEFAULT ( QtGui_LINK_TYPE                SHARED        		)
+SET_DEFAULT ( QtWebKit_LINK_TYPE             SHARED        		)
+SET_DEFAULT ( QtNetwork_LINK_TYPE            SHARED        		)
+SET_DEFAULT ( qscintilla2_LINK_TYPE          SHARED      WINDOWS  		)
+SET_DEFAULT ( qscintilla2_LINK_TYPE          STATIC      LINUX  		)
+
+
+SET_DEFAULT ( z_LINK_TYPE                       SHARED      LINUX   )
+SET_DEFAULT ( expat_LINK_TYPE                   SHARED      LINUX   )
+SET_DEFAULT ( jpeg_LINK_TYPE                    SHARED      LINUX   )
+SET_DEFAULT ( tiff_LINK_TYPE                    SHARED      LINUX   )
+SET_DEFAULT ( bz2_LINK_TYPE                     SHARED      LINUX   )
+SET_DEFAULT ( png_LINK_TYPE                     SHARED      LINUX   )
+SET_DEFAULT ( crypto_LINK_TYPE                  SHARED      LINUX   )
+SET_DEFAULT ( ssl_LINK_TYPE                     SHARED      LINUX   )
+SET_DEFAULT ( curl_LINK_TYPE                    SHARED      LINUX   )
+SET_DEFAULT ( xml2_LINK_TYPE                    SHARED      LINUX   )
+
+SET_DEFAULT ( boost_date_time_LINK_TYPE         SHARED      LINUX   )
+SET_DEFAULT ( boost_filesystem_LINK_TYPE        SHARED      LINUX   )
+SET_DEFAULT ( boost_iostreams_LINK_TYPE         SHARED      LINUX   )
+SET_DEFAULT ( boost_program_options_LINK_TYPE   SHARED      LINUX   )
+SET_DEFAULT ( boost_serialization_LINK_TYPE     SHARED      LINUX   )
+SET_DEFAULT ( boost_wserialization_LINK_TYPE    SHARED      LINUX   )
+SET_DEFAULT ( boost_system_LINK_TYPE            SHARED      LINUX   )
+SET_DEFAULT ( boost_regex_LINK_TYPE             SHARED      LINUX   )
+
+
+
+
+
+#SET_CONFIG ( z_USE                      SYSTEM      LINUX   )
+ADDX_DEPENDS_ON ( xml2                  LINUX    )
+
+#ADD_DEFINE ( IPV6STRICT						1		WINDOWS			)
+
+ADD_DEFINE ( _WIN32_WINNT						0x0501	WINDOWS			)	# script_crawl_wrap.cpp workaround: See http://social.msdn.microsoft.com/Forums/en-US/vclanguage/thread/fc37c29c-e790-44e6-896b-c021adaa9f6b
+ADD_DEFINE ( XULRUNNER_SDK_MAIN_LIB			\\\\"${XULRUNNER_SDK_MAIN_LIB}\\\\"		)
+ADD_DEFINE (QT_GUI_LIB 1)
+ADD_DEFINE (QT_WIDGETS_LIB 1)
+#ADD_DEFINE ( XPCOM_GLUE						1										)
+ADD_DEFINE ( __WXGTK__                      1       LINUX                           ) # wx
+ADD_DEFINE ( _LARGE_FILES                   1       LINUX                           ) # wx
+ADD_DEFINE ( _FILE_OFFSET_BITS             64       LINUX                           ) # wx
+
+ADD_DEFINE ( __WXMSW__						1		WINDOWS							)
+ADD_DEFINE ( XP_WIN							1		WINDOWS							)
+ADD_DEFINE ( WEBBROWSE_ENABLE_GTK			1		WEBBROWSE_ENABLE_GTK			)
+ADD_DEFINE ( WEBBROWSE_ENABLE_WX			1		WEBBROWSE_ENABLE_WX				)
+ADD_DEFINE ( WEBBROWSE_ENABLE_QT			1		WEBBROWSE_ENABLE_QT				)
+
+ADD_DEFINE ( QSCINTILLA_DLL					1		WINDOWS	 )
+ADD_DEFINE ( SCI_LEXER						1		WINDOWS	 )
+####ADD_DEFINE ( _ITERATOR_DEBUG_LEVEL			0		WINDOWS	 )
+
+#ADD_DEFINE ( MOZILLA_INTERNAL_API			1 										)
+#ADD_COMPILE_FLAG ( /Zc:wchar_t-				COMPILER_MSVC	)
+ADD_COMPILE_FLAG ( -Wno-deprecated          LINUX   )
+ADD_COMPILE_FLAG ( -Wno-write-strings       LINUX   )
+#ADD_COMPILE_FLAG ( -Wall                    LINUX   )
+
+
+#-D_FILE_OFFSET_BITS=64 -D_LARGE_FILES -D__WXGTK__
+
+
+ADD_SUBDIR ( "../../cpaf"     					)
+#ADD_SUBDIR (  $ENV{CPAF_ROOT_DIR}					)
+
+
+ADD_SUBDIR ( htmlparser                             )
+ADD_SUBDIR ( common_utils                           )
+ADD_SUBDIR ( script_embedding                       )
+ADD_SUBDIR ( interfaces                             )
+ADD_SUBDIR ( phpdocument							)
+ADD_SUBDIR ( simplebrowser                     		)
+ADD_SUBDIR ( webkitbrowser                     		)
+ADD_SUBDIR ( scriptfunctions/scriptfunctions_php    )
+ADD_SUBDIR ( crawl                                  )
+ADD_SUBDIR ( scriptcrawl                            )
+ADD_SUBDIR ( gui                                    )
+ADD_SUBDIR ( netscavator                            )
+ADD_SUBDIR ( netcreator                             )
+ADD_SUBDIR ( netscavator_server                     )
+ADD_SUBDIR ( test                                   )
+
+
+WARNING_DISABLE ( W_QUALIFIER_APPLIED_TO_FUNCTION_TYPE )
+
+MESSAGE( STATUS "CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE}" 		)
+
+# -----------------
+# --- Installer ---
+# -----------------
+
+# INCLUDE(InstallRequiredSystemLibraries)
+#
+# SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "My funky project")
+# SET(CPACK_PACKAGE_VENDOR "Me, myself, and I")
+# SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/ReadMe.txt")
+# SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt")
+# SET(CPACK_PACKAGE_VERSION_MAJOR "1")
+# SET(CPACK_PACKAGE_VERSION_MINOR "3")
+# SET(CPACK_PACKAGE_VERSION_PATCH "2")
+# SET(CPACK_PACKAGE_INSTALL_DIRECTORY "CMake ${CMake_VERSION_MAJOR}.${CMake_VERSION_MINOR}")
+# SET(CPACK_TGZ_COMPONENT_INSTALL ON)
+#
+#
+
+
+
+#
+# 	SET_CONFIG ( PHP_BASE_DIR			${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/php-5.4.13/win_vc10_release					CBS_RELEASE	)
+IF(WIN32 AND NOT UNIX)
+	# Win build location: C:\code\crawler\code\cpp\build_cbs\nmake_release_static\_CPack_Packages\win32\NSIS
+    SET_CONFIG 	( CPACK_GENERATOR       "NSIS" 	)
+    SET_CONFIG 	( PHP_DYN_LIB     		"${PHP_BASE_DIR}/bin/php5ts.dll" )
+	SET_CONFIG	( INSTALL_PREFIX 		"." )
+	SET_CONFIG  ( DATA_SUBDIR           "${INSTALL_PREFIX}/share/netscavator"   )
+
+	INSTALL ( FILES  	${PHP_DYN_LIB} DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/php_cpp_crawl.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/icudt53.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/icuin53.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/icuio53.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/icule53.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/iculx53.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/icutu53.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/icuuc53.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/qscintilla2.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/Qt5Core.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/Qt5Gui.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/Qt5Widgets.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/Qt5WebKit.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/Qt5WebKitWidgets.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/Qt5Positioning.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/Qt5Network.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/Qt5Qml.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/Qt5Sql.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/Qt5Multimedia.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/Qt5MultimediaWidgets.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/Qt5OpenGL.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/Qt5PrintSupport.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/Qt5Quick.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/Qt5Sensors.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/libEGL.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+	INSTALL ( FILES  	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/libGLESv2.dll DESTINATION ${INSTALL_PREFIX}/bin COMPONENT data )
+
+	SET_CONFIG ( CPACK_PACKAGE_NAME                 "netscavator"       )
+	SET_CONFIG ( CPACK_PACKAGE_VENDOR 				"netscavator.com"   )
+	SET_CONFIG ( CPACK_PACKAGE_DESCRIPTION_SUMMARY  "Advanced webcrawler screen scraper for large scale collection of structured information from websites." )
+	SET_CONFIG ( CPACK_PACKAGE_VERSION              ${NETSCAVATOR_VERSION_STRING}    	)
+	SET_CONFIG ( CPACK_PACKAGE_VERSION_MAJOR 		${NETSCAVATOR_VERSION_MAJOR}        )
+	SET_CONFIG ( CPACK_PACKAGE_VERSION_MINOR 		${NETSCAVATOR_VERSION_MINOR}        )
+	SET_CONFIG ( CPACK_PACKAGE_VERSION_PATCH 		${NETSCAVATOR_VERSION_PATCH}        )
+
+	#-----------------------------
+	##SET_CONFIG ( CPACK_PACKAGE_INSTALL_DIRECTORY 	"Sleipner"  )
+	SET_CONFIG ( CPACK_PACKAGE_CONTACT              "Martin Lutken <nitram@lutken.dk>" )
+	SET_CONFIG ( CPACK_COMPONENTS_ALL applications libraries  )
+
+	set ( CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "Applications")
+	set ( CPACK_COMPONENT_LIBRARIES_DISPLAY_NAME 	"Libraries")
+	set ( CPACK_COMPONENT_HEADERS_DISPLAY_NAME 		"C++ Headers")
+
+	set ( CPACK_COMPONENT_APPLICATIONS_DESCRIPTION 	"A powerfull webcrawler and IDE for creating miners.")
+	set ( CPACK_COMPONENT_LIBRARIES_DESCRIPTION 	"Dynamic libs used by the applications")
+
+	# SET ( CPACK_COMPONENTS_GROUPING 				    "ALL_COMPONENTS_IN_ONE" )
+
+	# SET ( CPACK_PACKAGE_DESCRIPTION_FILE  			"${CMAKE_CURRENT_SOURCE_DIR}/ReadMe.txt" )
+	# SET ( CPACK_RESOURCE_FILE_LICENSE 	  			"${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt" )
+	# SET ( CPACK_STRIP_FILES				  			TRUE )
+
+	#-----------------------------------------------
+    INSTALL ( FILES     data/config/crawler.cfg.in DESTINATION ${DATA_SUBDIR}/config/ COMPONENT data )
+    INSTALL ( FILES     data/config/minercreator.cfg.in DESTINATION ${DATA_SUBDIR}/config/ COMPONENT data )
+    INSTALL ( FILES     data/config/netscavator.cfg.in DESTINATION ${DATA_SUBDIR}/config/ COMPONENT data )
+    INSTALL ( FILES     data/config/netcreator.cfg.in DESTINATION ${DATA_SUBDIR}/config/ COMPONENT data )
+    INSTALL ( FILES     data/config/php.ini.in DESTINATION ${DATA_SUBDIR}/config/ COMPONENT data )
+	INSTALL ( FILES   	scriptcrawl/cpp_crawl/webminer.php DESTINATION ${DATA_SUBDIR}/php/miner_utils COMPONENT data )
+	INSTALL ( FILES   	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/cpp_crawl.php DESTINATION ${DATA_SUBDIR}/php/miner_utils COMPONENT data )
+
+	##INSTALL ( FILES 	 		DESTINATION ${DATA_SUBDIR}/doc COMPONENT data )
+	INSTALL ( FILES 	ReadMe.txt Copyright.txt 	DESTINATION ${DATA_SUBDIR}/doc COMPONENT data )
+	INSTALL	( DIRECTORY data/robot/ DESTINATION ${DATA_SUBDIR}/robot COMPONENT data FILES_MATCHING PATTERN "*.sh"   	)
+	INSTALL	( DIRECTORY data/robot/ DESTINATION ${DATA_SUBDIR}/robot COMPONENT data FILES_MATCHING PATTERN "*.php" )
+	INSTALL	( DIRECTORY data/robot/ DESTINATION ${DATA_SUBDIR}/robot COMPONENT data FILES_MATCHING PATTERN "*.in"  )
+
+	INSTALL	( DIRECTORY data/php/miner_templates/ DESTINATION ${DATA_SUBDIR}/php/miner_templates COMPONENT data FILES_MATCHING PATTERN "*.php" )
+	INSTALL	( DIRECTORY data/php/miner_utils/ 	  DESTINATION ${DATA_SUBDIR}/php/miner_utils 	 COMPONENT data FILES_MATCHING PATTERN "*.php" )
+	INSTALL	( DIRECTORY data/icons/48x48/ 	  	  DESTINATION ${DATA_SUBDIR}/icons/48x48 		 COMPONENT data FILES_MATCHING PATTERN "*.png" )
+	INSTALL	( DIRECTORY data/icons/128x128/ 	  DESTINATION ${DATA_SUBDIR}/icons/128x128 		 COMPONENT data FILES_MATCHING PATTERN "*.png" )
+
+
+	#--------------------------------
+
+
+
+	# There is a bug in NSI that does not handle full unix paths properly. Make
+	# sure there is at least one set of four (4) backlashes.
+#	SET(CPACK_PACKAGE_ICON "${CMake_SOURCE_DIR}/Utilities/Release\\\\InstallIcon.bmp")
+	SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\minercreator.exe")
+	SET(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_INSTALL_DIRECTORY} Netscavator Webminer")
+	SET(CPACK_NSIS_HELP_LINK "http:\\\\\\\\www.netscavator.com")
+	SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.netscavator.com")
+	SET(CPACK_NSIS_CONTACT "info@www.netscavator.com")
+	SET(CPACK_NSIS_MODIFY_PATH ON)
+
+	SET(CPACK_PACKAGE_EXECUTABLES "minercreator" "Minercreator")
+
+	SET ( CPACK_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}" )
+
+	##SET ( CPACK_SET_DESTDIR ON )
+	SET ( CMAKE_INSTALL_PREFIX "/" )
+	SET ( CPACK_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}" )
+
+	# ---------------------------------------------------------
+	# --- Run executable after install (not used currently) ---
+	# ---------------------------------------------------------
+	###ExecShell  open "c:\Windows\System32\notepad.exe"
+	#SET_CONFIG ( CPACK_NSIS_EXTRA_INSTALL_COMMANDS "ExecShell  open \\\"c:/Windows/System32/notepad.exe\\\"" )
+
+ENDIF(WIN32 AND NOT UNIX)
+
+##ELSE(WIN32 AND NOT UNIX)
+###	SET_CONFIG ( CPACK_GENERATOR                    "DEB" )  # STGZ;TGZ;DEB
+####	SET_CONFIG ( CPACK_STRIP_FILES "build_cbs/make_release_static/minercreator/minercreator")
+####	SET_CONFIG ( CPACK_SOURCE_STRIP_FILES "")
+##ENDIF(WIN32 AND NOT UNIX)
+
+
+# C:\Program Files (x86)\NSIS
+# --- Platform install configuration ---
+IF ( LINUX )
+	SET_CONFIG  ( INSTALL_PREFIX "." )
+	SET_CONFIG  ( DATA_SUBDIR           "${INSTALL_PREFIX}/share/netscavator"   )
+	SET_CONFIG	( PHP_DYN_LIB     		"../3rdparty/php-${PHP_VERSION}/linux_${CBS_SYSTEM_WIDTH}_release/lib/libphp-sleipner5.so" )
+
+    IF ( "${CBS_SYSTEM_WIDTH}" STREQUAL "32" )
+        SET_CONFIG ( CPACK_DEBIAN_PACKAGE_ARCHITECTURE  "i386"  )   # Use dpkg --print-architecture
+    ELSE ( "${CBS_SYSTEM_WIDTH}" STREQUAL "32" )
+        # 64 bit
+        SET_CONFIG ( CPACK_DEBIAN_PACKAGE_ARCHITECTURE  "amd64" )   # Use dpkg --print-architecture
+    ENDIF ( "${CBS_SYSTEM_WIDTH}" STREQUAL "32" )
+
+#TODO:    INSTALL ( FILES     data/icons/48x48/netscavator-minercreator-icon.xpm DESTINATION share/pixmaps/ COMPONENT data )
+#TODO:    INSTALL ( FILES     data/menu/netscavator DESTINATION share/menu/ COMPONENT data )
+#TODO:    INSTALL ( FILES     data/menu/netscavator.desktop DESTINATION share/applications/ COMPONENT data )
+INSTALL ( FILES     data/config/linux/crawler.cfg DESTINATION ${DATA_SUBDIR}/config/ COMPONENT data )
+INSTALL ( FILES     data/config/linux/minercreator.cfg DESTINATION ${DATA_SUBDIR}/config/ COMPONENT data )
+INSTALL ( FILES     data/config/linux/netscavator.cfg DESTINATION ${DATA_SUBDIR}/config/ COMPONENT data )
+INSTALL ( FILES     data/config/linux/netcreator.cfg DESTINATION ${DATA_SUBDIR}/config/ COMPONENT data )
+INSTALL ( FILES     data/config/linux/php.ini DESTINATION ${DATA_SUBDIR}/config/ COMPONENT data )
+ENDIF ( LINUX )
+
+
+
+message ( "CBS_INSTALL_RUNTIME_SUBDIR: ${CBS_INSTALL_RUNTIME_SUBDIR}" )
+message ( "CBS_INSTALL_SHARED_SUBDIR: ${CBS_INSTALL_SHARED_SUBDIR}" )
+message ( "CBS_INSTALL_SHARED_SUBDIR: ${CBS_INSTALL_SHARED_SUBDIR}" )
+message ( "INSTALL_PREFIX: ${INSTALL_PREFIX}" )
+message ( "DATA_SUBDIR: ${DATA_SUBDIR}" )
+
+IF ( LINUX )
+	SET_CONFIG ( CPACK_GENERATOR  "DEB" )  # STGZ;TGZ;DEB
+
+	# --- Additional install files ---
+    INSTALL ( FILES     data/config/crawler.cfg.in DESTINATION ${DATA_SUBDIR}/config/ COMPONENT data )
+    INSTALL ( FILES     data/config/minercreator.cfg.in DESTINATION ${DATA_SUBDIR}/config/ COMPONENT data )
+    INSTALL ( FILES     data/config/netscavator.cfg.in DESTINATION ${DATA_SUBDIR}/config/ COMPONENT data )
+    INSTALL ( FILES     data/config/netcreator.cfg.in DESTINATION ${DATA_SUBDIR}/config/ COMPONENT data )
+    INSTALL ( FILES     data/config/php.ini.in DESTINATION ${DATA_SUBDIR}/config/ COMPONENT data )
+	INSTALL ( FILES   	scriptcrawl/cpp_crawl/webminer.php DESTINATION ${DATA_SUBDIR}/php/miner_utils COMPONENT libraries )
+	INSTALL ( FILES   	build_cbs/libs/shared/${CMAKE_BUILD_TYPE}/cpp_crawl.php DESTINATION ${DATA_SUBDIR}/php/miner_utils COMPONENT libraries )
+	INSTALL ( FILES  	${PHP_DYN_LIB} DESTINATION ${INSTALL_PREFIX}/lib COMPONENT libraries )
+	INSTALL ( FILES 	ReadMe.txt Copyright.txt DESTINATION ${DATA_SUBDIR}/doc COMPONENT documentation )
+	##INSTALL	( DIRECTORY data/bin/linux/ DESTINATION ${CBS_INSTALL_RUNTIME_SUBDIR} FILES_MATCHING PATTERN "*.in" )
+	INSTALL	( DIRECTORY data/robot/ DESTINATION ${DATA_SUBDIR}/robot COMPONENT data FILES_MATCHING PATTERN "*.sh"   	)
+	INSTALL	( DIRECTORY data/robot/ DESTINATION ${DATA_SUBDIR}/robot COMPONENT data FILES_MATCHING PATTERN "*.php" )
+	INSTALL	( DIRECTORY data/robot/ DESTINATION ${DATA_SUBDIR}/robot COMPONENT data FILES_MATCHING PATTERN "*.in"  )
+
+	INSTALL	( DIRECTORY data/php/miner_templates/ DESTINATION ${DATA_SUBDIR}/php/miner_templates COMPONENT data FILES_MATCHING PATTERN "*.php" )
+	INSTALL	( DIRECTORY data/php/miner_utils/ 	  DESTINATION ${DATA_SUBDIR}/php/miner_utils 	 COMPONENT data FILES_MATCHING PATTERN "*.php" )
+	INSTALL	( DIRECTORY data/icons/48x48/ 	  	  DESTINATION ${DATA_SUBDIR}/icons/48x48 		 COMPONENT data FILES_MATCHING PATTERN "*.png" )
+	INSTALL	( DIRECTORY data/icons/128x128/ 	  DESTINATION ${DATA_SUBDIR}/icons/128x128 		 COMPONENT data FILES_MATCHING PATTERN "*.png" )
+
+
+
+
+	# --- General install configuration ---
+	# SET_CONFIG ( CPACK_GENERATOR                    "ZIP;NSIS" )  # STGZ;TGZ;DEB
+	##SET_CONFIG ( CPACK_GENERATOR                    "DEB" )  # STGZ;TGZ;DEB
+	SET_CONFIG ( CPACK_PACKAGE_NAME                 "netscavator"       )
+	SET_CONFIG ( CPACK_PACKAGE_VENDOR 				"netscavator.com"   )
+	SET_CONFIG ( CPACK_PACKAGE_DESCRIPTION_SUMMARY  "Advanced webcrawler screen scraper for large scale collection of structured information from websites." )
+	SET_CONFIG ( CPACK_PACKAGE_VERSION              ${NETSCAVATOR_VERSION_STRING}    	)
+	SET_CONFIG ( CPACK_PACKAGE_VERSION_MAJOR 		${NETSCAVATOR_VERSION_MAJOR}        )
+	SET_CONFIG ( CPACK_PACKAGE_VERSION_MINOR 		${NETSCAVATOR_VERSION_MINOR}        )
+	SET_CONFIG ( CPACK_PACKAGE_VERSION_PATCH 		${NETSCAVATOR_VERSION_PATCH}        )
+
+	SET_CONFIG ( CPACK_PACKAGE_INSTALL_DIRECTORY 	"Sleipner"  )
+	SET_CONFIG ( CPACK_PACKAGE_CONTACT              "Martin Lutken <nitram@lutken.dk>" )
+	SET_CONFIG ( CPACK_COMPONENTS_ALL applications libraries documentation data )
+
+	set ( CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "Applications")
+	set ( CPACK_COMPONENT_LIBRARIES_DISPLAY_NAME 	"Libraries")
+	set ( CPACK_COMPONENT_HEADERS_DISPLAY_NAME 		"C++ Headers")
+
+	set ( CPACK_COMPONENT_APPLICATIONS_DESCRIPTION 	"A powerfull webcrawler and IDE for creating miners.")
+	set ( CPACK_COMPONENT_LIBRARIES_DESCRIPTION 	"Dynamic libs used by the applications")
+	set ( CPACK_COMPONENT_HEADERS_DESCRIPTION		"")
+
+	SET ( CPACK_COMPONENTS_GROUPING 				"ALL_COMPONENTS_IN_ONE" )
+
+	SET ( CPACK_PACKAGE_DESCRIPTION_FILE  			"${CMAKE_CURRENT_SOURCE_DIR}/ReadMe.txt" )
+	SET ( CPACK_RESOURCE_FILE_LICENSE 	  			"${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt" )
+	SET ( CPACK_STRIP_FILES				  			TRUE )
+
+
+
+	# -----------------------------
+	# --- Deb package only only ---
+	# -----------------------------
+	SET_CONFIG ( CPACK_DEBIAN_PACKAGE_SECTION              "devel"      )
+	SET_CONFIG ( CPACK_DEBIAN_PACKAGE_PRIORITY             "optional"   )
+
+	SET_CONFIG ( CPACK_DEBIAN_PACKAGE_RECOMMENDS           ""           )
+	SET_CONFIG ( CPACK_DEBIAN_PACKAGE_SUGGESTS             ""           )
+
+	# ---------------------
+	# --- Control extra ---
+	# ---------------------
+	# Additional control files (optional)
+	# In order to perform pre-, or post-install configuration, certain files can be provided in the
+	# DEBIAN/ folder in the debian package (postinst, preinst, postrm, prerm)
+	# You should set: CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA
+	# E.g.
+	SET_CONFIG ( CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_CURRENT_SOURCE_DIR}/data/bin/linux/debian/postinst;${CMAKE_CURRENT_SOURCE_DIR}/data/bin/linux/debian/postrm;" )
+
+
+	# -----------------------------------
+	# --- Debian package dependencies ---
+	# -----------------------------------
+    # Use: objdump -p netscavator | grep NEEDED
+	#SET_CONFIG ( CPACK_DEBIAN_PACKAGE_DEPENDS "libQtCore (>= 4.8.0), libQtGui (>= 4.8.0), libQtWebKit (>= 4.8.0), libQtNetwork (>= 4.8.0), libcurl-gnutls (>= 4.0.0), libstdc++ (>= 6.0.0), libm (>= 6.0.0), libgcc_s (>= 1.0.0), libc (>= 6.0.0), libdl (>= 2.0.0)" )
+ENDIF ( LINUX )
+
+ # This must always be last!
+include(CPack)
+

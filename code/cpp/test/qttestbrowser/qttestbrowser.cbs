@@ -1,0 +1,26 @@
+# *** EXECUTABLE: 'wxMinimal' main cbs file. ***
+
+# -------------------
+# --- Build setup ---
+# -------------------
+VERIQUIN_ADD_QT_LIBS()
+ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR})
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE_QT4 ( cookiejar.cpp             )
+ADD_SOURCE_FILE_QT4 ( fpstimer.cpp              )
+ADD_SOURCE_FILE_QT4 ( launcherwindow.cpp        )
+ADD_SOURCE_FILE_QT4 ( launcherapplication.cpp   )
+ADD_SOURCE_FILE_QT4 ( locationedit.cpp          )
+ADD_SOURCE_FILE_QT4 ( mainwindow.cpp            )
+ADD_SOURCE_FILE_QT4 ( qttestbrowser.cpp         )
+ADD_SOURCE_FILE_QT4 ( urlloader.cpp             )
+ADD_SOURCE_FILE     ( utils.cpp                 )
+ADD_SOURCE_FILE_QT4 ( webpage.cpp               )
+ADD_SOURCE_FILE_QT4 ( webview.cpp               )
+ADD_SOURCE_FILE_QT4 ( webinspector.cpp          )
+
+#ADD_SOURCE_FILE_QT4 ( WebWidget.cpp            )
+

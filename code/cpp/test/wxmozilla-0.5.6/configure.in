@@ -1,0 +1,275 @@
+# Process this file with autoconf to produce a configure script
+AC_PREREQ([2.52])
+
+AC_INIT([wxMozilla], [0.5.6], [wxmozilla-devel@lists.sourceforge.net])
+AC_CONFIG_SRCDIR([src/wxMozillaBrowser.cpp])
+
+AC_CANONICAL_BUILD
+AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
+
+AM_OPTIONS_WXCONFIG
+
+build_python=0
+use_firefox=0
+
+AC_ARG_ENABLE([python],
+              AS_HELP_STRING([--enable-python],
+                             [build wxPython binding]),
+              [build_python="$enableval"])
+AC_ARG_ENABLE([firefox],
+              AS_HELP_STRING([--enable-firefox],
+                             [build against Firefox instead of Mozilla]),
+              [use_firefox="$enableval"])
+
+AM_INIT_AUTOMAKE
+AM_MAINTAINER_MODE
+
+AC_PROG_CC
+USE_WXGTK="yes"
+
+case "${host}" in
+    powerpc-*-darwin* )
+        USE_WXGTK="no"
+    ;;
+    *-*-mingw32* )
+        USE_WXGTK="no"
+    ;;
+esac
+
+AC_PROG_CXX
+AC_PROG_CXXCPP
+AC_LANG_CPLUSPLUS
+AC_PROG_INSTALL
+AM_PROG_LIBTOOL 
+PKG_PROG_PKG_CONFIG
+
+# Check for wxWindows
+dnl FIXME: once we require wx-2.6, remove second run of this macro below
+dnl        (search for 'FIXME')
+AM_PATH_WXCONFIG([2.4.0], [], [
+        AC_MSG_ERROR([
+     	   wxWindows must be installed on your system
+     	   but wx-config script couldn't be found.
+     
+     	   Please check that wx-config is in path, the directory
+     	   where wxWindows libraries are installed (returned by
+     	   'wx-config --libs' command) is in LD_LIBRARY_PATH or
+     	   equivalent variable and wxWindows version is 2.4.0 or above.
+        ])])
+
+AC_MSG_CHECKING([for wxMozilla library name])
+if test "$WX_VERSION" = "2.4.0" -o "$WX_VERSION" = "2.4.1"; then
+    WXMOZILLALIB="wxmozilla_`echo $WX_LIBS | sed -e 's/.*-lwx_\([[^ ]]*\).*/\1/g'`"
+    wxrelease=2.4
+else
+    wxbasename=`$WX_CONFIG_WITH_ARGS --basename | sed -e 's,^wx_,,g'`
+    wxrelease=`$WX_CONFIG_WITH_ARGS --release`
+    WXMOZILLALIB="wxmozilla_$wxbasename-$wxrelease"
+fi
+AC_MSG_RESULT([$WXMOZILLALIB])
+AC_SUBST(WXMOZILLALIB)
+
+if test "$wxrelease" != 2.4 ; then
+    dnl Run wx detection again, but this time tell it we only want certain
+    dnl subset of libraries:
+    dnl FIXME: remove this once we require wx-2.6
+    AM_PATH_WXCONFIG([2.5.2], [], [], [core net base])
+fi
+
+dnl Check for Mozilla
+mozilla_libs=""
+mozilla_includes=""
+AC_ARG_WITH(mozilla-libs,
+	[  --with-mozilla-libs=dir     Set mozilla 'lib' place ],
+	[ mozilla_libs="$withval" ])
+AC_ARG_WITH(mozilla-includes,
+	[  --with-mozilla-includes=dir Set mozilla 'include' place ],
+	[ mozilla_includes="$withval" ])
+AC_ARG_WITH(mozilla-home,
+	[  --with-mozilla-home=dir Where mozilla libs are at runtime ],
+	[ MOZILLA_HOME="$withval" ])
+
+if test "x$mozilla_includes" != "x" ; then
+    dnl Don't detect mozilla, use given version
+    if test "x$mozilla_libs" = "x" ; then
+        AC_MSG_ERROR([Must specify both --with-mozilla-includes and --with-mozilla-libs])
+    fi
+    MOZILLA_CFLAGS="-I$mozilla_includes -I$mozilla_includes/xpcom -I$mozilla_includes/string -I$mozilla_includes/nspr"
+
+    MOZILLA_LIBS="-L$mozilla_libs -lxpcom -lplds4 -lnspr4 -lplc4"
+    case "${host}" in
+      *-*-freebsd* )
+          MOZILLA_LIBS="$MOZILLA_LIBS -pthread"
+      ;;
+      * )
+          MOZILLA_LIBS="$MOZILLA_LIBS -lpthread -ldl"
+      ;;
+    esac
+
+    if test $USE_WXGTK = "yes"; then
+        MOZILLA_CFLAGS="$MOZILLA_CFLAGS -I$mozilla_includes/gtkembedmoz"
+        MOZILLA_LIBS="$MOZILLA_LIBS -lgtkembedmoz -lgtksuperwin"
+    else
+    	MOZILLA_LIBS="$MOZILLA_LIBS -L$mozilla_libs/../lib -lembed_base_s"
+    fi
+else
+    if test "$use_firefox" = "yes" ; then
+        PKG_CHECK_MODULES([MOZILLA], 
+            [firefox-nspr >= 1.0 firefox-xpcom])
+        mozilla_includes=`$PKG_CONFIG --variable=includedir firefox-xpcom`
+        mozilla_libs=`$PKG_CONFIG --variable=libdir firefox-xpcom`
+        if test $USE_WXGTK = "yes"; then
+            PKG_CHECK_MODULES([MOZILLA_GTK], [firefox-gtkmozembed >= 1.0])
+            MOZILLA_CFLAGS="$MOZILLA_CFLAGS $MOZILLA_GTK_CFLAGS"
+            MOZILLA_LIBS="$MOZILLA_LIBS $MOZILLA_GTK_LIBS"
+        fi
+    else
+        PKG_CHECK_MODULES([MOZILLA], 
+            [mozilla-nspr >= 1.3 mozilla-xpcom])
+        mozilla_includes=`$PKG_CONFIG --variable=includedir mozilla-xpcom`
+        mozilla_libs=`$PKG_CONFIG --variable=libdir mozilla-xpcom`
+        if test $USE_WXGTK = "yes"; then
+            PKG_CHECK_MODULES([MOZILLA_GTK], [mozilla-gtkmozembed >= 1.3])
+            MOZILLA_CFLAGS="$MOZILLA_CFLAGS $MOZILLA_GTK_CFLAGS"
+            MOZILLA_LIBS="$MOZILLA_LIBS $MOZILLA_GTK_LIBS"
+        fi
+    fi
+fi
+dnl Additional mozilla settings:
+if test "x$MOZILLA_HOME" = "x"; then
+    MOZILLA_HOME=$mozilla_libs
+fi
+MOZILLA_CFLAGS="$MOZILLA_CFLAGS -I$mozilla_includes"
+for subdir in unix dom windowwatcher webbrowserpersist appcomps find txtsvc \
+              docshell shistory webshell gfx necko widget content layout \
+              browser webbrwsr uconv embed_base uriloader editor \
+              commandhandler composer pref profdirserviceprovider ; do
+    MOZILLA_CFLAGS="$MOZILLA_CFLAGS -I$mozilla_includes/$subdir"
+done
+if test $USE_WXGTK = "yes"; then
+	MOZILLA_LIBS="$MOZILLA_LIBS -Wl,-rpath,$MOZILLA_HOME"
+else
+	#OS X doesn't accept the -rpath or MOZILLA_HOME arguments  
+	#should some mac-specific variable be used instead of USE_WXGTK?
+	MOZILLA_LIBS="$MOZILLA_LIBS -Wl"
+fi
+AC_SUBST(MOZILLA_LIBS)
+AC_SUBST(MOZILLA_CFLAGS)
+
+AC_DEFINE_UNQUOTED(MOZILLA_HOME, "$MOZILLA_HOME")
+
+dnl Verify that both Mozilla and wxWindows use same GTK+ major version:
+if test $USE_WXGTK = "yes"; then
+    saved_cpp_flags="$CPPFLAGS"
+    CPPFLAGS="$CPPFLAGS $WX_CXXFLAGS $MOZILLA_CFLAGS"
+    AC_MSG_CHECKING([for wxWindows toolkit])
+    AC_TRY_COMPILE([#include <wx/defs.h>],
+        [
+            #if !defined(__WXGTK12__) || defined(__WXGTK20__)
+                #error "not GTK+ 1.2"
+            #endif
+        ],
+        [
+            wx_toolkit="gtk1"
+        ],
+        [
+            AC_TRY_COMPILE([#include <wx/defs.h>],
+            [
+                #ifndef __WXGTK20__
+                    #error "not GTK+ 2.0"
+                #endif
+            ],
+            [
+                wx_toolkit="gtk2"
+            ],
+            [
+                AC_MSG_RESULT([not GTK+])
+                AC_MSG_ERROR([wxMozilla requires wxGTK version of wxWindows])
+            ])
+        ])
+    AC_MSG_RESULT([$wx_toolkit])
+    
+    AC_MSG_CHECKING([for Mozilla toolkit])
+    AC_TRY_COMPILE([#include <mozilla-config.h>],
+        [
+            #ifndef MOZ_WIDGET_GTK
+                #error "not GTK+ 1.2"
+            #endif
+        ],
+        [
+            mozilla_toolkit="gtk1"
+        ],
+        [
+            AC_TRY_COMPILE([#include <mozilla-config.h>],
+            [
+                #ifndef MOZ_WIDGET_GTK2
+                    #error "not GTK+ 2.0"
+                #endif
+            ],
+            [
+                mozilla_toolkit="gtk2"
+            ],
+            [
+                AC_MSG_RESULT([not GTK+])
+                AC_MSG_ERROR([wxMozilla requires GTK+ version of Mozilla])
+            ])
+        ])
+    AC_MSG_RESULT([$mozilla_toolkit])
+
+    if test "$mozilla_toolkit" != "$wx_toolkit" ; then
+        AC_MSG_ERROR([
+            Mozilla and wxWindows use different GTK+ versions.
+            Mozilla uses $mozilla_toolkit, wxWindows uses $wx_toolkit.
+        ])
+    fi
+
+    AC_LANG_C
+    if test "$wx_toolkit" = "gtk1" ; then
+	    AM_PATH_GTK(1.2.2, [], AC_MSG_ERROR("Need GTK+ 1.2.0 or better!"))
+    else
+        AM_PATH_GTK_2_0(2.0.0, [], AC_MSG_ERROR("Need GTK+ 2.0 or better!"))
+    fi
+    AC_LANG_CPLUSPLUS
+fi
+
+
+# test which wxPython major version we have:
+AM_CONDITIONAL(BUILD_24, [test "$wxrelease" = 2.4])
+
+dnl Python extension:
+if test "$build_python" = "yes" ; then
+    AM_PATH_PYTHON(2.1)
+    PYTHON_INCLUDE=`$PYTHON -c "import sys; print sys.prefix"`/include/python$PYTHON_VERSION
+    AC_SUBST(PYTHON_INCLUDE)
+    
+    AC_MSG_CHECKING([for wxPython directory])
+
+    if test "$wxrelease" = 2.4 ; then
+        WXPYTHONDIR="$pythondir"
+    else
+        wxpyvername=`$PYTHON -c "from wx.build.config import getExtraPath; print getExtraPath(addOpts=1)"`
+        WXPYTHONDIR="$pythondir/$wxpyvername"
+    fi
+    
+    AC_SUBST(WXPYTHONDIR)
+    AC_MSG_RESULT([$WXPYTHONDIR])
+    
+    AC_MSG_CHECKING([whether wxPython is >= 2.6.3])
+    wxpyverok=`$PYTHON -c "import wx; print wx.__version__ > '2.6.3'"`
+    if test "$wxpyverok" = "True" ; then
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+        AC_MSG_ERROR([wxPython must be at least version 2.6.3])
+    fi
+fi
+AM_CONDITIONAL(BUILD_PYTHON, [test $build_python = yes])
+
+AC_OUTPUT([
+    Makefile
+	src/Makefile
+    wxPython/Makefile
+	demo/Makefile
+    wxmozilla.pc
+    ])

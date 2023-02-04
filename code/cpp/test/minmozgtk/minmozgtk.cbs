@@ -1,0 +1,9 @@
+# -------------------
+# --- Build setup ---
+# -------------------
+ADD_COMPILE_FLAG ( "-fvisibility=hidden"	LINUX	)
+ADD_DEFINE ( XULRUNNER_SDK_MAIN_LIB			\\\\"${XULRUNNER_SDK_MAIN_LIB}\\\\"			)
+
+ADD_SUBDIR ( src	)
+ADD_SUBDIR ( tests	)
+

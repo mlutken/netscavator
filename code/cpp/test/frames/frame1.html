@@ -1,0 +1,30 @@
+<html xml:lang="da" lang="da">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>frame 1</title>    
+
+<script type="text/javascript">
+
+function showMe( sIdShow )
+{
+	var idShow=document.getElementById( sIdShow );
+	idShow.innerHTML = sIdShow;
+}
+
+function addMe( sIdAddTo, sText )
+{
+	var idAddTo=document.getElementById( sIdAddTo );
+	idAddTo.innerHTML = idAddTo.innerHTML + ",&nbsp;" + sText;
+}
+
+</script>
+
+</head>
+<body>
+	<h2> This is frame 1 </h2>
+	<table border="1" >
+		<tr><td> <input onclick="showMe('INPUT_onClick')" ></input>INPUT_onClick</td><td id="INPUT_onClick" >0</td></tr>
+		<tr><td> <input type=button onclick="showMe('INPUT_button_onClick')" ></input>INPUT_button_onClick</td><td id="INPUT_button_onClick" >0</td></tr>
+		<tr><td> <input type=checkbox onclick="showMe('INPUT_checkbox_onClick')" ></input>INPUT_checkbox_onClick</td><td id="INPUT_checkbox_onClick" >0</td></tr>
+	</table>
+</body>

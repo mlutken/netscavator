@@ -1,0 +1,5 @@
+binary-component xpcomsample.dll
+binary-component browsercomps.dll
+binary-component CSpecialThing.dll ABI=WINNT_x86-msvc
+interfaces ISpecialThing.xpt
+

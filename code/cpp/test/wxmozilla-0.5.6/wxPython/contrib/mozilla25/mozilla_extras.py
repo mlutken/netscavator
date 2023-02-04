@@ -1,0 +1,13 @@
+wx.wxMozillaBeforeLoadEventPtr = wxMozillaBeforeLoadEventPtr
+wx.wxMozillaLinkChangedEventPtr = wxMozillaLinkChangedEventPtr
+wx.wxMozillaStateChangedEventPtr = wxMozillaStateChangedEventPtr
+wx.wxMozillaSecurityChangedEventPtr = wxMozillaSecurityChangedEventPtr
+wx.wxMozillaStatusChangedEventPtr = wxMozillaStatusChangedEventPtr
+wx.wxMozillaTitleChangedEventPtr = wxMozillaTitleChangedEventPtr
+wx.wxMozillaLoadCompleteEventPtr = wxMozillaLoadCompleteEventPtr
+wx.wxMozillaProgressEventPtr = wxMozillaProgressEventPtr
+wx.wxMozillaRightClickEventPtr = wxMozillaRightClickEventPtr
+wx.wxMozillaMouseEventPtr = wxMozillaMouseEventPtr
+wx.wxMozillaKeyEventPtr = wxMozillaKeyEventPtr
+
+__version__ = (wxMOZ_MAJOR_VERSION, wxMOZ_MINOR_VERSION, wxMOZ_RELEASE_NUMBER)

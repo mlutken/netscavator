@@ -1,0 +1,4 @@
+#!/bin/sh 
+${VERIQUIN_CPP_DIR}/3rdparty/php/linux/php_release_5.3.2/bin/php -c ${VERIQUIN_CPP_DIR}/build_cbs/libs/shared/Release -f "$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"
+
+

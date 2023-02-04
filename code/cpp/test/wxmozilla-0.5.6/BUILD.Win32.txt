@@ -1,0 +1,43 @@
+Windows build instructions:
+
+NOTE: wxMozilla has moved over to using Bakefile (http://bakefile.sf.net) as it's makefile management tool! This means we now support both command line and GUI/DSW projects for MSVC builds, and we've added a Borland BCC makefile as well (which is currently untested). Thanks to Bakefile, we are now capable of supporting other project formats as well, but we will need people willing to test and debug those formats. If you are interested in helping, please send a message to wxmozilla-devel@lists.sourceforge.net.  
+
+Building with Microsoft Visual C++ (MSVC IDE)
+------------------------------------------
+To build wxMozilla, you will need to have MSVC 6 (or above) with the latest service pack. It is recommended also that you install the latest Platform SDK files. These instructions are based upon a build on MSVC 6 SP 5 and may not work with other versions. (If you are successful in building with other versions of MSVC please let us know!)
+
+These instructions assume that you have already built wxWindows. If not, you can get wxWindows from http://www.wxwindows.org. This build has been tested with release, debug and hybrid targets and both static and dynamic versions of the wxWindows library. (It was tested with 2.4.0) Now onto the instructions!
+
+1. Download and unpack the latest version of wxMozilla  from http://wxmozilla.sourceforge.net. 
+
+2. Set the environment variable WXWIN to your wxWindows root directory. (In Windows 2000/XP, you can do this by going to Control Panel->System->Advanced and clicking on the "Environment Variables" button.)
+
+3. Go into the build\msw folder and open wxMozilla.dsw. This workspace contains project files for the shared and static libraries, and also the demo. Select the project and configuration, and you're ready to build.
+
+Building the wxPython Extension for 2.6
+---------------------------------------------
+Building the wxPython extension on 2.6 and above is much simpler thanks to some additional capabilities Robin added to enable extensions to be installed into an existing wxPython installation. Note that this requires MSVC 6 or above. It has not been tested under any other configuration. All you need to do is:
+
+1. Download the wxPythonWIN32-Devel package for the release of wxPython you've installed and unpack it
+
+2. cd to wxPython\contrib\mozilla25 
+
+3. Run the following command: "python setup.py install WXPY_SRC=<path to wxPythonWIN32-devel root>"
+
+If this command completes without error, it means you have a freshly installed wxMozilla Python extension!  
+
+
+Building the wxPython Extension for 2.4
+---------------------------------------------
+NOTE: THIS IS NO LONGER SUPPORTED. The instructions are still in the docs in case someone needs to build against wxPython 2.4, but the project doesn't have the resources to provide support for it. In short, use at your own risk.
+
+Building the wxMozilla wxPython extension for 2.4 isn't as easy as I'd like it to be, but it can be done! Here's how (note, these instructions assume you have downloaded the wxPythonSrc package from wxpython.org):
+
+1. Copy the files and folders in <WXMOZILLA>\wxPython\contrib into your <WXPYTHONSRC>\wxPython\contrib folder.
+
+2. Patch the current <WXPYTHONSRC>\wxPython\setup.py with the mozilla instructions in <WXMOZILLA>\wxPython\setup.py.
+
+3. Build wxPython and the wxMozilla extension! (Instructions are on wxpython.org) Be sure to build and run SWIG on the mozilla.i file. (This is also detailed in the wxpython.org build instructions.)
+
+4. wxPython currently needs a custom-installed GRE to run. This can be obtained by installing the wxMozilla-0.5.x-Py2.x.exe binary releases. It copies all necessary files into "C:\Program Files\Common Files\wxMozilla\GRE\1.3", adds a registry value telling wxMozilla where to find the GRE, and adds this value to your PATH. This is what is needed to use Mozilla with wxPython at the moment, although we are hopeful that future releases will be able to run using the Mozilla GRE if it is installed. 
+

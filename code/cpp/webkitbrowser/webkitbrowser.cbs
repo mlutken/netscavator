@@ -1,0 +1,24 @@
+# *** EXECUTABLE: 'wxMinimal' main cbs file. ***
+
+# -------------------
+# --- Build setup ---
+# -------------------
+VERIQUIN_ADD_QT_LIBS ()
+
+ADDX_DEPENDS_ON ( interfaces    )
+##ADDX_DEPENDS_ON ( qttestbrowser )
+
+
+ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR})
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE_QT4 ( WebKitBrowserQt.cpp               )
+ADD_SOURCE_FILE_QT4 ( WebKitCookieJar.cpp               )
+ADD_SOURCE_FILE     ( WebKitDomNodeQt.cpp               )
+ADD_SOURCE_FILE     ( WebKitDomDocumentLinearQt.cpp     )
+ADD_SOURCE_FILE_QT4 ( WebkitNetworkAccessManagerQt.cpp  )
+
+
+

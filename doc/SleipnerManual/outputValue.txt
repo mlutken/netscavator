@@ -1,0 +1,383 @@
+--outputValue
+So far we have used the outputValue function without really introducing it properly. Hopefully it has been clear what it in essence does. It simply writes the value of the current node to the output XML document using the first (and in our previous examples only) parameter as the name of the property. For example the statement:
+\code
+outputValue("product_name"); 
+\endcode
+Assuming that the current node in the dom is at the node containing the string value 'Shirt: ' (note the trailing space)
+
+Will produce a line in the XML output like this:
+\code
+<product_name>Shirt:</product_name> 
+\endcode
+
+Note that the trailing space has been "trimmed" away. In fact, by default, both leading and trailing spaces are trimmed from any output value. As we shall se shortly we have a large number of possibilities when it comes to manipulating the output when using outputValue functions. We shall look at many of these in the following and also show how you can avoid the default trimming if so desired.
+
+
+--outputValue with manipulator functions
+The output of our current script would currently be like this:
+\code
+<product_name>Shirt:</product_name> 
+<product_price>12.75 EUR</product_price> 
+<product_name>Socks:</product_name> 
+<product_price>2.75 EUR</product_price> 
+\endcode
+
+Apart from the default trimming, which removes the trailing spaces from the two name fields this output is probably not what we typically want. Most likely we want the output file to be more like this:
+\code
+<product_name>Shirt</product_name> 
+<product_price>12.75</product_price> 
+<product_name>Socks</product_name> 
+<product_price>2.75</product_price> 
+\endcode
+
+---eraseAll
+Lest's start by fixing the names. The output value function is overloaded in several versions taking a different number of parameters and one of them allows us to erase the ':' from all the names simply by replacing the 
+#outputValue("product_name");#
+with:
+#outputValue("product_name", "eraseAll", ":" );#
+
+Pretty simple - huh? Again the default trimming of spaces is then applied after the erasing, making sure we end up with a nice clean value string. The eraseAll is only one of a family of erase trimming/manipulator functions you can use. Some of the others are: eraseFirst, eraseLast, eraseRegex (regular expresion).
+
+So when using erase manipulators in outputValue functions you need to supply two extra parameters: One that designates the erase function to use and one paramter for the erase function itself specifying what you actually want removed - like the string ":" in the above example. 
+
+---trimDefault, raw
+The erase manipulators needs one parameter in addition to the actual name of the manipulator. We have even simpler ones which does not require any parameters except the name of the trimming function. For example the trimDefault, which is simply an explicit way of doing the default trimming when doing like this:
+#outputValue("product_name", "trimDefault" );#
+
+Not awfully usefull in this example but could be usefull when used as argument to the valueModify() function introduced elsewhere. Another no parameters manipulator is 'raw', which allows us to suppres the default trimming:
+#outputValue("product_name", "raw" );#
+will make somenthing like this in the XML:
+\code
+<product_name>Shirt: </product_name>  
+\endcode
+Note that the trailing space is not trimmed away now.
+
+Other trimming functions that does not take any parameters are: toUpper and toLower (IMPL TODO: only a-z for now), trimLeft, trimRight, trimNumber, trimInteger, trimYear
+
+---trimNumber
+Although pretty straitforward we will explain this a little more. We could ofcourse use:
+#outputValue("product_price", "eraseAll", "EUR" );#
+But we prefer using:
+#outputValue("product_price", "trimNumber" );#
+
+The trimNumber manipulator actually searches through the current value looking for the first substring that can actually represent a decimal (floating point) number. So even if the price node looked for example like this 'price is 12.75 EUR' the trimNumber would pick up and parse the price correctly. 
+
+So now our complete example can be enhanced so we get the "clean values" as exemplified with the XML code above:
+
+
+\code
+// Define dom sequences for the positions we need
+domSeqCreate  ( "ProductStartSeq"   , "DIV, class, product" , "equals"  ); 
+domSeqCreate  ( "ProductNameSeq"    , "color:green"         , "contains", 1 ); 
+domSeqCreate  ( "ProductPriceSeq"   , "EUR"                 , "contains" ); 
+
+
+// Completely general way way of looping thruogh a list of products
+function MyScript_SearchListing_mine()            
+{
+    domNewSearch();
+    while ( domFindNext ( 1, "ProductStartSeq" ) ) {
+        domPointerPush();
+        $iStopPos = domFindNextPos( 1, "ProductStartSeq" );
+        domSetStopPos( $iStopPos );
+        GetProduct();
+        domClearStopPos();
+        domPointerPop();
+    }
+}
+
+function GetProduct()            
+{
+    // Get product name
+    domPointerPush();
+    if ( domFindNext ( 1, "ProductNameSeq" ) ) {
+        outputValue( "product_name", "eraseAll", ":" );  
+    }
+    domPointerPop();
+    
+    // Get product price
+    domPointerPush();
+    if ( domFindNext ( 1, "ProductPriceSeq" ) ) {
+       outputValue( "product_price", "trimNumber" );
+    }
+    domPointerPop();
+}
+\endcode
+
+
+---trimNumber locale settings, decimal point, thousands separator
+One thing you have to know is the "locale convention" used on the page you are mining. By default the Sleipner assumes US/UK style where the '.' is the decimal point and ',' is the thousands separator. If for example you need to parse prices/numbers on a page using danish, german etc... style where the comma ',' is the decimal point and the dot '.' is the thousands separator you need to set that somewhere in your script (for example in MyScript__setRunConfig():
+
+
+\code
+MyScript__setRunConfig()
+{
+    // Set number parsing to danish style
+    configParseDecimalPointSet( "," );
+    configParseThousandsSepSet( "." );
+}
+\endcode
+
+IMPL TODO: Get rid of the need for __setRunConfig() functions by simply allowing to call stuff like this in the top of the script.
+
+Alternatively you can specify the thousands separator and decimal point direcly like:
+\code
+outputValue( "product_price", "trimNumberCustom", ",", "." ); // decimal point, thousands separator
+\endcode
+
+---trimInteger, trimYear
+trimInteger works very similar to trimNumber except it parses until it finds the first integer whitin the string. So if the current node value again is 'price is 12.75 EUR' and we use #outputValue("product_price", "trimInteger" );# we get '12'. 
+
+Again, depending on locale used on the web site you are mining the configParseThousandsSepSet() function affects it's behaviour (configParseDecimalPointSet() has no effect). So if we assume we have set the thousands separator to '.' instead of the default ',' we would get the result '1275' instead of '12'.
+
+trimYear simply looks for a year in the form 'yyyy' like eg. 1989 or 2011.
+
+---prepend, append
+The prepend manipulator is often usefull when you need to grab links to subpages on the site you are crawling since they most often does not contain "http://www.somesite.com/" but just something like "clothing/socks.php?color=black". Suppose we also want to get the URL's where each product is presented (deep links) and we have found the correct dom position. Then all we would need to do is:
+
+#outputValue ( "product_url", "prepend", "http://www.somesite.com/" );#
+
+and then the output would be as expected:
+\code
+<product_url>http://www.somesite.com/clothing/socks.php?color=black</product_url>  
+\endcode
+
+We can show how this might fit into out little example code by adding a dom sequence to find the product_url:
+
+\code
+// Define dom sequences for the positions we need
+...
+domSeqCreate  ( "ProductUrlSeq", "View and buy", "contains", -1 ); 
+
+...
+function GetProduct()            
+{
+    ...
+    // Get product URL
+    domPointerPush();
+    if ( domFindNext ( 1, "ProductUrlSeq" ) ) {
+       outputValue ( "product_url", "prepend", "http://www.somesite.com/" );
+    }
+    domPointerPop();
+}
+\endcode
+
+Note:
+We search for the string "View and buy" which all the text nodes after the actual URL seems to contain. We are then one too far in the linearized dom and therefore we step one back ( -1 ) as specified in the domSeqCreate().
+
+The append manipulator works similar to prepend but natuarally append it's agument to the value being written to the output.
+
+---replace functions
+The replace functions works similar to the erase functions but taking an extra parameter designating what you want replaced for the substring that are removed. Assuming a current node value of "http://www.somesite.com/images/small/socks-black.jpg" containing the URL of the small/thumbnail image of the black socks shown in the seach listing pages. However what you really want is the larger image of the socks from the actual product page. Very often these will have a very predictable name like: "http://www.somesite.com/images/large/socks-black.jpg". We could then do:
+
+\code
+...
+outputValue ( "image_large_url", "replaceFirst", "/small/", "/large/" );
+...
+\endcode
+
+Other replace manipulators include: replaceLast, replaceAll, replaceRegex, replaceAllRegex.
+
+--Using manipulators as normal functions in PHP
+When using a manipulator in a function like outputValue() we need to put them in quotes like for example #outputValue( "product_name", "eraseAll", ":" );# In case you would like to use these functions as part of "normal" PHP code this does ofcourse not work. However it is very simply to use them still. Just skip the quotes and append '_fn' to the name and use as any other built in PHP function.
+
+\code
+$myString = "string with :'s to replace with #'s. One more : here";
+$replaced = replaceAll_fn ( $myString, ":", "#" );
+echo $replaced; // Output: "string with #'s to replace with #'s. One more # here"
+\endcode
+
+--Custom php function as manipulator
+Like for dom sequences you can also for manipulators use a custom php function. This is most often needed when you need to do more than a single manipulator can do. Suppose we wanted to output out product name in all uppercase letters (yes ugly I know :-) )
+
+All you need to do is to define a php function which takes a single parameter and returns the manipulated value/string that you want written to the output. Like this:
+
+TODO: Finish this
+
+\code
+// Define dom sequences for the positions we need
+...
+function filterProductName($val)            
+{
+    
+}
+...
+function GetProduct()            
+{
+    ...
+        outputValue( "product_name", "filterProductName" );  
+    ...
+}
+\endcode
+
+
+--Simplifying matters: outputValueFindNext()
+Every time we write a product property to the output we go through almost identical commands. 
+It is the 'domPointerPush()/Pop()'  and 'IF ( domFindNext() ) THEN ... outputValue()' like shown here:
+
+\code
+domPointerPush();
+if ( domFindNext ( 1, "ProductNameSeq" ) ) {
+    outputValue( "product_name", "eraseAll", ":" );  
+}
+domPointerPop();
+}
+\endcode
+
+It is this kind of repetitive typing that we can eliminate using the outputValueFindNext() function, which does excatly what the above code snippet does when used like this:
+
+\code
+outputValueFindNext( 1, "ProductNameSeq", "product_name", "eraseAll", ":" );
+\endcode
+
+So it works like a domFindNext() combined with an outputValue(). The dom position is saved and restored like we have done manually so far using domPointerPush() and domPointerPop(). The value is also only written to output if the domFindNext part actually find the position. 
+
+The first two parameters are for the domFindNext part and the rest follows the normal order of the outputValue() functions, where the first parameter is the property name etc.
+
+We can then make our example code much simpler:
+
+\code
+// Define dom sequences for the positions we need
+domSeqCreate  ( "ProductStartSeq"   , "DIV, class, product" , "equals"  ); 
+domSeqCreate  ( "ProductNameSeq"    , "color:green"         , "contains", 1 ); 
+domSeqCreate  ( "ProductPriceSeq"   , "EUR"                 , "contains" ); 
+
+
+// Completely general way way of looping thruogh a list of products
+function MyScript_SearchListing_mine()            
+{
+    domNewSearch();
+    while ( domFindNext ( 1, "ProductStartSeq" ) ) {
+        domPointerPush();
+        $iStopPos = domFindNextPos( 1, "ProductStartSeq" );
+        domSetStopPos( $iStopPos );
+        GetProduct();
+        domClearStopPos();
+        domPointerPop();
+    }
+}
+
+function GetProduct()            
+{
+    // Get product name and  product price
+    outputValueFindNext( 1, "ProductNameSeq", "product_name", "eraseAll", ":" );
+    outputValueFindNext( 1, "ProductPriceSeq", "product_price", "trimNumber" );
+}
+\endcode
+
+
+
+
+--outputDirect
+You often need to write a constant value directly to the output. For example you could need to write the currency of the prices into each record so that when you import into your database you know how to take exchange rates into account. Since the currency most likely will be a constant for the entire website you could write it directly like this:
+
+#outputDirect ( "currency_name" , "EUR" );#
+
+The outputDirect() works exactly like the outputValue functions and can take manipulators also. For example if you had a value in a php variable you could do:
+
+#outputDirect ( "product_price" , "$stringContainingAPrice", "trimNumber" );#  
+
+So now our example looks like this:
+\code
+// Define dom sequences for the positions we need
+domSeqCreate  ( "ProductStartSeq"   , "DIV, class, product" , "equals"  ); 
+domSeqCreate  ( "ProductNameSeq"    , "color:green"         , "contains", 1 ); 
+domSeqCreate  ( "ProductPriceSeq"   , "EUR"                 , "contains" ); 
+
+
+// Completely general way way of looping thruogh a list of products
+function MyScript_SearchListing_mine()            
+{
+    domNewSearch();
+    while ( domFindNext ( 1, "ProductStartSeq" ) ) {
+        domPointerPush();
+        $iStopPos = domFindNextPos( 1, "ProductStartSeq" );
+        domSetStopPos( $iStopPos );
+        GetProduct();
+        domClearStopPos();
+        domPointerPop();
+    }
+}
+
+function GetProduct()            
+{
+    // Get product name and  product price
+    outputValueFindNext( 1, "ProductNameSeq", "product_name", "eraseAll", ":" );
+    outputValueFindNext( 1, "ProductPriceSeq", "product_price", "trimNumber" );
+    outputDirect ( "currency_name" , "EUR" );  
+}
+\endcode
+
+
+--Keeping data for each product separated in the output
+The very last thing we need to do is to make sure that each product has it's own section in the output XML file so they don't get mixed up. So recalling that our output file currently looks like this:
+
+\code
+<product_name>Shirt</product_name> 
+<product_price>12.75</product_price> 
+<currency_name>EUR</currency_name> 
+<product_name>Socks</product_name> 
+<product_price>2.75</product_price> 
+<currency_name>EUR</currency_name> 
+\endcode
+
+We would like it to be structured:
+\code
+<product>
+    <product_name>Shirt</product_name> 
+    <product_price>12.75</product_price> 
+    <currency_name>EUR</currency_name> 
+</product>
+<product>
+    <product_name>Socks</product_name> 
+    <product_price>2.75</product_price> 
+    <currency_name>EUR</currency_name> 
+</product>
+\endcode
+
+We can do the by using the contextBegin() and contextEnd() functions. So if we simply add a #contextBegin("product");# in the beginning of the GetProduct() and then (important) remember to "end" the context again as the last step in the same function.
+
+\code
+// Define dom sequences for the positions we need
+domSeqCreate  ( "ProductStartSeq"   , "DIV, class, product" , "equals"  ); 
+domSeqCreate  ( "ProductNameSeq"    , "color:green"         , "contains", 1 ); 
+domSeqCreate  ( "ProductPriceSeq"   , "EUR"                 , "contains" ); 
+
+
+// Completely general way way of looping thruogh a list of products
+function MyScript_SearchListing_mine()            
+{
+    domNewSearch();
+    while ( domFindNext ( 1, "ProductStartSeq" ) ) {
+        domPointerPush();
+        $iStopPos = domFindNextPos( 1, "ProductStartSeq" );
+        domSetStopPos( $iStopPos );
+        GetProduct();
+        domClearStopPos();
+        domPointerPop();
+    }
+}
+
+function GetProduct()            
+{
+    // Get product name and  product price
+    contextBegin("product");
+    outputValueFindNext( 1, "ProductNameSeq", "product_name", "eraseAll", ":" );
+    outputValueFindNext( 1, "ProductPriceSeq", "product_price", "trimNumber" );
+    outputDirect ( "currency_name" , "EUR" );  
+    contextEnd();
+}
+\endcode
+
+------------------
+------------------
+
+-Getting the value of the current position
+
+--valueGet() vs.  nodeValue()
+TODO: Difference between the two
+
+
+
+
+

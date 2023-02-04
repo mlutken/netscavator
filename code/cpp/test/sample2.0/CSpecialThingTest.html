@@ -1,0 +1,22 @@
+<html>
+<script type="text/javascript">
+function CSpecialThingTestGo() {
+	try {
+		// normally Firefox extensions implicitly have XPCOM privileges, but since this is a file we have to request it.
+		netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+		const cid = "@starkravingfinkle.org/specialthing;1";
+		obj = Components.classes[cid].createInstance();
+		// bind the instance we just created to our interface
+		obj = obj.QueryInterface(Components.interfaces.ISpecialThing);
+	} catch (err) {
+		alert(err);
+		return;
+	}
+	var res = obj.add(3, 4);
+	alert('Performing 3+4. Returned ' + res + '.');
+}
+</script>
+<body>
+<button onclick="CSpecialThingTestGo();">CSpecialThing Test Go</button>
+</body>
+</html>

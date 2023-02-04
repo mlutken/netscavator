@@ -1,0 +1,17 @@
+# *** EXECUTABLE: 'wxMinimal' main cbs file. ***
+
+# -------------------
+# --- Build setup ---
+# -------------------
+# ADDX_DEPENDS_ON ( QtCore 	)
+ADDX_DEPENDS_ON ( QtGui 	)
+ADDX_DEPENDS_ON ( webbrowse	)
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE ( qtmozsimple.cpp		)
+
+
+#MESSAGE ( STATUS "My Message " ) 
+  

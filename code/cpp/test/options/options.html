@@ -1,0 +1,40 @@
+<html xml:lang="da" lang="da">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>options</title>    
+
+<script>
+
+g_iSelectClickCount = 0;
+g_iOptionClickCount = 0;
+g_iOnChangeCount = 0;
+
+function displayOption( elem ) {
+	g_iOnChangeCount++;
+	var obj = elem.options[elem.selectedIndex];
+	var sValue = obj.getAttribute( "value" );
+	document.getElementById("val").innerHTML = 'displayOption: ' + sValue + '  index: ' + elem.selectedIndex + '   OnChangeCount: ' + g_iOnChangeCount;
+	//console.log( 'displayOption: ' + sValue + '  index: ' + elem.selectedIndex );
+}
+</script>
+
+</head>
+<body>
+	<h1>Options</h1>
+	<select style="float:left;" onchange=displayOption(this) onclick="g_iSelectClickCount++; document.getElementById('val3').innerHTML = 'Select clicked ' + g_iSelectClickCount">
+		<option value=DENMARK onclick="g_iOptionClickCount++; document.getElementById('val2').innerHTML = 'DENMARK clicked ' + g_iOptionClickCount">DENMARK</option>
+		<option value=COPENHAGEN onclick="g_iOptionClickCount++; document.getElementById('val2').innerHTML = 'COPENHAGEN clicked ' + g_iOptionClickCount" >COPENHAGEN</option>
+		<option value=ZEALAND_NORTH onclick="g_iOptionClickCount++; document.getElementById('val2').innerHTML = 'ZEALAND_NORTH clicked ' + g_iOptionClickCount" >ZEALAND_NORTH</option>
+		<option value=ZEALAND_WEST onclick="g_iOptionClickCount++; document.getElementById('val2').innerHTML = 'ZEALAND_WEST clicked ' + g_iOptionClickCount" >ZEALAND_WEST</option>
+		<option value=ZEALAND_SOUTH onclick="g_iOptionClickCount++; document.getElementById('val2').innerHTML = 'ZEALAND_SOUTH clicked ' + g_iOptionClickCount" >ZEALAND_SOUTH</option>
+	</select>
+</body>
+	
+	<br>
+	<br><div id=val >val</div>
+	<br><div id=val2 >val2</div>
+	<br><div id=val3 >val3</div>
+
+<!-- selected="selected" -->
+</html>
+

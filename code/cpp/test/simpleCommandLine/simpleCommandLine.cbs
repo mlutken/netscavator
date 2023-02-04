@@ -1,0 +1,42 @@
+
+# -------------------
+# --- Build setup ---
+# -------------------
+#ADDX_DEPENDS_ON ( cpp_crawl )
+ADDX_DEPENDS_ON ( crawl     )
+ADDX_DEPENDS_ON ( interfaces  )
+ADDX_DEPENDS_ON ( cpaf_net  )
+ADDX_DEPENDS_ON ( cpaf_utils  )
+ADDX_DEPENDS_ON ( curl      )
+ADDX_DEPENDS_ON ( boost_thread )
+ADDX_DEPENDS_ON ( z )
+
+#set( CMAKE_C_FLAGS_DEBUG "-O3" )
+#set( CMAKE_CXX_FLAGS_DEBUG "-O3" )
+
+
+ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR}		)
+
+#ADDX_INCLUDE_DIR ( ${PHP_BASE_INCLUDE_DIR}			)
+#ADDX_INCLUDE_DIR ( ${PHP_BASE_INCLUDE_DIR}/Zend 	)
+#ADDX_INCLUDE_DIR ( ${PHP_BASE_INCLUDE_DIR}/TSRM 	)
+#ADDX_INCLUDE_DIR ( ${PHP_BASE_INCLUDE_DIR}/main	)
+#ADD_DEFINE ( ZEND_DEBUG					0		CBS_RELEASE					)
+#ADD_DEFINE ( ZEND_DEBUG					1		CBS_DEBUG					)
+#ADD_DEFINE ( ZTS							1       ZEND_ZTS_MODE               )
+#ADD_DEFINE ( _USE_32BIT_TIME_T				1		WINDOWS						)
+#ADD_DEFINE ( ZEND_WIN32					1		WINDOWS						)
+#ADD_DEFINE ( PHP_WIN32						1		WINDOWS						)
+#ADD_DEFINE ( ZEND_WIN32_FORCE_INLINE		1		WINDOWS						)
+#ADD_DEFINE ( WIN32							1		WIN32						)
+#ADD_DEFINE ( __WIN32__						1		WIN32						)
+
+ADDX_LINK_LIBRARY ( rt  LINUX )
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE ( simpleCommandLine.cpp				)
+
+  
+#MESSAGE ( STATUS "My Message simpleCommandLine" )

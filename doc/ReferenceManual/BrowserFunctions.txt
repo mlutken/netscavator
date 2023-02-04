@@ -1,0 +1,91 @@
+-------------------------
+--- Browser functions ---
+------------------------- 
+The browser functions are a collection of simple functions used to do very basic things with the Sleipner web browser. For example setting the browser window size or navigating to the previous page using browserGoBack().
+
+The functions are:
+
+
+void            browserHide         ()
+void            browserShow         ()
+
+void            browserSetSize      (int x, int y)
+int             browserGetSizeX     ()
+int             browserGetSizeY     ()
+
+bool            browserGoBack       ()
+
+-------------------
+--- browserHide ---
+------------------- 
+Syntax:
+void browserHide ()
+
+Family: 
+Browser functions
+
+Parameters:
+
+Description:
+Hides the browser window so it is not visible on screen. Use browserShow() to show it again. By default the browser window is visible.
+
+See also:
+browserShow(), browserSetSize()
+
+Example 1:
+\code
+function MyScript_beginMining()          
+{
+    browserHide();  // Default is visible
+    ...
+}
+\endcode
+
+
+
+-------------------
+--- browserShow ---
+------------------- 
+Syntax:
+void browserShow ()
+
+Family: 
+Browser functions
+
+Parameters:
+
+Description:
+Makes the browser visible if previously hidden using browserHide(). By default the browser window is visible.
+
+See also:
+browserHide(), browserSetSize()
+
+Example 1:
+
+
+----------------------
+--- browserSetSize ---
+----------------------
+Syntax:
+void browserSetSize (int x, int y)
+
+Family: 
+Browser functions
+
+Parameters:
+int | x | Width of browser window in pixels 
+int | y | Height of browser window in pixels 
+
+Description:
+Sets the width and height of the browser window.
+
+Example 1:
+\code
+function MyScript_beginMining()          
+{
+    browserSetSize (1000, 500);
+    ...
+}
+\endcode
+
+

@@ -1,0 +1,51 @@
+IF ( LINUX )
+    IF ( "${CBS_SYSTEM_WIDTH}" STREQUAL "32" ) 
+        SET_CONFIG ( XULRUNNER3_SDK_BASE     ${veriquin_cpp_SOURCE_DIR}/3rdparty/xulrunner-3.6.2-noexcept/linux )
+    ELSE ( "${CBS_SYSTEM_WIDTH}" STREQUAL "32" ) 
+
+#         SET_CONFIG ( XULRUNNER3_SDK_BASE     /home/ml/code/mozilla_source/mccoy/xulrunner/dist )
+       SET_CONFIG ( XULRUNNER3_SDK_BASE     ${veriquin_cpp_SOURCE_DIR}/3rdparty/xulrunner-3.6.10/linux_64_release )
+    ENDIF ( "${CBS_SYSTEM_WIDTH}" STREQUAL "32" ) 
+ENDIF ( LINUX )
+
+IF ( WINDOWS )
+ENDIF ( WINDOWS )
+
+
+
+SET_DEFAULT ( XULRUNNER3_SDK_INCLUDE_SDK         "${XULRUNNER3_SDK_BASE}/sdk/include"                             )
+SET_DEFAULT ( XULRUNNER3_SDK_INCLUDE             "${XULRUNNER3_SDK_BASE}/include"                                 )
+SET_DEFAULT ( XULRUNNER3_SDK_MAIN_LIB            "${XULRUNNER3_SDK_BASE}/xulrunner/"                              )
+SET_DEFAULT ( XULRUNNER3_SDK_DEVEL_LIB           "${XULRUNNER3_SDK_BASE}/sdk/lib"                                 )
+
+
+
+# -------------------
+# --- Build setup ---
+# -------------------
+#ADDX_DEPENDS_ON ( webbrowse	)
+
+ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR}          )
+ADDX_INCLUDE_DIR ( ${XULRUNNER3_SDK_INCLUDE_SDK}         )
+ADDX_INCLUDE_DIR ( ${XULRUNNER3_SDK_INCLUDE}             )
+ADDX_LINK_DIR ( ${XULRUNNER3_SDK_DEVEL_LIB}              )
+ADDX_LINK_DIR ( ${XULRUNNER3_SDK_MAIN_LIB}               )
+
+ADDX_LINK_LIBRARY   ( xpcomglue     )
+ADDX_LINK_LIBRARY   ( profdirserviceprovidersa_s    WINDOWS )
+
+
+ADD_DEFINE ( XPCOM_GLUE_USE_NSPR            1       )
+#ADD_DEFINE ( __WXMSW__						1		WINDOWS						)
+#ADD_DEFINE ( WEBBROWSE_ENABLE_GTK			1		WEBBROWSE_ENABLE_GTK		)
+#ADD_DEFINE ( WEBBROWSE_ENABLE_WX			1		WEBBROWSE_ENABLE_WX			)
+#ADD_COMPILE_FLAG ( /Zc:wchar_t-						COMPILER_MSVC				)
+
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE ( src/MyComponent.cpp           )
+ADD_SOURCE_FILE ( src/MyComponentModule.cpp     )
+
+  

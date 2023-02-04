@@ -1,0 +1,102 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="da" lang="da">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Events</title>    
+<script type="text/javascript">
+
+function showMe( sIdShow )
+{
+	var idShow=document.getElementById( sIdShow );
+	idShow.innerHTML = sIdShow;
+}
+
+function addMe( sIdAddTo, sText )
+{
+	var idAddTo=document.getElementById( sIdAddTo );
+	idAddTo.innerHTML = idAddTo.innerHTML + ",&nbsp;" + sText;
+}
+
+function simulatedClick2(target) {
+    var evObj = document.createEvent('MouseEvents');
+    evObj.initEvent( 'click', true, true );
+    target.dispatchEvent(evObj);   
+}
+
+function simulatedEvent2(target, sEventName ) {
+    var evObj = document.createEvent('MouseEvents');
+    evObj.initEvent( sEventName, true, true );
+    target.dispatchEvent(evObj);   
+}
+
+</script>
+
+</head>
+<body>
+<body>
+	<h1> Test javascript events </h1>
+
+	<table border="1" >
+		<tr><td> <input id="input" onclick="showMe('INPUT_onClick')" ></input>INPUT_onClick</td><td id="INPUT_onClick" >0</td></tr>
+		<tr><td> <input id="button" type=button onclick="showMe('INPUT_button_onClick')" ></input>INPUT_button_onClick</td><td id="INPUT_button_onClick" >0</td></tr>
+		<tr><td> <input id="checkbox" type=checkbox onclick="showMe('INPUT_checkbox_onClick')" ></input>INPUT_checkbox_onClick</td><td id="INPUT_checkbox_onClick" >0</td></tr>
+		<tr><td> <input id="file" type=file onclick="showMe('INPUT_file_onClick')" ></input>INPUT_file_onClick</td><td id="INPUT_file_onClick" >0</td></tr>
+		<tr><td> <input id="hidden" type=hidden onclick="showMe('INPUT_hidden_onClick')" ></input>INPUT_hidden_onClick</td><td id="INPUT_hidden_onClick" >0</td></tr>
+		<tr><td> <input id="image" type=image src="image.png" onclick="showMe('INPUT_image_onClick')" ></input>INPUT_image_onClick</td><td id="INPUT_image_onClick" >0</td></tr>
+		<tr><td> <input id="password" type=password onclick="showMe('INPUT_password_onClick')" ></input>INPUT_password_onClick</td><td id="INPUT_password_onClick" >0</td></tr>
+		<tr><td> <input id="radio" type=radio onclick="showMe('INPUT_radio_onClick')" ></input>INPUT_radio_onClick</td><td id="INPUT_radio_onClick" >0</td></tr>
+		<tr><td> <input id="reset" type=reset onclick="showMe('INPUT_reset_onClick')" ></input>INPUT_reset_onClick</td><td id="INPUT_reset_onClick" >0</td></tr>
+		<tr><td> <input id="submit" type=submit onclick="showMe('INPUT_submit_onClick')" ></input>INPUT_submit_onClick</td><td id="INPUT_submit_onClick" >0</td></tr>
+		<tr><td> <input id="text" type=text onclick="showMe('INPUT_text_onClick')" ></input>INPUT_text_onClick</td><td id="INPUT_text_onClick" >0</td></tr>
+		
+		<tr><td> <button onclick="showMe('BUTTON_onClick')" >BUTTON_onClick</button></td><td id="BUTTON_onClick" >0</td>	</tr>
+		<tr><td onclick="showMe('TD_onClick')" >TD_onClick</td><td id="TD_onClick" >0</td></tr>
+		<tr><td> <div onclick="showMe('DIV_onClick')" >DIV_onClick</div></td><td id="DIV_onClick" >0</td></tr>
+		<tr><td> <span onclick="showMe('SPAN_onClick')" >SPAN_onClick</span></td><td id="SPAN_onClick" >0</td></tr>
+		<tr><td> <a onclick="showMe('A_onClick')" href=# >A_onClick</span></td><td id="A_onClick" >0</td></tr>
+	</table>
+	
+
+	<table border="1" >
+		<tr>
+		<td> 
+			<input id=DIV_MouseEvents 
+				onfocus="addMe('DIV_MouseEventsShow','DIV_onfocus')" 
+				onblur="addMe('DIV_MouseEventsShow','DIV_onblur')" 
+				onselect="addMe('DIV_MouseEventsShow','DIV_onselect')" 
+				onchange="addMe('DIV_MouseEventsShow','DIV_onchange')" 
+				onclick="addMe('DIV_MouseEventsShow','DIV_onclick')" 
+				ondblclick="addMe('DIV_MouseEventsShow','DIV_ondblclick')" 
+				onmousedown="addMe('DIV_MouseEventsShow','DIV_onmousedown')" 
+				onmouseup="addMe('DIV_MouseEventsShow','DIV_onmouseup')" 
+				onmouseover="addMe('DIV_MouseEventsShow','DIV_onmouseover')" 
+				onmouseout="addMe('DIV_MouseEventsShow','DIV_onmouseout')" 
+				>DIV_MouseEvents
+			</input>
+		</td>
+		<td id=DIV_MouseEventsShow ></td>
+		</tr>
+	</table>
+<!-- 				onmousemove="addMe('DIV_MouseEventsShow','DIV_onmousemove')"  -->
+<br>
+<button id="runTest1" onclick="simulatedClick2(document.getElementById('input'));" >Simulate click on input</button><br>
+<button id="runTest2" onclick="simulatedClick2(document.getElementById('button'));" >Simulate click on button</button><br>
+<button id="runTest3" onclick="simulatedClick2(document.getElementById('input'));" >Simulate click on input</button><br>
+<button id="runTest4" onclick="simulatedClick2(document.getElementById('input'));" >Simulate click on input</button><br>
+<button id="runTest5" onclick="simulatedClick2(document.getElementById('input'));" >Simulate click on input</button><br>
+<button id="runTest6" onclick="simulatedClick2(document.getElementById('input'));" >Simulate click on input</button><br>
+<button id="runTest7" onclick="simulatedClick2(document.getElementById('input'));" >Simulate click on input</button><br>
+<button id="runTest8" onclick="simulatedClick2(document.getElementById('input'));" >Simulate click on input</button><br>
+<button id="runTest9" onclick="simulatedClick2(document.getElementById('input'));" >Simulate click on input</button><br>
+
+</body>
+
+
+
+
+
+
+
+
+

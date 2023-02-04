@@ -1,0 +1,71 @@
+/** \dir
+!!! Parser
+Main parser functionality. Here we find the code reposible for parsing the 
+webpages and finding the bugs and security issues etc. The parser uses 
+tidy to help parse the HTML pages. The result of the parsing of an entire 
+site will be in the form of vectors/maps/lists of all tag-bugs, link-bugs, 
+files with viruses etc. The parser will also gather some structural/statistical 
+information about the website which it mainly writes back to the Page classes 
+repository PageRepo and perhaps some of the other repository classes.
+
+! General steps in the parsing algorithm
+- The repository is initialized with the index page of the site to be scanned.
+- Current page is set to index page.
+- Pass1 - Run through the current page: 
+	- Add all internal page links to PageQueue.
+	- Add all internal/external image links to ImageQueue.
+	- Add all external page links to CheckLinkQueue.
+	- Add all internal/external file links to VirusQueue.
+	- Add all unknown words to SpellCheckQueue.
+	- Add all emails to EmailQueue
+	- (Add all cookies to CookieQueue)
+	- Wait for
+- Pass 2: - All data for current
+	
+ 
+
+
+
+=================================================================
+
+!! Formatting examples - TODO: Remove Later XX
+Here follows DoxyS wikistyle formatting examples.
+These and more can also be found in Help (Top right corner) or here "Text Formatting".
+
+
+!!! Headline BIG
+!! Headline Medium 
+! Headline small
+
+#bold text#  }italic text} {underlined text{  $monospaced text$ 
+
+Will produce:
+
+! Bullets:
+(Omit the \# to make unnumbered) 
+
+-# First item
+-# Second item
+-# Third item
+  -# First subitem
+  -# Second subitem
+
+! Tables
+
+||HeadlineCell||HeadlineCell||HeadlineCell
+|Cell|Cell|Cell
+|Cell|Cell|Cell
+
+
+
+\code
+Raw unformatted blok
+Of text complete with all newlines
+Like this
+\endcode
+
+\image verify.png "Image caption goes here if you want one"
+
+*/
+
+

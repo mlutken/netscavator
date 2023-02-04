@@ -1,0 +1,11 @@
+# -------------------
+# --- Build setup ---
+# -------------------
+ADDX_DEPENDS_ON  ( wxMozilla56		)
+
+# -------------------
+# --- Add sources ---
+# -------------------
+####ADD_SOURCE_FILE ( protocols.cpp 	)
+ADD_SOURCE_FILE ( main.cpp 			)
+

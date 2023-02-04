@@ -1,0 +1,37 @@
+# *** EXECUTABLE: 'wxMinimal' main cbs file. ***
+IF ( LINUX )
+    set( CMAKE_C_FLAGS_DEBUG "-O0 -g" )
+    set( CMAKE_CXX_FLAGS_DEBUG "-O0 -g" )
+    set( CMAKE_C_FLAGS_RELEASE "-O0 -g" )
+    set( CMAKE_CXX_FLAGS_RELEASE "-O0 -g" )
+ENDIF ( LINUX )
+
+message ("----------------")
+message ("----------------")
+message ("--- CBS_SHARED_LIBRARY_PATH_PREBUILD: ${CBS_SHARED_LIBRARY_PATH_PREBUILD}")
+message ("----------------")
+
+CONFIGURE_FILE ( ${CMAKE_CURRENT_SOURCE_DIR}/netscavator.cfg.in ${CBS_SHARED_LIBRARY_PATH_PREBUILD}/netscavator.cfg     )
+CONFIGURE_FILE ( ${CMAKE_CURRENT_SOURCE_DIR}/netscavator.cfg.in ${CMAKE_CURRENT_BINARY_DIR}/netscavator.cfg             )
+
+# -------------------
+# --- Build setup ---
+# -------------------
+
+ADDX_DEPENDS_ON ( qtmain              	WINDOWS )	# Needed for linker flag subsystem:windows
+ADDX_DEPENDS_ON ( script_embedding      )
+ADDX_DEPENDS_ON ( scriptfunctions_php   )
+ADDX_DEPENDS_ON ( crawl                 )
+ADDX_DEPENDS_ON ( webkitbrowser         )
+ADDX_DEPENDS_ON ( gui                   )
+
+
+ADD_LINK_FLAG ( "/subsystem:windows" WINDOWS ) 
+#ADD_LINK_FLAG ( "/subsystem:console" WINDOWS ) 
+
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE ( netscavator.cpp )
+

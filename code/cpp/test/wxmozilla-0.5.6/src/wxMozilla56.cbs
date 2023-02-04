@@ -1,0 +1,22 @@
+
+# -------------------
+# --- Build setup ---
+# -------------------
+# ADDX_DEPENDS_ON ( wx_core	)
+# ADDX_DEPENDS_ON ( wx_base	)
+
+ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR}	)
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE ( wxMozillaBrowser.cpp 			)
+ADD_SOURCE_FILE ( wxMozillaBrowserChrome.cpp 	)
+ADD_SOURCE_FILE ( wxMozillaWindow.cpp 			)
+ADD_SOURCE_FILE ( wxMozillaEvents.cpp 			)
+ADD_SOURCE_FILE ( wxMozillaSettings.cpp 		)
+ADD_SOURCE_FILE ( helpers.cpp 					)
+ADD_SOURCE_FILE ( cstmdlg.cpp 					)
+ADD_SOURCE_FILE ( wxMozillaProtocolHandler.cpp	)
+ADD_SOURCE_FILE ( wxMozillaDialogs.cpp			)
+

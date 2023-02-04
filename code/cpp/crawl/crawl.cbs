@@ -1,0 +1,109 @@
+# --- Config stuff ---
+SET_DEFAULT ( USE_CURL "" )
+
+
+# -------------------
+# --- Build setup ---
+# -------------------
+#ADDX_DEPENDS_ON ( webbrowse     )
+
+ADDX_DEPENDS_ON ( scriptfunctions_php   )
+ADDX_DEPENDS_ON ( webkitbrowser         )
+ADDX_DEPENDS_ON ( interfaces            )
+ADDX_DEPENDS_ON ( cpaf_concurrent       )
+ADDX_DEPENDS_ON ( cpaf_net              )
+ADDX_DEPENDS_ON ( cpaf_compression      )
+ADDX_DEPENDS_ON ( cpaf_filesystem       )
+ADDX_DEPENDS_ON ( cpaf_utils            )
+ADDX_DEPENDS_ON ( cpaf_system			)
+ADDX_DEPENDS_ON ( utf8                  )
+ADDX_DEPENDS_ON ( loki                  )
+ADDX_DEPENDS_ON ( boost_signals			)
+ADDX_DEPENDS_ON ( boost_headers 		)
+ADDX_DEPENDS_ON ( boost_filesystem		)
+ADDX_DEPENDS_ON ( boost_system			)
+ADDX_DEPENDS_ON ( boost_thread			)
+ADDX_DEPENDS_ON ( boost_date_time		)
+ADDX_DEPENDS_ON ( curl                  )
+ADDX_DEPENDS_ON ( crypto                )
+ADDX_DEPENDS_ON ( ssl                   )
+ADDX_DEPENDS_ON ( z                     )
+
+VERIQUIN_ADD_QT_LIBS ()
+
+ADDX_INCLUDE_DIR  	( ${cpaf_ROOT_DIR}/cul/boost_process    )
+ADDX_INCLUDE_DIR  	( ${CMAKE_CURRENT_SOURCE_DIR}           )
+ADDX_INCLUDE_DIR  	( ${BASE_3RDPARTY_DIR}/json             )
+
+
+ADD_DEFINE ( VERIQUIN_CODE_DIR		\\\\"$ENV{VERIQUIN_CODE_DIR}\\\\"			)
+ADD_DEFINE ( XP_WIN					1		WINDOWS								)
+ADD_DEFINE ( USE_CURL				1		USE_CURL							)
+ADD_DEFINE ( __WXGTK__				1		LINUX								)
+ADD_DEFINE ( __WXMSW__				1		WINDOWS								)
+ADD_DEFINE ( WEBBROWSE_ENABLE_GTK	1		WEBBROWSE_ENABLE_GTK				)
+ADD_DEFINE ( WEBBROWSE_ENABLE_WX	1		WEBBROWSE_ENABLE_WX					)
+ADD_DEFINE ( XPCOM_GLUE             1                                           )
+#ADD_COMPILE_FLAG ( /Zc:wchar_t-				COMPILER_MSVC						)
+
+
+# -------------------
+# --- Add sources ---
+# -------------------
+
+
+ADD_SOURCE_FILE ( applicationutils/qt_compression.cpp	)
+ADD_SOURCE_FILE_QT4 ( applicationutils/CrawlerCommandQueue.cpp	)
+ADD_SOURCE_FILE_QT4 ( applicationutils/QtHttpDownloader.cpp	)
+
+ADD_SOURCE_FILE ( containers/DomActionMgr.cpp		)
+ADD_SOURCE_FILE ( containers/DomSearchMgr.cpp		)
+ADD_SOURCE_FILE ( containers/ModifierMgr.cpp		)
+ADD_SOURCE_FILE ( containers/NetworkActivityLogger.cpp	)
+ADD_SOURCE_FILE ( containers/SettingsMgr.cpp		)
+ADD_SOURCE_FILE ( containers/UrlQueue.cpp 			)
+ADD_SOURCE_FILE ( containers/LookForWordMgr.cpp      )
+ADD_SOURCE_FILE ( containers/WordMonitor.cpp        )
+ADD_SOURCE_FILE ( parser/DataWriterXml.cpp          )
+ADD_SOURCE_FILE ( parser/DataWriterJson.cpp         )
+ADD_SOURCE_FILE ( parser/DomActionAbstraction.cpp	)
+ADD_SOURCE_FILE ( parser/DomSeq.cpp					)
+ADD_SOURCE_FILE ( parser/LinearDomSearch.cpp		)
+ADD_SOURCE_FILE (parser/LookForWordDomFinder.cpp    )
+ADD_SOURCE_FILE ( parser/StringSearch.cpp			)
+#ADD_SOURCE_FILE ( parser/dom_node_convenience.cpp	)
+ADD_SOURCE_FILE	( parser/linear_dom_algorithms.cpp	)
+ADD_SOURCE_FILE	( parser/LinksGetter.cpp			)
+
+
+ADD_SOURCE_FILE ( locale/default_locales.cpp                        )
+ADD_SOURCE_FILE ( navigator/NavigatorActionsExecutor.cpp            )
+ADD_SOURCE_FILE ( navigator/NavigatorActionsClickAllExecutor.cpp    )
+ADD_SOURCE_FILE ( navigator/AutoInputState.cpp                      )
+ADD_SOURCE_FILE ( navigator/AutoInputLocales.cpp                    )
+ADD_SOURCE_FILE ( navigator/DomNavigator.cpp                        )
+ADD_SOURCE_FILE ( navigator/DomPosClickState.cpp                    )
+ADD_SOURCE_FILE ( navigator/DomClickNextState.cpp                   )
+ADD_SOURCE_FILE ( navigator/NavigateStateBase.cpp                   )
+ADD_SOURCE_FILE ( navigator/DropDownSelectState.cpp                 )
+ADD_SOURCE_FILE ( navigator/InputOptionsState.cpp                   )
+ADD_SOURCE_FILE ( navigator/StringSequenceState.cpp                 )
+ADD_SOURCE_FILE ( navigator/StateMachineMgr.cpp                     )
+ADD_SOURCE_FILE ( navigator/UrlLoadState.cpp                        )
+ADD_SOURCE_FILE ( navigator/JavascriptExecuteState.cpp              )
+ADD_SOURCE_FILE_QT4 ( navigator/SiteMapGetter.cpp                   )
+
+ADD_SOURCE_FILE ( creatorutils/DomTreeTextHtmlGen.cpp               )
+ADD_SOURCE_FILE_QT4 ( scripting/ScriptExecutor.cpp                  )
+
+ADD_SOURCE_FILE_QT4 ( Crawler.cpp                       )
+ADD_SOURCE_FILE_QT4 ( ScriptMiner.cpp                   )
+ADD_SOURCE_FILE ( KeepActiveThread.cpp              )
+ADD_SOURCE_FILE_QT4 ( MinerWorker.cpp               )
+
+
+#MESSAGE( STATUS "DDDDDDDD ${CBS_CURRENT}.cbs" 		)
+
+
+
+

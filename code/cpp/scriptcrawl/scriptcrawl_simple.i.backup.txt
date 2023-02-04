@@ -1,0 +1,756 @@
+
+/* File : scripting.i */
+%module scripting
+
+%{
+#include "scriptcrawl.h"
+#include <string>
+#include <vector>
+#include <url/UrlGetter.h>
+#include <utils/CommandLineParser.h>
+#include <utils/string_compare_functions.h>
+%}
+
+%include "std_string.i"
+%include "typemaps.i"
+
+/*
+class UrlGetter {
+public:
+    UrlGetter ();
+    UrlGetter ( int iLinkType, const std::string& sUrlsMatch="",  const std::string& sIdCompFun = "equals" );
+    ~UrlGetter();
+    int				count					();
+    bool			getNext					();
+    void			resetCurrent			( int iNewCurrent = 0 );
+    bool			currentAtEnd			();
+    std::string		current					();
+    std::string		current_raw				();
+    std::string		currentProtocol			();
+    std::string		currentPath				();
+    std::string		currentParameters		();
+    std::string		currentDomain			();
+    std::string		currentTopDomain		();
+    std::string		currentSecondLevelDomain();
+    std::string		currentSubDomains		();
+    std::string		currentSiteDomain		();
+};
+*/
+
+
+namespace crawl {
+
+    class DomSeq
+    {
+    public:
+
+
+        DomSeq	( );
+        DomSeq	(	const std::string& sPattern, const std::string& sCompareFun, int iPostMatchSteps );
+        DomSeq	(	const std::string& sPattern, const std::string& sCompareFun, int iPostMatchSteps, const std::string& sCommaChar );
+        void	add	( const std::string& sPattern )	;
+        void	add	( const std::string& sPattern, const std::string& sCompareFun );
+
+        int		getSize	() 	const;
+    };
+}
+
+
+/* --- Command line parsing --- */
+
+namespace crawl {
+    void			cmdDefaultValsSet	( const std::string sDefaults	);
+    void			cmdParseStart		();
+    bool			cmdParseArg			( const std::string sArgument	);
+    std::string		cmdValStrGet		( const std::string sArgName 	);
+    double			cmdValNumGet		( const std::string sArgName 	);
+    void            cmdValStrForceSet	( const std::string sArgName, const std::string& sVal );
+    void            cmdValNumForceSet	( const std::string sArgName, double fVal );
+}
+
+
+
+/* ----------------------
+   --- Init functions ---
+   ---------------------- */
+void            currentMinerSetPointer  ( const std::string& sMinerPointer );
+void            currentMinerSetRaw      ( void* pMiner );
+void 			initMining();
+void 			addMiner( std::string sMinerName );
+void 			runMiners( );
+
+
+/*----------------------
+--- Misc functions ---
+----------------------*/
+/*void 			useLocale			( const std::string& sLocale )	; */   /* Empty impl. for now */
+std::string		currentMiner		()								;
+std::string		currentDataFile		()								;
+
+/*
+-------------------------
+--- Browser functions ---
+------------------------- */
+void			browserHide			()								;
+void			browserShow			()								;
+void			browserSetSize		(int x, int y)					;
+int				browserGetSizeX		()								;
+int				browserGetSizeY		()								;
+bool			browserGoBack		()								;
+
+/*------------------------------------------
+--- String operators/compare functions ---
+------------------------------------------*/
+
+typedef bool (*CompareStringsFnT)(const std::string&, const std::string&) ;
+bool 			valuesCompare		( const std::string& sInput, const std::string& sTest, const std::string& sCompareFun );
+
+
+/*
+--------------------------------
+--- Navigation (nav) functions ---
+----------------------------------*/
+%constant int ATTR;
+
+void            navActiveNavigatorSet   ( const std::string& sNavigatorName );
+std::string     navActiveNavigatorGet   ();
+void            navJavascriptExecuteCreate ( const std::string& sNavActionName );
+void            navUrlLoadCreate        ( const std::string& sNavActionName, const std::string& sBaseUrl = "" );
+void            navInputOptionsCreate   ( const std::string& sNavActionName );
+void            navDropDownSelectCreate ( const std::string& sNavActionName );
+void            navDomPosClickCreate    ( const std::string& sNavActionName, const std::string& sFindNextDomPosSequence );
+void            navAutoInputCreate      ( const std::string& sNavActionName, const std::string& sCharsList, int iMinLength, int iMaxLength );
+
+void            navAttributeNamesCreate ( const std::string& sAttrNames, const std::string& sDelimiter = "," );
+
+void            navBeginStateSet        ( const std::string& sState, const std::string& sActionSeparator );
+void            navBeginStateSet        ( const std::string& sState );
+void            navEndStateSet          ( const std::string& sState, const std::string& sActionSeparator );
+void            navEndStateSet          ( const std::string& sState );
+
+void            navOptionResourceAdd    ( const std::string& sResourcePath, const std::string& sScriptFilterFunction,  bool bForceDownload  );
+void            navOptionAdd            ( int iCount, const std::string& sValue, const std::string& sSearchFor  );
+void            navOptionAdd            ( int iCount, const std::string& sValue );
+void            navOptionAdd            ( const std::string& sValue, const std::string& sSearchFor );
+void            navOptionAdd            ( const std::string& sValue );
+void            navOptionAdd            ( int iCount );
+
+void            navOptionAdd            ( int iCount, const std::string& sValue, const std::string& sSearchFor,
+                                          int attrStart, const std::string& sAttributes, const std::string& sDelimiter = "," );
+void            navOptionAdd            ( int iCount, const std::string& sValue,
+                                          int attrStart, const std::string& sAttributes, const std::string& sDelimiter = "," );
+void            navOptionAdd            ( const std::string& sValue, const std::string& sSearchFor,
+                                          int attrStart, const std::string& sAttributes, const std::string& sDelimiter = "," );
+void            navOptionAdd            ( const std::string& sValue,
+                                          int attrStart, const std::string& sAttributes, const std::string& sDelimiter = "," );
+void            navOptionAdd            ( int iCount, int attrStart, const std::string& sAttributes, const std::string& sDelimiter = "," );
+
+void            navOptionAttributesAdd  ( const std::string& sAttrValue1, const std::string& sAttrValue2,
+                                          const std::string& sAttrValue3, const std::string& sAttrValue4  );
+void            navOptionAttributesAdd  ( const std::string& sAttrValue1, const std::string& sAttrValue2,
+                                          const std::string& sAttrValue3 );
+void            navOptionAttributesAdd  ( const std::string& sAttrValue1, const std::string& sAttrValue2 );
+void            navOptionAttributesAdd  ( const std::string& sAttrValue1 );
+
+
+std::string     navDomTextValueGet      ( const std::string& sNavActionName ) ;
+std::string     navDomValueGet          ( const std::string& sNavActionName ) ;
+std::string     navValueGet             ( const std::string& sNavActionName ) ;
+std::string     navSearchForGet         ( const std::string& sNavActionName ) ;
+std::string     navAttributeGet         ( const std::string& sNavActionName, const std::string& sAttrName ) ;
+std::string     navAttributeGet         ( const std::string& sAttrName );
+int             navCountGet             ( const std::string& sNavActionName ) ;
+int             navOptionIndexGet       ( const std::string& sNavActionName ) ;
+
+bool            navNextState            ();
+bool            navDoAction             ( const std::string& sNavActionName ) ;
+bool            navDoActionClickAll     ( const std::string& sNavActionName ) ;
+std::string     navStateString          ();
+void            navStart                ();
+bool            navNavigationDone       ();
+void            navAutoInputIncreaseLength ( bool bDoIncreaseLength );
+
+bool 			equals_fn		( const std::string& sInput, 	const std::string& sTest 	)	;
+bool 			iequals_fn		( const std::string& sInput, 	const std::string& sTest 	)	;
+bool 			contains_fn		( const std::string& sInput, 	const std::string& sTest 	)	;
+bool 			icontains_fn	( const std::string& sInput, 	const std::string& sTest 	)	;
+bool 			startsWith_fn	( const std::string& sInput, 	const std::string& sTest 	)	;
+bool 			istartsWith_fn	( const std::string& sInput, 	const std::string& sTest 	)	;
+bool 			endsWith_fn		( const std::string& sInput, 	const std::string& sTest 	)	;
+bool 			iendsWith_fn	( const std::string& sInput, 	const std::string& sTest 	)	;
+bool 			lessThan_fn		( const std::string& sLhs, 		const std::string& sRhs 	)	;
+bool 			ilessThan_fn	( const std::string& sLhs,   	const std::string& sRhs 	)	;
+bool 			greaterThan_fn	( const std::string& sLhs, 		const std::string& sRhs 	)	;
+bool 			igreaterThan_fn	( const std::string& sLhs,   	const std::string& sRhs 	)	;
+bool			regexSearch_fn	( const std::string& sInput, 	const std::string& sRegex 	)	;
+
+
+/*
+-------------------------------------
+--- String manipulation functions ---
+-------------------------------------*/
+/*
+NOTE: These are normal callable PHP functions. Use same names without _fn
+      when using as modifiers in outputXX() functions, valueModify(), valueGet(),
+      valueCompare(), nodeCompare(), nodeValueParent(), nodeValuePos()
+*/
+/* --- 0 parameters --- */
+std::string		trimDefault_fn 		( const std::string& sInput 	);
+std::string		raw_fn				( const std::string& sInput		);
+std::string		toUpper_fn			( const std::string& sInput		);
+std::string		toLower_fn			( const std::string& sInput		);
+std::string		trimEnds_fn			( const std::string& sInput		);
+std::string		trimLeft_fn			( const std::string& sInput		);
+std::string		trimRight_fn		( const std::string& sInput		);
+std::string		trimYear_fn			( const std::string& sInput 	);
+std::string		trimInteger_fn      ( const std::string& sInput		);
+std::string		trimNumber_fn		( const std::string& sInput		);
+
+/* --- 1 parameters --- */
+std::string 	trimCharsEnds_fn	( const std::string& sInput, const std::string& sCharsToTrim )	;
+std::string 	trimCharsLeft_fn	( const std::string& sInput, const std::string& sCharsToTrim ) 	;
+std::string 	trimCharsRight_fn	( const std::string& sInput, const std::string& sCharsToTrim )	;
+std::string 	trimRegex_fn		( const std::string& sInput, const std::string& sRegex )												;
+std::string 	itrimRegex_fn		( const std::string& sInput, const std::string& sRegex )												;
+std::string		append_fn			( const std::string& sInput, const std::string& sString	)	;
+std::string		prepend_fn			( const std::string& sInput, const std::string& sString	)	;
+std::string		eraseFirst_fn		( const std::string& sInput, const std::string& sSearchFor	)	;
+std::string		ieraseFirst_fn		( const std::string& sInput, const std::string& sSearchFor	)	;
+std::string		eraseLast_fn		( const std::string& sInput, const std::string& sSearchFor	)	;
+std::string		ieraseLast_fn		( const std::string& sInput, const std::string& sSearchFor	)	;
+std::string		eraseAll_fn			( const std::string& sInput, const std::string& sSearchFor	)	;
+std::string		ieraseAll_fn		( const std::string& sInput, const std::string& sSearchFor	)	;
+std::string		eraseRegex_fn		( const std::string& sInput, const std::string& sSearchFor	)	;
+std::string		eraseAllRegex_fn	( const std::string& sInput, const std::string& sSearchFor	)	;
+
+/* --- 2 parameters --- */
+std::string 	trimIntegerCustom_fn( const std::string& sInput, const std::string& iBase, 			const std::string& sThousandsSep);
+std::string 	trimNumberCustom_fn	( const std::string& sInput, const std::string& sDecimalPoint, 	const std::string& sThousandsSep);
+std::string		replaceFirst_fn		( const std::string& sInput, const std::string& sSearchFor,		const std::string& sReplaceWith	);
+std::string		ireplaceFirst_fn	( const std::string& sInput, const std::string& sSearchFor,		const std::string& sReplaceWith	);
+std::string		replaceLast_fn		( const std::string& sInput, const std::string& sSearchFor,		const std::string& sReplaceWith	);
+std::string		ireplaceLast_fn		( const std::string& sInput, const std::string& sSearchFor,		const std::string& sReplaceWith	);
+std::string		replaceAll_fn		( const std::string& sInput, const std::string& sSearchFor,		const std::string& sReplaceWith	)	;
+std::string		ireplaceAll_fn		( const std::string& sInput, const std::string& sSearchFor,		const std::string& sReplaceWith	)	;
+std::string		replaceRegex_fn		( const std::string& sInput, const std::string& sSearchFor,		const std::string& sReplaceWith	)	;
+std::string		replaceAllRegex_fn	( const std::string& sInput, const std::string& sSearchFor,		const std::string& sReplaceWith	)	;
+
+/* --- 2 parameters (last is an integer ) --- */
+std::string		eraseNth_fn			( const std::string& sInput, const std::string& sSearchFor,	int iNth 	)	;
+std::string		ieraseNth_fn		( const std::string& sInput, const std::string& sSearchFor,	int iNth 	)	;
+
+/* --- 3 parameters (last is an integer ) --- */
+std::string		replaceNth_fn		( const std::string& sInput, const std::string& sSearchFor,	const std::string& sReplaceWith, int iNth	)	;
+std::string		ireplaceNth_fn		( const std::string& sInput, const std::string& sSearchFor,	const std::string& sReplaceWith, int iNth	)	;
+
+/*---------------------
+--- URL functions ---
+---------------------*/
+std::string		urlSite();
+std::string		urlCurrent();
+bool			urlLoad		( const std::string sURL	);
+bool			urlLoadWait	( const std::string sURL	);
+
+/*---------------------
+--- DOM constants ---
+---------------------*/
+%constant int ELEMENT_NODE					;
+%constant int ATTRIBUTE_NODE 				;
+%constant int TEXT_NODE 					;
+%constant int CDATA_SECTION_NODE 			;
+%constant int ENTITY_REFERENCE_NODE 		;
+%constant int ENTITY_NODE 					;
+%constant int PROCESSING_INSTRUCTION_NODE	;
+%constant int COMMENT_NODE 					;
+%constant int DOCUMENT_NODE 				;
+%constant int DOCUMENT_TYPE_NODE 			;
+%constant int DOCUMENT_FRAGMENT_NODE 		;
+%constant int NOTATION_NODE 				;
+%constant int ATTRIBUTE_VALUE_NODE 			;
+%constant int ALL_NODE_TYPES				;
+
+/*---------------------
+--- DOM functions ---
+---------------------*/
+void		domNewSearch			();
+int			domFindParentPos		( 	int iLevelsUp = 1 );
+int			domFindParent			( 	int iLevelsUp = 1 );
+
+int			domFindNext				( 	int iCount, const crawl::DomSeq& seq, int iNodeTypes );
+
+int			domFindNext				( 	int iCount, const std::string& sSequence, const std::string& sCompareFun, int iNodeTypes );
+int			domFindNext				( 	int iCount, const std::string& sSequence, const std::string& sCompareFun );
+int			domFindNext				( 	int iCount, const std::string& sSequence, int iNodeTypes );
+int			domFindNext				( 	int iCount, const std::string& sSequence );
+int			domFindNext				( 	const std::string& sSequence, const std::string& sCompareFun );
+int			domFindPrev				( 	const std::string& sSequence, const std::string& sCompareFun );
+int			domFindNextParams       ( 	int iCount, const std::string& sSequence, const std::string& sArgs );
+
+int			domFind					( 	int iCount, const std::string& sSequence, const std::string& sCompareFun, int iNodeTypes );
+int			domFind					( 	int iCount, const std::string& sSequence, const std::string& sCompareFun );
+int			domFind					( 	int iCount, const std::string& sSequence, int iNodeTypes );
+int			domFind					( 	int iCount, const std::string& sSequence );
+int			domFind					( 	const std::string& sSequence, const std::string& sCompareFun );
+
+int			domFindNextPos			( 	int iCount, const std::string& sSequence, const std::string& sCompareFun, int iNodeTypes );
+int			domFindNextPos			( 	int iCount, const std::string& sSequence, const std::string& sCompareFun );
+int			domFindNextPos			( 	int iCount, const std::string& sSequence, int iNodeTypes );
+int			domFindNextPos			( 	int iCount, const std::string& sSequence );
+int			domFindNextPos			( 	const std::string& sSequence, const std::string& sCompareFun );
+int			domFindPrevPos			( 	const std::string& sSequence, const std::string& sCompareFun );
+
+
+int			domClickInput			(  	int iCount 	)																													;
+int			domClickInputNext		(  	int iCount 	)																													;
+int			domSetInput				(  	int iCount,	const std::string& sValue 	)																						;
+int			domSetInputNext			(  	int iCount,	const std::string& sValue 	)																						;
+int			domSetInput				(  	int iCount,	int iValue 					)																						;
+int			domSetInputNext			(  	int iCount,	int iValue 					)																						;
+int			domStep					(  	int iCount, int iNodeTypes = ALL_NODE_TYPES )																					;
+bool		domAtEnd				()																																	;
+void		domPointerPush			()																																	;
+int			domPointerPop			()																																	;
+int 		domSize					() 																																	;
+int 		domEndPos				() 																																	;
+int 		domGetPos				() 																																	;
+int			domSetPos				( int iNewPos )																														;
+int			domSetStopPos			( int iStopPos )																													;
+int			domGetStopPos			()																														;
+void		domClearStopPos			()																																	;
+void		domSetAtEnd             ()																																	;
+
+/*
+-------------------------------------
+--- DOM Sequence create functions ---
+------------------------------------- */
+void		domSeqCreate			( 	const std::string& sName, const std::string& sSequence, const std::string& sCompareFun,
+                                        int iPostMatchSteps, const std::string& sCommaChar  );
+void		domSeqCreate			( 	const std::string& sName, const std::string& sSequence, const std::string& sCompareFun,
+                                        int iPostMatchSteps  );
+void		domSeqCreate			( 	const std::string& sName, const std::string& sSequence, const std::string& sCompareFun );
+void		domSeqCreate			( 	const std::string& sName, const std::string& sSequence, int iPostMatchSteps );
+void		domSeqCreate			( 	const std::string& sName, const std::string& sSequence );
+
+/*
+------------------------------------
+--- Current (dom) node functions ---
+------------------------------------ */
+%constant int NEAREST_FORWARD	;
+%constant int NEAREST_BACKWARD	;
+%constant int NEAREST_BOTH		;
+%constant int NEAREST_PARENT	;
+%constant int NEAREST_AUTO		;
+%constant int NEAREST_THIS_NODE	;
+%constant int FWD	;
+%constant int REV	;
+
+int			nodeType				()																																	;
+bool		nodeClick				( int iSearchDir = NEAREST_AUTO, bool bLoadHref = true )																			;
+bool		nodeClickWait			( int iSearchDir = NEAREST_AUTO, bool bLoadHref = true )																			;
+bool		nodeMouseEvent			( const std::string& sEvent, int iSearchDir = NEAREST_AUTO )																		;
+bool 		inputSet 				( const std::string& sValue, int iSearchDir = NEAREST_AUTO )																		;
+bool 		inputSet 				( int 				 iValue, int iSearchDir = NEAREST_AUTO )																		;
+bool		formSubmit				( int iSearchDir = NEAREST_AUTO )																									;
+bool		formReset				( int iSearchDir = NEAREST_AUTO )																									;
+int			selectLength			( int iSearchDir = NEAREST_AUTO )																									;
+int			selectSelectedIndex		( int iSearchDir = NEAREST_AUTO )																									;
+int 		selectSelectedDomPos 	( int iSearchDir = NEAREST_AUTO )																									;
+bool		selectSelect			( int iIndex, int iSearchDir = NEAREST_AUTO )																						;
+bool		selectOption			( int iSearchDir = NEAREST_AUTO )																									;
+/* bool		doActionPos				( int iDomPos, const std::string& sAction, const std::string& sParam1, const std::string& sParam2, int iSearchDir = NEAREST_AUTO );*/
+bool		doAction				( const std::string& sAction, const std::string& sParam1, const std::string& sParam2, int iSearchDir );
+bool		doAction				( const std::string& sAction, const std::string& sParam1, const std::string& sParam2 );
+bool		doAction				( const std::string& sAction, const std::string& sParam1, int iSearchDir = NEAREST_AUTO );
+bool		doAction				( const std::string& sAction, int iSearchDir = NEAREST_AUTO );
+
+/*
+--------------------------------------
+--- DOM doActionFindNext functions ---
+-------------------------------------- */
+int		doActionFindNext			(	int iCount, const std::string& sSequence, const std::string& sAction, const std::string& sParam1,
+                                        const std::string& sParam2, int iSearchDir );
+int		doActionFindNext			(	int iCount, const std::string& sSequence, const std::string& sAction, const std::string& sParam1,
+                                        const std::string& sParam2 );
+int		doActionFindNext			(	int iCount, const std::string& sSequence, const std::string& sAction, const std::string& sParam1,
+                                        int iSearchDir = NEAREST_AUTO );
+int		doActionFindNext			(	int iCount, const std::string& sSequence, const std::string& sAction, int iSearchDir = NEAREST_AUTO );
+
+/*
+----------------------------------
+--- DOM doActionFind functions ---
+---------------------------------- */
+int		doActionFind				(	int iCount, const std::string& sSequence, const std::string& sAction, const std::string& sParam1,
+                                        const std::string& sParam2, int iSearchDir );
+int		doActionFind				(	int iCount, const std::string& sSequence, const std::string& sAction, const std::string& sParam1,
+                                        const std::string& sParam2 );
+int		doActionFind				(	int iCount, const std::string& sSequence, const std::string& sAction, const std::string& sParam1,
+                                        int iSearchDir = NEAREST_AUTO );
+int		doActionFind				(	int iCount, const std::string& sSequence, const std::string& sAction, int iSearchDir = NEAREST_AUTO );
+
+/*
+-----------------------------------
+--- DOM Action create functions ---
+----------------------------------- */
+void		domActionCreate			( 	const std::string& sName, const std::string& sAction, const std::string& sParam1,
+                                        const std::string& sParam2, int iSearchDir );
+void		domActionCreate			( 	const std::string& sName, const std::string& sAction, const std::string& sParam1,
+                                        const std::string& sParam2 );
+void		domActionCreate			( 	const std::string& sName, const std::string& sAction, const std::string& sParam1,
+                                        int iSearchDir = NEAREST_AUTO );
+void		domActionCreate			( 	const std::string& sName, const std::string& sAction, int iSearchDir = NEAREST_AUTO );
+
+/*
+--------------------------------------------------------------------
+--- Modifier create functions (OutputModifier create functions)  ---
+-------------------------------------------------------------------- */
+void modifierCreate					(	const std::string& sModifierID, const std::string& sMainipFunID, const std::string& sManipParam1,
+                                        const std::string& sManipParam2, const std::string& sManipParam3, const std::string& sManipParam4 );
+void modifierCreate					(	const std::string& sModifierID, const std::string& sMainipFunID, const std::string& sManipParam1,
+                                        const std::string& sManipParam2, const std::string& sManipParam3 );
+void modifierCreate					(	const std::string& sModifierID, const std::string& sMainipFunID, const std::string& sManipParam1,
+                                        const std::string& sManipParam2 );
+void modifierCreate					(	const std::string& sModifierID, const std::string& sMainipFunID, const std::string& sManipParam1 );
+void modifierCreate					(	const std::string& sModifierID, const std::string& sMainipFunID );
+
+/*
+------------------------------
+--- nodeValuePos functions ---
+------------------------------ */
+std::string	nodeValuePos			( int iDomPos, const std::string& sModifierID, const std::string& sManipParam1,
+                                      const std::string& sManipParam2, const std::string& sManipParam3,
+                                      const std::string& sManipParam4 );
+std::string	nodeValuePos			( int iDomPos, const std::string& sModifierID, const std::string& sManipParam1,
+                                      const std::string& sManipParam2, const std::string& sManipParam3 );
+std::string	nodeValuePos			( int iDomPos, const std::string& sModifierID, const std::string& sManipParam1,
+                                      const std::string& sManipParam2 );
+std::string	nodeValuePos			( int iDomPos, const std::string& sModifierID, const std::string& sManipParam1 );
+std::string	nodeValuePos			( int iDomPos, const std::string& sModifierID );
+std::string	nodeValuePos			( int iDomPos );
+
+/*
+---------------------------
+--- nodeValue functions ---
+--------------------------- */
+std::string	nodeValue			( const std::string& sModifierID, const std::string& sManipParam1,
+                                  const std::string& sManipParam2, const std::string& sManipParam3,
+                                  const std::string& sManipParam4 );
+std::string	nodeValue			( const std::string& sModifierID, const std::string& sManipParam1,
+                                  const std::string& sManipParam2, const std::string& sManipParam3 );
+std::string	nodeValue			( const std::string& sModifierID, const std::string& sManipParam1,
+                                  const std::string& sManipParam2 );
+std::string	nodeValue			( const std::string& sModifierID, const std::string& sManipParam1 );
+std::string	nodeValue			( const std::string& sModifierID );
+std::string	nodeValue			();
+
+/*
+---------------------------------
+--- nodeValueParent functions ---
+--------------------------------- */
+std::string	nodeValueParent			( int iLevelsUp, const std::string& sModifierID, const std::string& sManipParam1,
+                                      const std::string& sManipParam2, const std::string& sManipParam3,
+                                      const std::string& sManipParam4 );
+std::string	nodeValueParent			( int iLevelsUp, const std::string& sModifierID, const std::string& sManipParam1,
+                                      const std::string& sManipParam2, const std::string& sManipParam3 );
+std::string	nodeValueParent			( int iLevelsUp, const std::string& sModifierID, const std::string& sManipParam1,
+                                      const std::string& sManipParam2 );
+std::string	nodeValueParent			( int iLevelsUp, const std::string& sModifierID, const std::string& sManipParam1 );
+std::string	nodeValueParent			( int iLevelsUp, const std::string& sModifierID );
+std::string	nodeValueParent			( int iLevelsUp );
+
+/*
+-----------------------------
+--- nodeCompare functions ---
+----------------------------- */
+bool		nodeCompare				( const std::string& sPattern, const std::string& sCompareFun, const std::string& sModifierID,
+                                      const std::string& sManipParam1, const std::string& sManipParam2,
+                                      const std::string& sManipParam3, const std::string& sManipParam4 );
+bool		nodeCompare				( const std::string& sPattern, const std::string& sCompareFun, const std::string& sModifierID,
+                                      const std::string& sManipParam1, const std::string& sManipParam2,
+                                      const std::string& sManipParam3 );
+bool		nodeCompare				( const std::string& sPattern, const std::string& sCompareFun, const std::string& sModifierID,
+                                      const std::string& sManipParam1, const std::string& sManipParam2 );
+bool		nodeCompare				( const std::string& sPattern, const std::string& sCompareFun, const std::string& sModifierID,
+                                      const std::string& sManipParam1 );
+bool		nodeCompare				( const std::string& sPattern, const std::string& sCompareFun, const std::string& sModifierID );
+bool		nodeCompare				( const std::string& sPattern, const std::string& sCompareFun );
+
+/*-----------------------
+--- Parse functions ---
+-----------------------*/
+%constant int MATCH_FIRST		;
+%constant int MATCH_LAST		;
+bool		parseRegex			(	int iCount, const std::string& sRegex,		int postMarkerPos = MATCH_FIRST		)												;
+bool		iparseRegex			(	int iCount, const std::string& sRegex,		int postMarkerPos = MATCH_FIRST		)												;
+bool		parseToRegex		(	int iCount, const std::string& sRegex,		int postMarkerPos = MATCH_FIRST		)												;
+bool		iparseToRegex		(	int iCount, const std::string& sRegex,		int postMarkerPos = MATCH_FIRST		)												;
+bool		parseToString		(	int iCount, const std::string& sSubstring,	int postMarkerPos = MATCH_FIRST		)												;
+bool		iparseToString		(	int iCount, const std::string& sSubstring,	int postMarkerPos = MATCH_FIRST		)												;
+bool		parseToEnd			()																																	;
+std::string	getParseMatch		( int iMatchNumber )																												;
+std::string	getParseRest		()																																	;
+int			getParseMatchCount	()																																	;
+
+/*------------------------
+--- Text functions ---
+------------------------*/
+void		textNewSearch		()																																	;
+bool		findBegin			(	int iCount, const std::string& sSearchFor, 	int setBeginToPos = MATCH_LAST		)												;
+bool		findEnd				(	int iCount, const std::string& sSearchFor, 	int setBeginToPos = MATCH_FIRST		)												;
+bool		findBeginNext		(	int iCount, const std::string& sSearchFor, 	int setBeginToPos = MATCH_LAST 		)												;
+bool		findEndNext			(	int iCount, const std::string& sSearchFor, 	int setBeginToPos = MATCH_FIRST		)												;
+bool		ifindBegin			(	int iCount, const std::string& sSearchFor, 	int setBeginToPos = MATCH_LAST		)												;
+bool		ifindEnd			(	int iCount, const std::string& sSearchFor, 	int setBeginToPos = MATCH_FIRST		)												;
+bool		ifindBeginNext		(	int iCount, const std::string& sSearchFor, 	int setBeginToPos = MATCH_LAST 		)												;
+bool		ifindEndNext		(	int iCount, const std::string& sSearchFor, 	int setBeginToPos = MATCH_FIRST		)												;
+bool		findRegexBegin		(	int iCount, const std::string& sRegex,		int setBeginToPos = MATCH_LAST		)												;
+bool		findRegexEnd		(	int iCount, const std::string& sRegex, 		int setBeginToPos = MATCH_FIRST		)												;
+bool		findRegexBeginNext	(	int iCount, const std::string& sRegex,		int setBeginToPos = MATCH_LAST		)												;
+bool		findRegexEndNext	(	int iCount, const std::string& sRegex, 		int setBeginToPos = MATCH_FIRST		)												;
+bool		stepBegin			(	int iCount	)																													;
+bool		stepEnd				(	int iCount	)																													;
+
+/*-----------------------------
+--- (URL) queue functions ---
+-----------------------------*/
+%constant int LINK_TYPE_LOCAL		;
+%constant int LINK_TYPE_EXTERNAL	;
+%constant int LINK_TYPE_ALL			;
+
+int			urlQueueSize			();
+int			urlQueueSizeProcessed	();
+bool        urlQueueAlreadyProcessed( const std::string& sUrl );
+void		urlQueueClear			()	;
+std::string	urlQueueFront			()	;
+void		urlQueueAppend			(	int iLinkType, const std::string& sUrlsMatch ="", const std::string& sCompareFun = DefaultCompareFun )	;
+void		urlQueueAppendUnique	(	int iLinkType, const std::string& sUrlsMatch ="", const std::string& sCompareFun = DefaultCompareFun )	;
+void		urlQueueAppend			(	const std::string& sUrl		)	;
+void		urlQueueAppendUnique	(	const std::string& sUrl		)	;
+void		urlQueuePrepend			(	const std::string& sUrl		)	;
+void		urlQueuePrependUnique	(	const std::string& sUrl		)	;
+
+/*-----------------------------
+--- linksGetter functions ---
+-----------------------------*/
+void		linksGetterDebugPrint	();
+
+/*
+--------------------------
+--- valueSet functions ---
+-------------------------- */
+void		valueSet				( const std::string& sValue );
+
+/*
+--------------------------
+--- valueGet functions ---
+-------------------------- */
+std::string	valueGet				( const std::string& sModifierID, const std::string& sManipParam1, const std::string& sManipParam2,
+                                      const std::string& sManipParam3, const std::string& sManipParam4 );
+std::string	valueGet				( const std::string& sModifierID, const std::string& sManipParam1, const std::string& sManipParam2,
+                                      const std::string& sManipParam3 );
+std::string	valueGet				( const std::string& sModifierID, const std::string& sManipParam1, const std::string& sManipParam2 );
+std::string	valueGet				( const std::string& sModifierID, const std::string& sManipParam1 );
+std::string	valueGet				( const std::string& sModifierID );
+std::string	valueGet				();
+
+/*
+------------------------------
+--- valueCompare functions ---
+------------------------------ */
+bool	valueCompare				( const std::string& sPattern, const std::string& sCompareFun, const std::string& sModifierID,
+                                      const std::string& sManipParam1, const std::string& sManipParam2, const std::string& sManipParam3,
+                                      const std::string& sManipParam4 );
+bool	valueCompare				( const std::string& sPattern, const std::string& sCompareFun, const std::string& sModifierID,
+                                      const std::string& sManipParam1, const std::string& sManipParam2, const std::string& sManipParam3 );
+bool	valueCompare				( const std::string& sPattern, const std::string& sCompareFun, const std::string& sModifierID,
+                                      const std::string& sManipParam1, const std::string& sManipParam2 );
+bool	valueCompare				( const std::string& sPattern, const std::string& sCompareFun, const std::string& sModifierID,
+                                      const std::string& sManipParam1 );
+bool	valueCompare				( const std::string& sPattern, const std::string& sCompareFun, const std::string& sModifierID );
+bool	valueCompare				( const std::string& sPattern, const std::string& sCompareFun );
+
+/*
+--------------------------------
+--- outputValueGet functions ---
+-------------------------------- */
+std::string	outputValueGet			( const std::string& sFieldName, const std::string& sContextName = ""	);
+
+/*
+------------------------------
+--- Modify value functions ---
+------------------------------ */
+std::string	valueModify				( const std::string& sModifierID, const std::string& sManipParam1, const std::string& sManipParam2,
+                                      const std::string& sManipParam3, const std::string& sManipParam4 );
+std::string	valueModify				( const std::string& sModifierID, const std::string& sManipParam1, const std::string& sManipParam2,
+                                      const std::string& sManipParam3 );
+std::string	valueModify				( const std::string& sModifierID, const std::string& sManipParam1, const std::string& sManipParam2 );
+std::string	valueModify				( const std::string& sModifierID, const std::string& sManipParam1 );
+std::string	valueModify				( const std::string& sModifierID );
+
+/*
+-------------------------
+--- Context functions ---
+------------------------- */
+void		dataPushContext			(	std::string sContext, std::string const& sUnit = "" );
+void		dataPushContextAlias	(	const std::string& sContext, const std::string& sContextAlias, const std::string& sUnit = "" );
+void		dataPopContext			();
+
+void		contextBegin                (	std::string sContextName );
+void		contextEnd                  ();
+void        contextOutputSaveAs         ( const std::string& sContextName );
+void        contextFallbackOutputLoad   ( const std::string& sContextName );
+void        contextFallbackOutputClear  ();
+std::string contextFallbackValueGet     ( const std::string& sFieldName );
+void        contextFallbackValueSet     ( const std::string& sFieldName, const std::string& sValue ) ;
+bool        contextFallbackValueExists  ( const std::string& sFieldName );
+void        contextFallbackValueDelete  ( const std::string& sFieldName );
+bool        contextSavedOutputExists    ( const std::string& sContextName );
+void        contextSavedOutputDelete    ( const std::string& sContextName );
+
+/*
+------------------------
+--- Output functions ---
+------------------------ */
+void		outputDirectUnit		( const std::string& sFieldName, const std::string& sValue, const std::string& sUnit,
+                                      const std::string& sModifierID, const std::string& sManipParam1, const std::string& sManipParam2,
+                                      const std::string& sManipParam3, const std::string& sManipParam4 );
+void		outputDirectUnit		( const std::string& sFieldName, const std::string& sValue, const std::string& sUnit,
+                                      const std::string& sModifierID, const std::string& sManipParam1, const std::string& sManipParam2,
+                                      const std::string& sManipParam3 );
+void		outputDirectUnit		( const std::string& sFieldName, const std::string& sValue, const std::string& sUnit,
+                                      const std::string& sModifierID, const std::string& sManipParam1, const std::string& sManipParam2 );
+void		outputDirectUnit		( const std::string& sFieldName, const std::string& sValue, const std::string& sUnit,
+                                      const std::string& sModifierID, const std::string& sManipParam1 );
+void		outputDirectUnit		( const std::string& sFieldName, const std::string& sValue, const std::string& sUnit,
+                                      const std::string& sModifierID );
+void		outputDirectUnit		( const std::string& sFieldName, const std::string& sValue, const std::string& sUnit );
+
+/*---*/
+void		outputDirect			( const std::string& sFieldName, const std::string& sValue, const std::string& sModifierID,
+                                      const std::string& sManipParam1, const std::string& sManipParam2, const std::string& sManipParam3,
+                                      const std::string& sManipParam4 );
+void		outputDirect			( const std::string& sFieldName, const std::string& sValue, const std::string& sModifierID,
+                                      const std::string& sManipParam1, const std::string& sManipParam2, const std::string& sManipParam3 );
+void		outputDirect			( const std::string& sFieldName, const std::string& sValue, const std::string& sModifierID,
+                                      const std::string& sManipParam1, const std::string& sManipParam2 );
+void		outputDirect			( const std::string& sFieldName, const std::string& sValue, const std::string& sModifierID,
+                                      const std::string& sManipParam1 );
+void		outputDirect			( const std::string& sFieldName, const std::string& sValue, const std::string& sModifierID );
+void		outputDirect			( const std::string& sFieldName, const std::string& sValue );
+
+/* --- */
+void		outputValueUnit			( const std::string& sFieldName, const std::string& sUnit, const std::string& sModifierID,
+                                      const std::string& sManipParam1, const std::string& sManipParam2,
+                                      const std::string& sManipParam3, const std::string& sManipParam4 );
+void		outputValueUnit			( const std::string& sFieldName, const std::string& sUnit, const std::string& sModifierID,
+                                      const std::string& sManipParam1, const std::string& sManipParam2,
+                                      const std::string& sManipParam3 );
+void		outputValueUnit			( const std::string& sFieldName, const std::string& sUnit, const std::string& sModifierID,
+                                      const std::string& sManipParam1, const std::string& sManipParam2 );
+void		outputValueUnit			( const std::string& sFieldName, const std::string& sUnit, const std::string& sModifierID,
+                                      const std::string& sManipParam1 );
+void		outputValueUnit			( const std::string& sFieldName, const std::string& sUnit, const std::string& sModifierID );
+void		outputValueUnit			( const std::string& sFieldName, const std::string& sUnit );
+
+/* --- */
+void		outputValue				( const std::string& sFieldName, const std::string& sModifierID, const std::string& sManipParam1,
+                                      const std::string& sManipParam2, const std::string& sManipParam3, const std::string& sManipParam4 );
+void		outputValue				( const std::string& sFieldName, const std::string& sModifierID, const std::string& sManipParam1,
+                                      const std::string& sManipParam2, const std::string& sManipParam3 );
+void		outputValue				( const std::string& sFieldName, const std::string& sModifierID, const std::string& sManipParam1,
+                                      const std::string& sManipParam2 );
+void		outputValue				( const std::string& sFieldName, const std::string& sModifierID, const std::string& sManipParam1 );
+void		outputValue				( const std::string& sFieldName, const std::string& sModifierID );
+void		outputValue				( const std::string& sFieldName );
+
+/*
+-------------------------------------
+--- outputValueFindNext functions ---
+------------------------------------- */
+int			outputValueFindNext		( int iCount, const std::string& sSequence,	const std::string& sFieldName, const std::string& sManipFun,
+                                      const std::string& sManipParam1, const std::string& sManipParam2, const std::string& sManipParam3,
+                                      const std::string& sManipParam4 );
+int			outputValueFindNext		( int iCount, const std::string& sSequence,	const std::string& sFieldName, const std::string& sManipFun,
+                                      const std::string& sManipParam1, const std::string& sManipParam2, const std::string& sManipParam3	);
+int			outputValueFindNext		( int iCount, const std::string& sSequence,	const std::string& sFieldName, const std::string& sManipFun,
+                                      const std::string& sManipParam1, const std::string& sManipParam2	);
+int			outputValueFindNext		( int iCount, const std::string& sSequence,	const std::string& sFieldName, const std::string& sManipFun,
+                                      const std::string& sManipParam1 );
+int			outputValueFindNext		( int iCount, const std::string& sSequence,	const std::string& sFieldName, const std::string& sManipFun );
+int			outputValueFindNext		( int iCount, const std::string& sSequence,	const std::string& sFieldName );
+
+/*
+---------------------------------
+--- outputValueFind functions ---
+--------------------------------- */
+int			outputValueFind			( int iCount, const std::string& sSequence,	const std::string& sFieldName, const std::string& sManipFun,
+                                      const std::string& sManipParam1, const std::string& sManipParam2, const std::string& sManipParam3,
+                                      const std::string& sManipParam4 );
+int			outputValueFind			( int iCount, const std::string& sSequence,	const std::string& sFieldName, const std::string& sManipFun,
+                                      const std::string& sManipParam1, const std::string& sManipParam2, const std::string& sManipParam3	);
+int			outputValueFind			( int iCount, const std::string& sSequence,	const std::string& sFieldName, const std::string& sManipFun,
+                                      const std::string& sManipParam1, const std::string& sManipParam2	);
+int			outputValueFind			( int iCount, const std::string& sSequence,	const std::string& sFieldName, const std::string& sManipFun,
+                                      const std::string& sManipParam1 );
+int			outputValueFind			( int iCount, const std::string& sSequence,	const std::string& sFieldName, const std::string& sManipFun );
+int			outputValueFind			( int iCount, const std::string& sSequence,	const std::string& sFieldName );
+
+/*----------------------------
+--- Javascript functions ---
+----------------------------*/
+bool 		javaScriptExecuteRetVal	( const std::string& sScript, std::string& sScriptReturnValue 	)							;
+bool 		javaScriptExecute		( const std::string& sScript									)							;
+
+/*-------------------------
+--- Utility functions ---
+-------------------------*/
+int 		curlPostUploadFileSimple( const std::string& sURL, const std::string& sFieldName, const std::string& sFilePath 	) 	;
+bool 		gzCompressFile			( const std::string& sSrcFilePath, const std::string& sDstFilePath ) 						;
+bool 		gzUnCompressFile		( const std::string& sSrcFilePath, const std::string& sDstFilePath )						;
+
+/*
+--------------------------
+--- Settings functions ---
+-------------------------- */
+void		settingDelete           (	const std::string& sName );
+void		settingSet              (	const std::string& sName, const std::string& sValue );
+std::string settingGet              (	const std::string& sName );
+bool        hasSetting              (	const std::string& sName ) ;
+
+/*------------------------
+--- Config functions ---
+------------------------*/
+void 		configUrlStart			( const std::string& sUrl	)																;
+void 		configUrlUploadDataSet	( const std::string& sUrl	)																;
+std::string configUrlUploadDataGet	()																							;
+void 		configDisableLoadImages	()																							;
+void 		configForceLoadImages	()																							;
+void 		configAddIncludeUrl		( const std::string& sPattern, const std::string& sCompareFun )	;
+void 		configAddExcludeUrl		( const std::string& sPattern, const std::string& sCompareFun )	;
+void		configForceSendXmlData	();
+void		configReloadTimeOut		( int iMinutes, int iSecs )																	;
+void		configKeepActiveInterval( int iSecs )																				;
+void		configProgressOutputSet	( bool bEnable )																			;
+void		configDebugOutputSet	( bool bEnable )																			;
+bool		configDebugOutputGet	()																							;
+void 		configParseDecimalPointSet( const std::string& sDecimalPoint  	)													;
+void 		configParseThousandsSepSet( const std::string& sThousandsSep 	)													;
+void		configOutputEncloseCDATA( bool bDoEncloseInCDATA )																	;
+void		configOutputWriteToFile ( bool bDoWriteOutputToFile );
+std::string configGetRunMode        ();
+void 		configInsertEndTagNodes ( bool bInsertEndTagNodes )																	;
+void 		configSkipEmptyNodes 	( bool bSkipEmptyNodes )																	;
+void 		configTrimBlanks 		( bool bTrimBlanks )																		;
+
+/*-----------------------
+--- Debug functions ---
+-----------------------*/
+void		domDebugPrint			( const std::string& sFileName="" 								)							;
+void		nodeDebugPrint			( int iNodesBefore, int iNodesAfter, bool bPrintNodeTypes = false )							;
+void		nodeDebugPrint			( int iNodesAround=10, bool bPrintNodeTypes = false )										;
+std::string	nodeValueDebug			( int iNodesBefore, int iNodesAfter, bool bPrintNodeTypes = false )							;
+std::string	nodeValueDebug			( int iNodesAround=10, bool bPrintNodeTypes = false )										;
+bool		domFindNextTest			( int iCount, const std::string& sSearchFor, int idCompFun, int iNodeTypes = ALL_NODE_TYPES );
+
+void        dbgSimpleTestFunction();
+void        dbgCurrentMinerSetPointer(const std::string& sMinerPointer);
+

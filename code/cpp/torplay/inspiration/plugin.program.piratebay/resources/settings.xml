@@ -1,0 +1,7 @@
+<settings>
+  <setting id="sort" type="enum" label="Sort Method" values="Most Recent|Top 100|Most Seeders|Most Leechers" default="0"/>
+  <setting id="ip" type="text" label="30100" default="192.168.1.1" />
+	<setting id="port" type="text" label="30101" default="8080" />
+	<setting id="usr" type="text" label="30102" default="admin" />
+	<setting id="pwd" type="text" label="30103" default="" /> 
+</settings>

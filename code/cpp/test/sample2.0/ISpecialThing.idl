@@ -1,0 +1,11 @@
+#include "nsISupports.idl"
+
+[scriptable, uuid(263ed1ba-5cc1-11db-9673-00e08161165f)]
+interface ISpecialThing : nsISupports
+{
+  attribute AString name;
+
+  void init(in AString xulWindow, in AString browserId );
+  long add(in long a, in long b);
+  void dbgPrint(in AString str );
+};

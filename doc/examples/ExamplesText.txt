@@ -1,0 +1,494 @@
+
+----------------------
+--- ExDomSequences --- 
+----------------------
+
+Example site: http://examples.netscavator.com/sites/ExDomSequences/
+
+Instead of just searching for a single element when using domFind() and domFindNext() like we have 
+done so far we can just as well search for a sequence of elements. This is far more powerfull and 
+just as easy to use. In this example we shall also demonstrate a simple way to loop through a list 
+of similar items on a webpage, like a typical SearchListing page.
+
+!!Dom sequences
+Looking at the html for this example we see that each product block seems to begin with:
+
+
+<DIV class="product" >
+
+
+If we want to locate this position in on the page we can use look for the the sequence DIV, class, product simply by doing like this:
+
+
+domFindNext ( 1, "DIV, class, product", "equals" ); 
+
+
+This means that we look for those elements in sequence and that we use "equals" when comparing each of them to the nodes in the document. If domFindNext() succeeds it places the current position at the last element, which in this case would be at the node containing the string 'product'.  You can use all the same comparators as normally, but most of the time "equals" and "contains" will get the job done. See the reference manual and the main manual for more details about the comparators and also how to specify different ones for each element in the sequence if needed.
+
+Although this is really great, we generally don't recommend using dom sequences directly like this but rather use named dom sequences:
+
+
+!!Named dom sequences: domSeqCreate
+Named dom sequences are highly recommended for any serious mining:
+- Using the name enables you to refer to the same sequence multiple times
+- Avoids the use of domStep to do final ajustment in order to get to the desired position.
+- Works perfect in conjunction with outputValueFindNext(), which we will be using all the time after we introduce it in ExTypicalDataMining later.
+- Absolutely essential if you want to use templates, which you probably want for professional use, since it greatly reduces the work needed per site you want to mine.
+- Separates out the place where you define the dom sequences to locate the points of interrest on the site from the place where you actually write to output or execute actions on those positions.
+
+
+Creating a named dom sequence is done using domSeqCreate and to create a sequence to locate the start of each product block we use:
+
+
+domSeqCreate  ( "ProductStartSeq"   , "DIV, class, product" , "equals"      );
+
+
+We do similar for the two other positions we need in this example. Pay special attention to the one locating the product name:
+
+
+domSeqCreate  ( "ProductNameSeq"  , "color:green"   , "contains", 1 );
+
+
+The interresting part here is the last parameter '1'  
+
+..........
+
+
+------------------------
+--- ExOutputTrimming --- 
+------------------------
+toUpper String to upper case     |VAL="abc" => outputValue( "toUpper" ); == "ABC"
+toLower String to lower case     |VAL="ABC" => outputValue( "toLower" ); == "abc"
+trimNumber  Parse number         |VAL="xxx 34.7 xxx" => outputValue( "trimNumber" ); == "34.7"   
+append  Append string            |VAL="abc" => outputValue( "append", "def" ); == "abcdef"
+prepend Prepend string           |VAL="abc" => outputValue( "prepend", "def" ); == "defabc"   
+eraseFirst  Erase first occurence of string  |VAL="abaca" => outputValue( "eraseFirst", "a" ); == "baca"
+eraseLast   Erase last occurence of string   |VAL="abaca" => outputValue( "eraseLast", "a" ); == "abac"
+eraseAll    Erase all occurences of string   |VAL="abaca" => outputValue( "eraseAll", "a" ); == "bc"
+replaceFirst    Replace first occurence of string |VAL="abaca" => outputValue( "replaceFirst", "a", "U" ); == "Ubaca"    
+replaceLast Replace last occurence of string     |VAL="abaca" => outputValue( "replaceLast", "a", "U" ); == "abacU"
+replaceAll  Replace all occurences of string     |VAL="abaca" => outputValue( "replaceAll", "a", "U" ); == "UbUcU"
+
+
+The eraseXX and replaceXX modifiers have versions with an 'i' prepended which ignores casing. For now the ignore case only works with the ASCII chars a-z,A-Z, but this will be fixed in later version to support all UTF-8 chars. For example:
+
+VAL="abAcA" => outputValue( "ireplaceAll", "a", "U" ); == "UbUcU"
+
+-------------------------------------
+--- ExTypicalDataMining --- 
+-------------------------------------
+
+
+Here we are going to introduce a completely general and robust way of looping though a list of items and the workhorse outputValueFindNext(). 
+
+!! General and robust items loop
+The saving and restoring of the dom position as we saw in the previous example is great, but it does not prevent that item values can get mixed up in case a value is not found. Turning to our example: If we for a minute imagined that that the price was somehow missing from the Shirt's product block. This would be unfortunate, because then the domFindNext ( 1, "ProductPriceSeq" ) would find the price of the next product in the list, the Socks. 
+
+The saving of the dom position in the beginning of the loop body and restoring it at the end again only ensures that regardless of the Shirt's price becoming that of the Socks, we still get correct price for the Socks.
+
+So how do we fix the problem of wrong price for the Shirt?
+Well, since we can't guess what a missing price is, the best we can do is to prevent it from being found at all.
+
+!Dom stop position domSetStopPos()
+The idea is simple: Instead of all domFindXX functions always searches untill the end of the page, we set a temporary stop position where the next item begins. So in the loop we want do do this:
+
+ -1 while (find and move current position to start of next item )
+ -2 Save current dom position
+ -3 Find start position of the item/product ( domFindNextPos() ) following the current, but DON'T move to that position - just return the index. 
+ -4 Set (temporary) end of the document to be the position just found.
+ -5 Mine all properties/values from the current product. In case eg. a price is not present the domFindNext() will not falsly find the following item's price because the stop position prevents the search from continuing past the current item.
+ -6 Clear the stop postion, so we can move on to the next item without "hitting" the stop position.
+ -7 Restore the current dom position, again so the domFindNext() in the while clause starts out from a well defined position to locate the start of the next item.
+ -8 Goto 1
+ 
+You can see the loop in the example code, but we shall repeat it here for convenience:
+
+
+ // Completely general way way of looping through a list of products
+ function ExTypicalDataMining_SearchListing_mine()            
+ {
+     domNewSearch();
+     while ( domFindNext ( 1, "ProductStartSeq" ) ) {
+         $savePos = domGetPos(); // Save dom position
+         $iStopPos = domFindNextPos( 1, "ProductStartSeq" );
+         domSetStopPos( $iStopPos ); // Set stop position to start of next product block
+         GetProduct();
+         domClearStopPos();
+         domSetPos($savePos);    // Restore dom position so we are ready to find next product start
+     }
+ }
+
+
+!!outputValueFindNext()
+This function combines the locating of a postion with writing the found value to the output.
+It makes the skript easier to read and solves yet another problem that we have not touched so far:
+
+We saw in the previous example how we added IF's around the domFindNext() locating the item's properties like this:
+
+
+ if ( domFindNext ( 1, "ProductPriceSeq" ) ) {
+     outputValue ( "product_price", "trimNumber" );
+ }
+
+
+Combined with the dom stop position, we now make sure to only write a price if the current product actually has one. One little problem is still left: if we fail to find the price it is because we ended up "hitting" the stop position. So in this case we have the current position at the end of the current item (same as the start of the next), which means that if we after the price wanted to find the item's color or other property we would surely not find it.
+Ofcourse the solution is simple and we have used it before in the loop. We just need to save and restore the dom postion before and after finding each property:
+
+
+
+ $savePos = domGetPos(); // Save dom position
+ if ( domFindNext ( 1, "ProductPriceSeq" ) ) {
+     outputValue ( "product_price", "trimNumber" );
+ }
+ domSetPos($savePos);    // Restore dom position
+
+
+The above is exactly what the outputValueFindNext() function does, so instead of the 4 lines above we can just do:
+
+ outputValueFindNext( 1, "ProductPriceSeq", "product_price", "trimNumber" );
+
+So the first two parameters (1, "ProductPriceSeq" ) are the same as used in our normal domFindNext() and the rest are paramters for outputValue().
+
+
+!!outputDirect()
+Finally we should mention the outputDirect() function, which we have used in this example to simply write a "hardcoded" property to the output. Here we know that all prices on the site are in Euros, so we simply write this to the product output directly like this:
+
+
+
+ outputDirect ( "currency_name" , "EUR" );  
+
+
+
+-------------------------------------
+--- ExDoSearchActionsAndClickNext --- 
+-------------------------------------
+
+This example introduces multimple handlers exemplified by the DoSearch and SearchListing handlers. If you have not heard about handlers before please go to ExMinimal example or the main manual. We also introduce actions in that we will simulate user input an click the "Search" button.
+
+
+!!Multiple handlers
+
+This site has a "DoSearch" page, which is where the user is expected to provide input parameter and press "Search" in order to get a list of results. On this site the input is somewhat contrieved in that the user is required to input the string "all" in order to get the result pages displayed. This will change in later examples, but we try not to introduce to many new things per example, so bear with us :-)
+
+Nevertheless this means that we now need to handle two types of pages:
+
+# DoSearch: Single page from which the user can input search parameters and pres "Search". 
+# SearchListing: Large number of essentially identical pages which list all the results/products in summary form and linked together using "next" links. 
+
+
+We need a handler for each of them and they will be called as hinted in the bullets above: DoSearch and SearchListing.
+
+!Selecting the correct handler for a page
+
+When a page is loaded the Miner must select a handler to "handle" the page - i.e. mine data and perform actions. 
+This is done by evaluating the _match() functions of which we have one for each handler named ExDoSearchActionsAndClickNext_DoSearch_match() and ExDoSearchActionsAndClickNext_SearchListing_match().
+
+The functions are called by the Miner in the order they appear and the first one to return true 'wins', which means that it's corresponding handler functions _mine() and _navigate() will be called. Both _match() functions examine the current URL and returns true if it is the "right one" which is determind like this:
+
+ - ExDoSearchActionsAndClickNext_DoSearch_match(): True if current URL contains the string "dosearch.php".
+ - ExDoSearchActionsAndClickNext_SearchListing_match(): True if current URL contains the string "searchlisting". 
+
+The approach used here with examining the current URL is 90% of the time enough to distinguish the different page types on a site. But if you need to, you can just call domFind() to look for a certain sequence on the page, if the URL alone is not enough to uniquely separate the page types/handlers.
+
+
+!!Actions
+In this example we introduce actions and we have 3 in all:
+
+ - "inputValue" : Type 'all' (action = 'inputValue') in producttype field..
+ - "click" : Click the "Search" button. 
+ - nodeClick(): Click the "Next" link on the first SearchListing page.
+ 
+The first two are executed using
+
+We have two ways of executing actions: 
+ - Using "direct" action functions like nodeClick() and inputSet(), which assumes you already navigated (domFindXX()) to a node that makes sense in the context of the given action.
+ - Using the doActionFind() and doActionFindNext() functions, which works similar to outputValueFindNext().
+ 
+The first form is just normal function calls, sometimes with parameters the other form takes a dom sequence and the action to be executed as a string parameter like you see in the example:
+
+
+ doActionFind ( 1, "DoSearchTypeSeq", "inputValue", "all" ); // Type 'all' (action = 'inputValue') in producttype field.
+ doActionFind ( 1, "DoSearchBtnSeq", "click" );              // Click on search button.
+
+ 
+One unfortunate thing, that we will correct in a later release of the Miner, is that the two forms are not named uniformly. The following table list the actions available in both forms:
+
+|"click"| nodeClick()|Do simple (left) click on current element
+|"mouseEvent"| nodeMouseEvent()|Send named mouseevent to current element. See below table for events
+|"loadUrl"| urlLoad()|Load the url specified in parameter1
+|"inputValue"| inputSet()|Input the value specified in parameter1 into current INPUT element
+|"formSubmit"| formSubmit()|Assuming current dom element is a FORM, do a submit.
+|"formReset"| formReset()|Assuming current dom element is a FORM, do a reset of the form
+|"selectIndex"| selectSelect()| Assuming current dom element is a SELECT, do select index specified in parameter1
+|"selectOption"| selectOption()| Assuming current dom element is an OPTION, do select this option
+
+
+!ExDoSearchActionsAndClickNext_SearchListing_navigate()
+
+This function uses actions in the "first way" as described above. We use domFind() to locate the next link, and if found we simply call nodeClick(). In this case we also return true since clicking on the 'next' links causes a new page to be loaded. If we do not find the 'next' link (no more pages to load), we return false and this causes the Miner to close down. 
+
+Please note that returning true/false like this is only needed in the _navigate() functions of each handler. To repeat the 'rule' what to return from _navigate():
+ - true: When the action(s) you perform results in a new page being loaded. 
+ - false: When none of the action(s) you perform causes a new page to be loaded. This will normally cause the Miner to close down, except if the "Url Queue" is not empty, but see later examples or the manual
+
+
+ function ExDoSearchActionsAndClickNext_SearchListing_navigate()           
+ {   
+     if ( domFind ( 1, "DoClickNextSeq" ) ) {
+         nodeClick();
+         return true;    // if we find a 'next' link then a new page will be loaded
+     }
+     else {
+         return false;   // No 'next' link, no new page will be loaded. Miner closes down.  
+     }
+ }
+
+
+-----------------------------
+--- ExNavigatorAndSelects ---
+-----------------------------
+
+This example introduces the 'navigator', which is an effective way of traversing thruogh all the needed search parameter combinations on a site. 
+
+
+!! SELECTs
+The example site we use here has two drop down SELECTs (clothes category, fabric) and we wish to make a search for clothes using all possible combinations. 
+
+You can see the HTML source on the example site by clicking on "Html source for this page:" link but we shall show them here for easy reference:
+
+
+<SELECT name="clothes_type" >
+<OPTION value="none">Select clothes category</OPTION>
+<OPTION value="dress">Dresses</OPTION>
+<OPTION value="tie">Ties</OPTION>
+<OPTION value="jacket">Jackets</OPTION>
+</SELECT>
+<SELECT name="fabric_type" >
+<OPTION value="none">Select fabric</OPTION>
+<OPTION value="wool">Wool</OPTION>
+<OPTION value="cotton">Cotton</OPTION>
+</SELECT>
+
+
+The two SELECTs has the following options:
+
+ - clothesSelect (clothes_type): Dresses, Ties, Jackets 
+ - fabricSelect (fabric_type): Wool, Cotton 
+ 
+Where we have used the display text string of each OPTION element ignoring the 'none' options, see HTML source. 
+
+If we want to traverse the whole site we need to do like this:
+Select the first combination: Dresses, Wool
+Press Search
+Go through all the SearchListing pages collecting the data.
+Go back to the DoSearch page
+Select the next combination: Dresses, Cotton
+Press Search
+... An so forth to go through all combinations of the SELECTs. 
+
+We can summarize the 6 combinations/states in a table like this:
+
+
+   | combinations/states: clothesSelect, fabricSelect 
+ 1 | Dresses, Wool
+ 2 | Dresses, Cotton
+ 3 | Ties, Wool
+ 4 | Ties, Cotton
+ 5 | Jackets, Wool
+ 6 | Jackets, Cotton
+ 
+ 
+!Direct way of selecting a select
+Before continuing we shall briefly demonstrate how we could do if we just wanted to select say Jackets in the clothesSelect. Jackets is the 4th option in the clothesSelect select, because the "none" option is also an option, allthough we do not really care about selecting that one. Since the first option has index 0 (zero) we can see that the Jackets option must have index 3.
+
+So all we need to do is to move to the correct SELECT and call selectIndex(3) to actually select the Jackets option. 
+Confession: For historic reasons the selectIndex() function is currently only available under the name selectSelect(). Recall from the table in example "ExDoSearchActionsAndClickNext" that the selectIndex action unfortunately has different names whether you use it as a free function or as a named action like for example in doActionFind(). The two forms are repaeted here:
+|"selectIndex"| selectSelect()| Assuming current dom element is a SELECT, do select index specified in parameter1
+
+
+XX TODO: Fix this description when the selectIndex() function is implemented XX
+So until a later realease of the Miner fixes this our code will have to look something like this to select the Jackets:
+
+
+ domSeqCreate  ( "ClothesSelectSeq"  , "SELECT, name, clothes_type"  , "equals" );
+ ...
+ domFind ( 1, "ClothesSelectSeq" );
+ selectSelect ( 3 );
+
+
+Or, using named actions and doActionFind style:
+
+ domSeqCreate  ( "ClothesSelectSeq"  , "SELECT, name, clothes_type"  , "equals"  );
+ ...
+ doActionFind( 1, "ClothesSelectSeq", "selectIndex", 3 );
+
+
+This approach, however is not too well suited unless we always need to select the Jackets option. For getting through all combinations we need the navigator, which is the central topic for this example.
+
+ 
+!! The navigator
+The navigator can help us with traversing all the combinations/states and with executing the actions associated: which are selecting the correct option in each drop down SELECT. 
+
+!Revolving counter analogy
+You could think of the way we need to traverse the states like an old style revolving counter, known from the meter on a car, measuring how many kilometers you have travelled. This counter would then have 2 "wheels" where the leftmost is the clothesSelect and the rightmost is fabricSelect. The clothesSelect has 3 "digits" (Dresses, Ties, Jackets) and the fabricSelect has 2 "digits" (Wool, Cotton). 
+To emphasize we can repeat the bullet list from above with the two SELECTs slightly changed:
+
+ - Leftmost wheel: clothesSelect => Dresses(1), Ties(2), Jackets(3) 
+ - Rightmost wheel: fabricSelect => Wool(1), Cotton(2) 
+
+The numbers in paranthesis are the index each option has in their respective SELECTs. If we repeat the table with the counter states and also show the indices shown in parantheses the revolving counter analogy will hopefully become apparent:
+
+
+   | clothesSelect, fabricSelect | clothesSelect index, fabricSelect index  
+ 1 | Dresses, Wool     | 1,1
+ 2 | Dresses, Cotton   | 1,2
+ 3 | Ties, Wool        | 2,1 
+ 4 | Ties, Cotton      | 2,2
+ 5 | Jackets, Wool     | 3,1
+ 6 | Jackets, Cotton   | 3,2
+ 
+
+ 
+!Creating the navigator
+The navigator is created strait forward by simply creating a "DropDownSelect" entry per SELECT and adding the options to each:
+
+ navDropDownSelectCreate("clothesSelect"); // Leftmost "wheel"
+ navOptionAdd ( 1,  "dresses"   );
+ navOptionAdd ( 2,  "ties"      );
+ navOptionAdd ( 3,  "jackets"   );
+
+ navDropDownSelectCreate("fabricSelect");  // Rightmost "wheel"
+ navOptionAdd ( 1,  "wool"     );
+ navOptionAdd ( 2,  "cotton"   );
+
+
+The first parameter in each navOptionAdd() call is the index which the option has, when we want to actually select it. The second parameter is a name which can be whatever you like, but the natural recommended choice for SELECT options are either the value attribute or the actual displayed text. Here we have chosen the actual displayed text, but with the subtle change, that we write the names here with all lowercase, and not with capital starting letter as the actual displayed named. This is to emphasize, that the names you choose can be what you want, but we highly recommend names that reflect the actual option. 
+
+If you look in the example code you will see the navigator created a little differently from above because we have added attributes to each option, but more on that later
+
+!Debugging the navigator
+If you want to see how the states are actually going to be traversed you can call the dbgPrintNavigatorStates() function where the only parameter is how many states you at most want to print. For example:
+
+
+ dbgPrintNavigatorStates(10);
+
+See also the example code where this function call is commented out ready to try.
+Another way is to actually write the navigator state to each product like we have done here also:
+ 
+ 
+ outputDirect ( "navigator_state", navStateString() );   // Write the navigator state for demo/debug
+
+
+
+!Navigator actions
+Firing actions on a navigator is very much like actions we have seen so far. We use the doActionFind() function for example like this:
+ 
+ 
+ domSeqCreate  ( "ClothesSelectSeq"  , "SELECT, name, clothes_type"  , "equals"          );
+ ...
+ doActionFind ( 1, "ClothesSelectSeq",   "clothesSelect" ); // Select clothes drop down according to current navigator state
+
+
+So we use the dom sequence to loacate the SELECT element and then we execute the action "clothesSelect". Since the "clothesSelect" is defined using the navDropDownSelectCreate("clothesSelect") it can be used as any other action. So calling:
+#doActionFind ( 1, "ClothesSelectSeq", "clothesSelect" );# is the same as doing: doActionFind( 1, "ClothesSelectSeq", "selectIndex", 1 ); if we are in state 1 = (Dresses, Wool). Were we in state 6 = (Jackets, Cotton) it would be the same as calling doActionFind( 1, "ClothesSelectSeq", "selectIndex", 3 );
+
+So if we have the two doActionFind's from the example:
+
+ doActionFind ( 1, "ClothesSelectSeq",   "clothesSelect" ); // Select clothes drop down according to current navigator state
+ doActionFind ( 1, "FabricSelectSeq",    "fabricSelect"  ); // Select fabric drop down according to current navigator state
+
+We can carve out in stone what happens in each state by enhancing the table from before:
+
+   | clothesSelect, fabricSelect | Equivalent "selectIndex" actions  
+ 1 | Dresses, Wool     | doActionFind( 1, "ClothesSelectSeq", "selectIndex", 1 ); doActionFind( 1, "FabricSelectSeqSeq", "selectIndex", 1 );
+ 2 | Dresses, Cotton   | 1,2
+ 3 | Ties, Wool        | 2,1 
+ 4 | Ties, Cotton      | 2,2
+ 5 | Jackets, Wool     | 3,1
+ 6 | Jackets, Cotton   | 3,2
+
+
+!Getting through all combinations/states 
+In order to get the mining done we need to explain how to actually advance through all the states. For that we just need a way to tell the navigator to advance to "next" state and a way to tell whether we are at the last state.
+
+What we want is to change the _navigate() function of the SearchListing handler so it advances to the next state when it has reached the end of the search listing for the current search combination. Also we test if we should happen to be at the last combination/state in which case we terminate the Miner.
+
+The new navigator related parts in all in the else-clause:
+
+
+ function ExNavigatorAndSelects_SearchListing_navigate()           
+ {   
+     if ( domFind ( 1, "DoClickNextSeq" ) ) {
+         nodeClick();
+         return true;    // if we find a 'next' link then a new page will be loaded
+     }
+     else {
+         if ( !navNavigationDone() ) {
+             navNextState(); // Go to next state in navigator
+             urlLoad ( "sleipnerexamples.com.localhost/sites/ExNavigatorAndSelects/dosearch.php" );  // Back to search page
+             return true;
+         }
+         return false;   // No 'next' link, no new page will be loaded. Miner closes down.  
+     }
+ }
+
+
+!! Attributes in navigators
+As you can see from the actual example code we have added attributes to each of the "DropDownSelect's" like this:
+
+
+
+ navDropDownSelectCreate("clothesSelect");
+ navAttributeNamesCreate ("product_name, sex");
+ navOptionAdd ( 1,  "dresses"        , ATTR, "Dress,  F"  );
+ navOptionAdd ( 2,  "ties"           , ATTR, "Tie,    M"  );
+ navOptionAdd ( 3,  "jackets"        , ATTR, "Jacket, MF" );
+ navDropDownSelectCreate("fabricSelect");
+ navAttributeNamesCreate ("fabric");
+ navOptionAdd ( 1,  "wool"           , ATTR, "Wool"       );
+ navOptionAdd ( 2,  "cotton"         , ATTR, "Cotton"     );
+
+
+
+For the "clothesSelect" action we have added the attributes "product_name" and "sex". Using the 
+navAttributeNamesCreate() function, which states the attrubutes names. it must be called right after 
+the navDropDownSelectCreate() function, in order for the attribute names to be associated with the "clothesSelect". 
+The (attribute) values for each of these two (attribute) names are specified along with each option after the reserved ATTR parameter (not in quotes). The actual values are then written in quotes comma separated as shown.
+
+For the "fabricSelect" we have only defined one attrubute "fabric".
+
+The reason this is smart is that we now can ask the navigator for the current value of product_name like this:
+
+ navAttributeGet("product_name");
+
+And depending on the current state we would get one of "Dress", "Tie" or "Jacket". Similar we could ask for the value of "sex" or "fabric". 
+
+
+Where this gets even smarter, is that that this works elegantly together with outputValueFindNext() as you can see from the example code, for instance in this line:
+
+ outputValueFindNext( 1, "__NEVER_FIND_ME__", "sex" );   // Get value from Navigator attribute by fallback on fail to find dom position 
+
+
+What happens above is that the domFindNext()-part of outputValueFindNext() fails to locate __NEVER_FIND_ME__ since that string is nowhere on the page and we also have no named dom sequence defined with that name. Normally this would mean that that the property "sex" is not written to the output, but if you look in the XML you can see every product has the sex property set to one of: F, M, MF. 
+When outputValueFindNext() fails to locate the dom position it looks for the name "sex" in the navigator's attributes and if found it's value is then written to the output.
+
+The above approach for using the attributes of the navigator is very usefull. One of the great things about the approach is that the value is only taken from the navigator in case the domFindNext()-part fails so you can use the attribute as a sort of fall-back value in case the dom position you prefer to get the value from is not found for a particular product.
+
+
+For completeness we have also shown how to get the sttribute value directly in the example code:
+
+ outputDirect ( "fabric" , navAttributeGet("fabric") );  // Gettting the attribute value directly  
+
+
+
+--------------------------
+--- ExNavigatorUrlLoad ---
+--------------------------
+
+This example shows how to use the navigator's UrlLoad actions. For the basic introduction to the navigator please go to example ExNavigatorAndSelects. 
+
+!!Approach taken
+
+Instead of using the SELECTs directly we here want to load each of the 6 URLs that represent the different combinations directly into the browser. For this strategy we then don't even need the postions of the SELECTs, but we do need to figure out the XXX way the URLs are created have to look XXX
+
+!! Creating the navigator

@@ -1,0 +1,20 @@
+<?php
+
+// --- User settings (User might want to change at least the two first) ---
+$settingNumberOfRobots		= @NUMBER_OF_ROBOTS@;
+$settingServerUrl 			= "@ROBOTS_SERVER_URL@";
+$settingCrawlerCmdParams 	= "";
+$settingKillTimeOutSeconds 	= 3600;
+$settingRobotsBaseDir 		= "@ROBOTS_DIR@";
+$settingMaxContinues 		= 30;
+$settingWaitNewJobSeconds 	= 5;
+$settingPrioQueue 			= 2;
+$settingUpdateScriptsCmd 	= "svn up";
+
+// --- Automatic settings (probably no reason to change) ---
+$settingScriptsBaseDir		= "@SCRIPTS_BASE_DIR@";
+$settingCrawlerBinDir		= "@CRAWLER_BIN_DIR@";
+$settingCrawlerCmdName 		= "run_crawler";
+
+?>
+

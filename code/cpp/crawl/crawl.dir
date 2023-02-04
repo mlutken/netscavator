@@ -1,0 +1,79 @@
+/** \dir
+!!! Libcrawl C++ source code
+This library implements the bulk part of the crawler. Actually the crawler 
+executable is a relatively simple commandline program which just calls major 
+functions in this library.
+
+!! Overview of the scanning process
+As the drawing shows we have a number of queues responsible for fetching 
+pages from the internet or for example testing if an external link is valid. 
+For example the PageQueue delivers each downloaded page to the the PageRepo class 
+inside the (resource) repository. 
+
+\image ../images/LibCrawlOverview.png "Crawl / scanning process overview"
+
+From the repository the parser can then get the pages and eg. ask if a given external 
+link works or not. In case the repository does not know of a given link or page, it is 
+put into the corresponding queue. Actually we plan to do 2 passes of the initial parsing 
+step of each page so that we in the first pass mainly pickup links to (internal) pages 
+for download, external links for checking, image links to check and so on. All these 
+( during the first pass unknown) links are enqued for download/test. When first pass is 
+done and all queues have finished testing/downloading their results into the repository 
+we can beging tha second pass, where we now have all the information about links, pages, 
+images etc. readily avaiable in the repository.
+
+The parser uses libtidy to help parse the pages and during this process builds a 
+internal model of the website. The representation of a WebSite has a number of 
+lists/vectors with the different types of bugs, security issues, advices and so on 
+that we scan for. Together with some of the lists (std::map) in the repository we 
+here have an internal representation of the website's structure as well as the bugs 
+etc. it contains.
+This representation is then used by the (output database) generators to create the 
+final text files containing SQL commands for importing into the (mysql) database on 
+the Database Servers.
+
+
+
+=================================================================
+
+!! Formatting examples - TODO: Remove Later XX
+Here follows DoxyS wikistyle formatting examples.
+These and more can also be found in Help (Top right corner) or here "Text Formatting".
+
+
+!!! Headline BIG
+!! Headline Medium 
+! Headline small
+
+#bold text#  }italic text} {underlined text{  $monospaced text$ 
+
+Will produce:
+
+! Bullets:
+(Omit the \# to make unnumbered) 
+
+-# First item
+-# Second item
+-# Third item
+  -# First subitem
+  -# Second subitem
+
+! Tables
+
+||HeadlineCell||HeadlineCell||HeadlineCell
+|Cell|Cell|Cell
+|Cell|Cell|Cell
+
+
+
+\code
+Raw unformatted blok
+Of text complete with all newlines
+Like this
+\endcode
+
+\image verify.png "Image caption goes here if you want one"
+
+*/
+
+

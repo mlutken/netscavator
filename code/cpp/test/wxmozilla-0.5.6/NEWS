@@ -1,0 +1,11 @@
+0.5.3
+-----
+
+- events processing fixes
+- added wxMozillaBrowser::SetZoom
+- added more events: wxMozillaTitleChangedEvent, wxMozillaProgressEvent,
+  wxMozillaBeforeLoadEvent, wxMozillaStateChangedEvent,
+  wxMozillaSecurityChangedEvent, wxMozillaLoadCompleteEvent and
+  wxMozillaStatusChangedEvent
+- added wxMOZILLA_CHECK_VERSION macro for checking available wxMozilla version
+- added wxMozillaSettings class for setting preferences

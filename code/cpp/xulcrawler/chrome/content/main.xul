@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window onload="onMainXulWinLoaded();" id="mywindow" title="Xul Crawler" width="800" height="600" name="Hans" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <script type="application/javascript" src="chrome://xulcrawler/content/main.js"/>
+    <caption label="Hello World"/>
+    
+	<separator/>
+    <browser id="mybrowser1"  src="http://airplaymusic.dk.localhost" flex="1" />
+
+	<button id="btn1" label="More >>" oncommand="showMore();"/>
+    <separator/>
+    <description id="more-text" hidden="true">This is a simple XULRunner application. XUL is simple to use and quite powerful and can even be used on mobile devices.</description>
+</window>

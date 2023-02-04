@@ -1,0 +1,17 @@
+# *** EXECUTABLE: 'wxMinimal' main cbs file. ***
+
+ADDX_DEPENDS_ON ( crawl                 )
+
+# -------------------
+# --- Build setup ---
+# -------------------
+VERIQUIN_ADD_QT_LIBS()
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE ( qtnetworkdownload.cpp		)
+
+
+#MESSAGE ( STATUS "My Message qtnetworkdownload" )
+

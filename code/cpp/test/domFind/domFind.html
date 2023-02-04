@@ -1,0 +1,67 @@
+<html xml:lang="da" lang="da">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Events</title>    
+<script type="text/javascript">
+
+function showMe( sIdShow )
+{
+	var idShow=document.getElementById( sIdShow );
+	idShow.innerHTML = sIdShow;
+}
+
+function addMe( sIdAddTo, sText )
+{
+	var idAddTo=document.getElementById( sIdAddTo );
+	idAddTo.innerHTML = idAddTo.innerHTML + ",&nbsp;" + sText;
+}
+
+</script>
+
+</head>
+<body>
+<body>
+	<h1> Test javascript events </h1>
+
+	<table border="1" >
+		<tr><td> <input onclick="showMe('INPUT_onClick')" ></input>INPUT_onClick</td><td id="INPUT_onClick" >0</td></tr>
+		<tr><td> <input type=button onclick="showMe('INPUT_button_onClick')" ></input>INPUT_button_onClick</td><td id="INPUT_button_onClick" >0</td></tr>
+		<tr><td> <input type=checkbox onclick="showMe('INPUT_checkbox_onClick')" ></input>INPUT_checkbox_onClick</td><td id="INPUT_checkbox_onClick" >0</td></tr>
+		<tr><td> <input type=file onclick="showMe('INPUT_file_onClick')" ></input>INPUT_file_onClick</td><td id="INPUT_file_onClick" >0</td></tr>
+		<tr><td> <input type=hidden onclick="showMe('INPUT_hidden_onClick')" ></input>INPUT_hidden_onClick</td><td id="INPUT_hidden_onClick" >0</td></tr>
+		<tr><td> <input type=image src="image.png" onclick="showMe('INPUT_image_onClick')" ></input>INPUT_image_onClick</td><td id="INPUT_image_onClick" >0</td></tr>
+		<tr><td> <input type=password onclick="showMe('INPUT_password_onClick')" ></input>INPUT_password_onClick</td><td id="INPUT_password_onClick" >0</td></tr>
+		<tr><td> <input type=radio onclick="showMe('INPUT_radio_onClick')" ></input>INPUT_radio_onClick</td><td id="INPUT_radio_onClick" >0</td></tr>
+		<tr><td> <input type=reset onclick="showMe('INPUT_reset_onClick')" ></input>INPUT_reset_onClick</td><td id="INPUT_reset_onClick" >0</td></tr>
+		<tr><td> <input find=FIND1 type=submit onclick="showMe('INPUT_submit_onClick')" ></input>INPUT_submit_onClick</td><td id="INPUT_submit_onClick" >0</td></tr>
+		<tr><td> <input stop=STOP1 stopme=STOPME type=text find=FIND2 onclick="showMe('INPUT_text_onClick')" search=SEARCH_BACK ></input>INPUT_text_onClick</td><td id="INPUT_text_onClick" >0</td></tr>
+		
+		<tr><td a=b c=d seq1=1 > </td><td stopSeq=STOP3 id="BUTTON_onClick" >0</td>	</tr>
+		<tr><td a=b c=d seq2=2 ></td><td search=SEARCH_BACK_SEQ >0</td></tr>
+		<tr><td> <div onclick="showMe('DIV_onClick')" >DIV_onClick</div></td><td id="DIV_onClick" >0</td></tr>
+		<tr><td> <span onclick="showMe('SPAN_onClick')" >SPAN_onClick</span></td><td id="SPAN_onClick" >0</td></tr>
+		<tr><td> <a onclick="showMe('A_onClick')" href=# >A_onClick</span></td><td id="A_onClick" >0</td></tr>
+	</table>
+	
+
+	<table border="1" >
+		<tr>
+		<td> 
+			<input id=DIV_MouseEvents 
+				onfocus="addMe('DIV_MouseEventsShow','DIV_onfocus')" 
+				onblur="addMe('DIV_MouseEventsShow','DIV_onblur')" 
+				onselect="addMe('DIV_MouseEventsShow','DIV_onselect')" 
+				onchange="addMe('DIV_MouseEventsShow','DIV_onchange')" 
+				onclick="addMe('DIV_MouseEventsShow','DIV_onclick')" 
+				ondblclick="addMe('DIV_MouseEventsShow','DIV_ondblclick')" 
+				onmousedown="addMe('DIV_MouseEventsShow','DIV_onmousedown')" 
+				onmouseup="addMe('DIV_MouseEventsShow','DIV_onmouseup')" 
+				onmouseover="addMe('DIV_MouseEventsShow','DIV_onmouseover')" 
+				onmouseout="addMe('DIV_MouseEventsShow','DIV_onmouseout')" 
+				>DIV_MouseEvents
+			</input>
+		</td>
+		<td id=DIV_MouseEventsShow ></td>
+		</tr>
+	</table>
+</body>

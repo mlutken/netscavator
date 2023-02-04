@@ -1,0 +1,14 @@
+body {
+    background:#fff url("background.gif") repeat-x top left;
+    padding:2px;
+}
+
+.largeText {
+  color: #4F4E4E;
+  font: normal 18px/1.5 Verdana, Arial, Helvetica, sans-serif;
+}
+
+.largeTextTable {
+  color: #1F1E1E;
+  font: normal 18px/1.5 Verdana, Arial, Helvetica, sans-serif;
+}

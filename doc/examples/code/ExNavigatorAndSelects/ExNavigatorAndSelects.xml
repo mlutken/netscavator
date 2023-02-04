@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ROOT>
+	<TIME_SCANNING_START_UTC>20121011T114034</TIME_SCANNING_START_UTC>
+	<TIME_SCANNING_START_LOCAL>2012-Oct-11 13:40:34</TIME_SCANNING_START_LOCAL>
+	<product>
+		<product_name>Dress</product_name>
+		<product_price>45.5</product_price>
+		<sex>F</sex>
+		<fabric>Wool</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>dresses,wool</navigator_state>
+		<dbg_state_progress>5 / 0</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Dress</product_name>
+		<product_price>55.5</product_price>
+		<sex>F</sex>
+		<fabric>Wool</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>dresses,wool</navigator_state>
+		<dbg_state_progress>5 / 0</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Dress</product_name>
+		<product_price>35.75</product_price>
+		<sex>F</sex>
+		<fabric>Wool</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>dresses,wool</navigator_state>
+		<dbg_state_progress>5 / 0</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Dress</product_name>
+		<product_price>67.25</product_price>
+		<sex>F</sex>
+		<fabric>Wool</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>dresses,wool</navigator_state>
+		<dbg_state_progress>5 / 0</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Dress</product_name>
+		<product_price>55.5</product_price>
+		<sex>F</sex>
+		<fabric>Cotton</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>dresses,cotton</navigator_state>
+		<dbg_state_progress>5 / 1</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Dress</product_name>
+		<product_price>65.5</product_price>
+		<sex>F</sex>
+		<fabric>Cotton</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>dresses,cotton</navigator_state>
+		<dbg_state_progress>5 / 1</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Dress</product_name>
+		<product_price>45.75</product_price>
+		<sex>F</sex>
+		<fabric>Cotton</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>dresses,cotton</navigator_state>
+		<dbg_state_progress>5 / 1</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Dress</product_name>
+		<product_price>77.25</product_price>
+		<sex>F</sex>
+		<fabric>Cotton</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>dresses,cotton</navigator_state>
+		<dbg_state_progress>5 / 1</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Tie</product_name>
+		<product_price>25.5</product_price>
+		<sex>M</sex>
+		<fabric>Wool</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>ties,wool</navigator_state>
+		<dbg_state_progress>5 / 2</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Tie</product_name>
+		<product_price>35.5</product_price>
+		<sex>M</sex>
+		<fabric>Wool</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>ties,wool</navigator_state>
+		<dbg_state_progress>5 / 2</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Tie</product_name>
+		<product_price>25.75</product_price>
+		<sex>M</sex>
+		<fabric>Wool</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>ties,wool</navigator_state>
+		<dbg_state_progress>5 / 2</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Tie</product_name>
+		<product_price>47.25</product_price>
+		<sex>M</sex>
+		<fabric>Wool</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>ties,wool</navigator_state>
+		<dbg_state_progress>5 / 2</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Tie</product_name>
+		<product_price>35.5</product_price>
+		<sex>M</sex>
+		<fabric>Cotton</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>ties,cotton</navigator_state>
+		<dbg_state_progress>5 / 3</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Tie</product_name>
+		<product_price>45.5</product_price>
+		<sex>M</sex>
+		<fabric>Cotton</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>ties,cotton</navigator_state>
+		<dbg_state_progress>5 / 3</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Tie</product_name>
+		<product_price>25.75</product_price>
+		<sex>M</sex>
+		<fabric>Cotton</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>ties,cotton</navigator_state>
+		<dbg_state_progress>5 / 3</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Tie</product_name>
+		<product_price>57.25</product_price>
+		<sex>M</sex>
+		<fabric>Cotton</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>ties,cotton</navigator_state>
+		<dbg_state_progress>5 / 3</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Jacket</product_name>
+		<product_price>83.5</product_price>
+		<sex>MF</sex>
+		<fabric>Wool</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>jackets,wool</navigator_state>
+		<dbg_state_progress>5 / 4</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Jacket</product_name>
+		<product_price>76.5</product_price>
+		<sex>MF</sex>
+		<fabric>Wool</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>jackets,wool</navigator_state>
+		<dbg_state_progress>5 / 4</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Jacket</product_name>
+		<product_price>63.75</product_price>
+		<sex>MF</sex>
+		<fabric>Wool</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>jackets,wool</navigator_state>
+		<dbg_state_progress>5 / 4</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Jacket</product_name>
+		<product_price>58.25</product_price>
+		<sex>MF</sex>
+		<fabric>Wool</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>jackets,wool</navigator_state>
+		<dbg_state_progress>5 / 4</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Jacket</product_name>
+		<product_price>65.5</product_price>
+		<sex>MF</sex>
+		<fabric>Cotton</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>jackets,cotton</navigator_state>
+		<dbg_state_progress>5 / 5</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Jacket</product_name>
+		<product_price>79.5</product_price>
+		<sex>MF</sex>
+		<fabric>Cotton</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>jackets,cotton</navigator_state>
+		<dbg_state_progress>5 / 5</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Jacket</product_name>
+		<product_price>51.75</product_price>
+		<sex>MF</sex>
+		<fabric>Cotton</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>jackets,cotton</navigator_state>
+		<dbg_state_progress>5 / 5</dbg_state_progress>
+	</product>
+	<product>
+		<product_name>Jacket</product_name>
+		<product_price>82.25</product_price>
+		<sex>MF</sex>
+		<fabric>Cotton</fabric>
+		<currency_name>EUR</currency_name>
+		<navigator_state>jackets,cotton</navigator_state>
+		<dbg_state_progress>5 / 5</dbg_state_progress>
+	</product>
+	<TIME_SCANNING_END_UTC>20121011T114037</TIME_SCANNING_END_UTC>
+	<TIME_SCANNING_END_LOCAL>2012-Oct-11 13:40:37</TIME_SCANNING_END_LOCAL>
+	<TIME_SCANNING_ELAPSED>000003</TIME_SCANNING_ELAPSED>
+	<TIME_SCANNING_ELAPSED>00:00:03</TIME_SCANNING_ELAPSED>
+</ROOT>

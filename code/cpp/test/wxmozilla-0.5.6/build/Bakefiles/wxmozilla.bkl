@@ -1,0 +1,202 @@
+<?xml version="1.0" ?>
+<!-- $Id: wxmozilla.bkl,v 1.8 2005/06/10 22:23:24 vaclavslavik Exp $ -->
+
+<makefile>
+	<!-- wxMozilla version metadata -->
+	<set var="PROJ_NAME">wxmozilla</set>
+	<set var="PROJ_VERSION">0.5.6</set>
+
+	<!-- include the wx template, so that we can get
+		 all necessary wx build options and settings. -->
+    <include file="presets/wx.bkl"/>
+
+    <set var="TARGETING_WIN32">
+        <if cond="FORMAT=='autoconf' or FORMAT=='gnu'">0</if>
+        <if cond="FORMAT!='autoconf' and FORMAT!='gnu'">1</if>
+    </set>    
+	
+	<option name="MOZINCLUDE" category="path">
+		<default-value>../../mozilla/include</default-value>
+        <description>
+            The directory where Mozilla includes can be found.
+        </description>
+	</option>
+
+	<option name="MOZEMBED" category="path">
+		<default-value>../../mozilla/Embed</default-value>
+        <description>
+            The directory where Mozilla dlls can be found.
+        </description>
+	</option>
+
+	<option name="MOZLIBDIR" category="path">
+		<default-value>../../mozilla/lib</default-value>
+        <description>
+            The directory where Mozilla .lib files can be found. 
+			This is only needed on Windows.
+        </description>
+	</option>
+
+	<if cond="FORMAT=='autoconf'">
+		<option name="USE_WXGTK">
+			<values>yes,no</values>
+			<default-value>no</default-value>
+        	<description>
+            	On some platforms, such as Mac, using GTK is an
+				option but not enabled by default. We need to 
+				adjust our settings if it is used.
+        	</description>
+		</option>
+	</if>
+
+	<if cond="FORMAT!='autoconf'">
+		<set var="USE_WXGTK">no</set>
+	</if>
+
+	<option name="MOZILLA_HOME" category="path"/>
+
+	<if cond="TARGETING_WIN32=='1'">
+	    <set var="WARNINGS">
+	        <if cond="WX_DEBUG=='1'">max</if>
+	        <if cond="WX_DEBUG=='0'">no</if>
+	    </set>
+	    <set var="DEBUGINFO">
+	        <if cond="WX_DEBUG=='1'">on</if>
+	        <if cond="WX_DEBUG=='0'">off</if>
+	    </set>
+	    <set var="DEBUGRUNTIME">
+	        <if cond="WX_DEBUG=='1'">on</if>
+	        <if cond="WX_DEBUG=='0'">off</if>
+	    </set>
+	    <set var="OPTIMIZEFLAG">
+	        <if cond="WX_DEBUG=='1'">off</if>
+	        <if cond="WX_DEBUG=='0'">speed</if>
+	    </set>
+    </if>
+
+	<template id="mozilla_gre">
+		<include>$(MOZINCLUDE)</include>
+		<include>$(MOZINCLUDE)/unix</include>
+		<include>$(MOZINCLUDE)/dom</include>
+		<include>$(MOZINCLUDE)/windowwatcher</include>
+		<include>$(MOZINCLUDE)/webbrowserpersist</include>
+		<include>$(MOZINCLUDE)/appcomps</include>
+		<include>$(MOZINCLUDE)/find</include>
+		<include>$(MOZINCLUDE)/txtsvc</include>
+		<include>$(MOZINCLUDE)/docshell</include>
+		<include>$(MOZINCLUDE)/shistory</include> 
+		<include>$(MOZINCLUDE)/webshell</include>
+		<include>$(MOZINCLUDE)/gfx</include>
+		<include>$(MOZINCLUDE)/necko</include> 
+		<include>$(MOZINCLUDE)/widget</include> 
+		<include>$(MOZINCLUDE)/content</include>
+		<include>$(MOZINCLUDE)/layout</include> 
+		<include>$(MOZINCLUDE)/browser</include>
+		<include>$(MOZINCLUDE)/webbrwsr</include>
+		<include>$(MOZINCLUDE)/uconv</include> 
+		<include>$(MOZINCLUDE)/embed_base</include> 
+		<include>$(MOZINCLUDE)/uriloader</include> 
+		<include>$(MOZINCLUDE)/editor</include> 
+		<include>$(MOZINCLUDE)/commandhandler</include> 
+		<include>$(MOZINCLUDE)/composer</include>
+		<include>$(MOZINCLUDE)/pref</include> 
+		<include>$(MOZINCLUDE)/profdirserviceprovider</include>
+		<include>$(MOZINCLUDE)/xpcom</include>
+		<include>$(MOZINCLUDE)/nspr</include>
+		<include>$(MOZINCLUDE)/string</include>
+		<lib-path>$(MOZEMBED)</lib-path>
+		<sys-lib>embed_base_s</sys-lib>
+		<sys-lib>xpcom</sys-lib>
+		<sys-lib>profdirserviceprovider_s</sys-lib>
+		<sys-lib>nspr4</sys-lib>
+		<if cond="FORMAT == 'autoconf'">
+			<sys-lib>plc4</sys-lib>
+			<sys-lib>plds4</sys-lib>
+		</if>
+		<if cond="FORMAT in ['msvc', 'msvc6prj', 'msvc4prj', 'borland']">
+			<lib-path>$(MOZLIBDIR)</lib-path>
+			<define>XP_WIN=1</define>
+		</if>
+	</template>
+
+	<template id="wxmozilla">
+		<include>../../src</include>
+		<!-- We need to add these define for Mozilla debug on Windows.
+			 For now, assume building release as release binaries come
+			 with wxMozilla packages; later we'll add an option
+			 for this.
+		<if cond="FORMAT!='autoconf'">
+			<set var="DEBUG_DEF1"><if cond="WX_DEBUG=='1'">_DEBUG</if></set>
+			<set var="DEBUG_DEF2"><if cond="WX_DEBUG=='1'">TRACING</if></set>
+			<set var="DEBUG_DEF3"><if cond="WX_DEBUG=='1'">DEBUG</if></set>
+			<define>$(DEBUG_DEF1)</define>
+			<define>$(DEBUG_DEF2)</define>
+			<define>$(DEBUG_DEF3)</define>
+		</if>
+		-->
+
+		<set var="MOZGTK_INCLUDES"><if cond="USE_WXGTK=='yes'">$(DOLLAR)(MOZINCLUDE)/gtkembedmoz</if></set>
+		<set var="MOZGTK_EMBEDLIB1"><if cond="USE_WXGTK=='yes'">gtkmozembed</if></set>
+		<set var="MOZGTK_EMBEDLIB2"><if cond="USE_WXGTK=='yes'">gtksuperwin</if></set>
+		<set var="MOZGTK_LDFLAGS"><if cond="USE_WXGTK=='yes'">-Wl,-rpath,$(DOLLAR)(MOZILLA_HOME)</if></set>
+
+		<include>$(MOZGTK_INCLUDES)</include>
+		<sys-lib>$(MOZGTK_EMBEDLIB1)</sys-lib>
+		<sys-lib>$(MOZGTK_EMBEDLIB2)</sys-lib>
+		<ldflags>$(MOZGTK_LDFLAGS)</ldflags>
+	</template>
+
+	<template id="wxmozilla_library">
+		<!-- common sources, flags, defines, etc. for static and shared lib targets -->
+        <sources>../../src/wxMozillaBrowser.cpp</sources>
+		<sources>../../src/wxMozillaBrowserChrome.cpp</sources>
+		<sources>../../src/wxMozillaEvents.cpp</sources>
+		<sources>../../src/wxMozillaWindow.cpp</sources>
+		<sources>../../src/helpers.cpp</sources>
+		<sources>../../src/cstmdlg.cpp</sources>
+		<sources>../../src/wxMozillaDialogs.cpp</sources>
+		<sources>../../src/wxMozillaSettings.cpp</sources>
+		<if cond="FORMAT in ['msvc', 'msvc6prj', 'borland', 'msvc4prj']">
+			<define>_DLL</define> <!-- dynamic C runtime link -->
+		</if>
+		<if cond="TARGETING_WIN32=='1'">
+	        <warnings>$(WARNINGS)</warnings>
+    	    <optimize>$(OPTIMIZEFLAG)</optimize>
+        	<debug-info>$(DEBUGINFO)</debug-info>
+	        <debug-runtime-libs>$(DEBUGRUNTIME)</debug-runtime-libs>
+	    </if>	
+	</template>
+	
+    <dll id="wxmozilla_dll" template="wx,mozilla_gre,wxmozilla,wxmozilla_library">
+		<version>$(PROJ_VERSION)</version>
+		<if cond="FORMAT in ['msvc', 'msvc6prj', 'borland', 'msvc4prj']">
+			<define>_WINDLL</define>
+		</if>
+		<define>WXUSINGDLL=1</define>
+		<wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </dll>
+
+	<lib id="wxmozilla_lib" template="wx-lib,mozilla_gre,wxmozilla,wxmozilla_library">
+	</lib>
+
+	<exe id="wxmozilla_demo" template="wx,mozilla_gre,wxmozilla">
+		<if cond="TARGETING_WIN32=='1'">
+	        <warnings>$(WARNINGS)</warnings>
+    	    <optimize>$(OPTIMIZEFLAG)</optimize>
+        	<debug-info>$(DEBUGINFO)</debug-info>
+	        <debug-runtime-libs>$(DEBUGRUNTIME)</debug-runtime-libs>
+	    </if>	
+		<app-type>gui</app-type>
+		<depends>wxmozilla_lib</depends>
+		<library>wxmozilla_lib</library>
+		<sources>../../demo/main.cpp</sources>
+		<if cond="FORMAT in ['msvc', 'msvc6prj', 'borland', 'msvc4prj']">
+        	<wx-lib>core</wx-lib>
+        	<wx-lib>base</wx-lib>
+		</if>
+	</exe>
+	<!-- for some odd reason, doing this changes the wxmozilla_demo dependency to wxmozilla_dll in MSVC 6 -->
+	<!-- <set var="MSVC6PRJ_MERGED_TARGETS" append="1">wxmoz_lib=wxmozilla_lib+wxmozilla_dll</set> -->
+
+</makefile>

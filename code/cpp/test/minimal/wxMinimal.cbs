@@ -1,0 +1,40 @@
+# *** EXECUTABLE: 'wxMinimal' main cbs file. ***
+
+# -------------------
+# --- Build setup ---
+# -------------------
+#ADDX_DEPENDS_ON ( z					)
+ADDX_DEPENDS_ON ( wx_core			)
+ADDX_DEPENDS_ON ( wx_base			)
+##ADDX_DEPENDS_ON ( gtk		WINDOWS	)
+ADDX_DEPENDS_ON ( boost_headers		)
+
+ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR}				)
+ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_INCLUDE_SDK}				)
+ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_INCLUDE}					)
+ADDX_LINK_DIR ( ${XULRUNNER_SDK_MAIN_LIB}					)
+ADDX_LINK_DIR ( ${XULRUNNER_SDK_DEVEL_LIB}					)
+
+
+ADDX_LINK_LIBRARY 	( xpcomglue								)
+ADDX_LINK_LIBRARY 	( profdirserviceprovidersa_s	WINDOWS	)
+#ADDX_LINK_LIBRARY 	( nspr							WINDOWS	) # TODO: This might be needed too
+
+ADD_DEFINE ( XPCOM_GLUE								1	)
+ADD_DEFINE ( XULRUNNER_SDK_MAIN_LIB		\\\\"${XULRUNNER_SDK_MAIN_LIB}\\\\"			)
+ADD_DEFINE ( __WXGTK__				1		LINUX	)
+ADD_DEFINE ( __WXMSW__				1		WINDOWS	)
+ADD_DEFINE ( XP_WIN 				1		WINDOWS	)
+
+#ADD_COMPILE_FLAG ( /Zc:wchar_t-				COMPILER_MSVC	)
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE ( Init.cpp				)
+ADD_SOURCE_FILE ( MiroBrowserEmbed.cpp	)
+ADD_SOURCE_FILE ( minimal.cpp		)
+
+
+#MESSAGE ( STATUS "My Message " ) 
+  

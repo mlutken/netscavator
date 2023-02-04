@@ -1,0 +1,6 @@
+xul-dir=@XULDIR@
+php-ini-path=@CBS_SHARED_LIBRARY_PATH_PREBUILD@/php.ini
+resource-dir=@RESOURCE_DIR@
+
+
+

@@ -1,0 +1,32 @@
+cd /home/ml/code/build/crawler/code/cpp/scriptcrawl/cpp_crawl && /usr/bin/cmake -E cmake_link_script
+CMakeFiles/cpp_crawl.dir/link.txt --verbose=1
+/usr/bin/c++ -fPIC -O3 -DNDEBUG  -shared  -o
+libcpp_crawl.so CMakeFiles/cpp_crawl.dir/__/scriptcrawl.cpp.o
+CMakeFiles/cpp_crawl.dir/__/scriptcrawl_private.cpp.o CMakeFiles/cpp_crawl.dir/scriptcrawl_module_cpp.cpp.o
+../../../../lib/libscriptfunctions_php.a
+../../../../lib/libcrawl.a
+../../../../lib/libinterfaces.a
+../../../../lib/libcpaf_net.a
+../../../../lib/libcpaf_compression.a
+../../../../lib/libcpaf_utils.a
+../../../../lib/libcpaf_filesystem.a
+../../../../lib/libcpaf_system.a
+../../../../lib/libloki.a
+../../../../lib/libscriptfunctions_php.a
+../../../../lib/libcpaf_net.a
+/usr/lib/x86_64-linux-gnu/libcurl.so
+../../../../lib/libscript_embedding.a
+../../../../lib/libutf8.a
+../../../../lib/libwebkitbrowser.a
+../../../../lib/libinterfaces.a
+/usr/lib/x86_64-linux-gnu/libQt5Widgets.so.5.9.5
+/usr/lib/x86_64-linux-gnu/libQt5Gui.so.5.9.5
+../../../../lib/libcpaf_compression.a
+../../../../lib/libcpaf_filesystem.a
+../../../../lib/libcpaf_utils.a
+../../../../lib/libcpaf_system.a
+../../../../lib/libloki.a
+/usr/lib/x86_64-linux-gnu/libQt5Network.so.5.9.5
+/usr/lib/x86_64-linux-gnu/libQt5Core.so.5.9.5
+
+

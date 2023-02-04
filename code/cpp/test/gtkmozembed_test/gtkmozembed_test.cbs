@@ -1,0 +1,106 @@
+# *** EXECUTABLE: 'gtkmozembed_test' main cbs file. ***
+
+# -------------------
+# --- Build setup ---
+# -------------------
+#ADDX_DEPENDS_ON ( webbrowse	)
+ADDX_DEPENDS_ON ( gtk	)
+
+ADDX_INCLUDE_DIR ( ${veriquin_cpp_SOURCE_DIR}/webbrowse	)
+ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR}			)
+
+ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_INCLUDE_SDK}			)
+ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_INCLUDE}				)
+ADDX_LINK_DIR ( ${XULRUNNER_SDK_MAIN_LIB}				)
+ADDX_LINK_DIR ( ${XULRUNNER_SDK_DEVEL_LIB}				)
+
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/xpcom 					)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/content 					)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/string 					)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/docshell 					)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/necko 					)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/widget 					)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/dom 						)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/gfx 						)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/layout 					)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/uriloader 				)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/webbrwsr 					)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/shistory 					)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/embed_base 				)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/windowwatcher 			)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/profdirserviceprovider 	)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/xulapp 					)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/accessibility 			)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include   						)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/gtkembedmoz 				)
+# # # ADDX_INCLUDE_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/include/nspr						)
+# # # #ADDX_INCLUDE_DIR		( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/sdk/include	)
+# # # #-I.  -I. -I.
+
+
+ADD_COMPILE_FLAG ( "-fvisibility=hidden"	LINUX	)
+###ADD_COMPILE_FLAG ( -fshort-wchar			LINUX	)
+ADD_COMPILE_FLAG ( -fno-rtti 				LINUX	)
+ADD_COMPILE_FLAG ( -fno-exceptions 			LINUX	)
+ADD_COMPILE_FLAG ( -fno-strict-aliasing     LINUX	)
+ADD_COMPILE_FLAG ( -pthread                 LINUX	)
+ADD_COMPILE_FLAG ( -pipe                    LINUX	)
+ADD_COMPILE_FLAG ( -DNDEBUG                 LINUX	)
+ADD_COMPILE_FLAG ( -DTRIMMED                LINUX	)
+ADD_COMPILE_FLAG ( -Os                      LINUX	)
+ADD_COMPILE_FLAG ( -freorder-blocks         LINUX	)
+ADD_COMPILE_FLAG ( -fno-reorder-functions   LINUX	)
+
+# # # ADD_DEFINE ( XULRUNNER_SDK_BASE		\\\\"${XULRUNNER_SDK_BASE}\\\\"	)
+ADD_DEFINE ( XULRUNNER_SDK_MAIN_LIB		\\\\"${XULRUNNER_SDK_MAIN_LIB}\\\\"			)
+
+# # ADD_DEFINE ( IMPL_XREAPI					1		) 
+# # ADD_DEFINE ( MOZILLA_INTERNAL_API 			1		)
+# # ADD_DEFINE ( _IMPL_NS_COM 					1		)
+# # ADD_DEFINE ( EXPORT_XPT_API 				1		)
+# # ADD_DEFINE ( EXPORT_XPTC_API 				1		)
+# # ADD_DEFINE ( _IMPL_NS_COM_OBSOLETE 			1		)
+# # ADD_DEFINE ( _IMPL_NS_GFX 					1		)
+# # ADD_DEFINE ( _IMPL_NS_WIDGET 				1		)
+# # ADD_DEFINE ( IMPL_XREAPI 					1		)
+# # ADD_DEFINE ( IMPL_NS_NET 					1		)
+# # ADD_DEFINE ( IMPL_THEBES  					1		)
+# # ADD_DEFINE ( ZLIB_INTERNAL					1		) 
+# # ADD_DEFINE ( _IMPL_GTKMOZEMBED 				1		)
+# # ADD_DEFINE ( OSTYPE							\\\\"Linux2.6.18.8-0\\\\"	LINUX	) 
+# # ADD_DEFINE ( OSARCH							Linux						LINUX	) 
+
+
+ADDX_LINK_DIR ( ${XULRUNNER_SDK_BASE}/xulrunner-sdk/lib	)
+#ADDX_LINK_DIR ( /home/ml/code/temp/mozilla/dist/lib	)
+
+
+ADD_DEFINE ( XPCOM_GLUE						1	)
+ADD_DEFINE ( OSTYPE							\\\\"Linux2.6.18.8-0\\\\"	LINUX	) 
+ADD_DEFINE ( OSARCH							Linux						LINUX	) 
+ADD_DEFINE ( NDEBUG 						1							LINUX	)
+ADD_DEFINE ( TRIMMED 						1							LINUX	)
+
+##ADD_COMPILE_FLAG ( -fshort-wchar			LINUX	)
+ADD_COMPILE_FLAG ( -fvisibility=hidden 		LINUX	)
+ADD_COMPILE_FLAG ( -fno-rtti 				LINUX	)
+ADD_COMPILE_FLAG ( -fno-exceptions 			LINUX	)
+ADD_COMPILE_FLAG ( -fno-strict-aliasing 	LINUX	)
+ADD_COMPILE_FLAG ( -pthread 				LINUX	)
+ADD_COMPILE_FLAG ( -pipe  					LINUX	)
+ADD_COMPILE_FLAG ( -Os 						LINUX	)
+ADD_COMPILE_FLAG ( -freorder-blocks 		LINUX	)
+ADD_COMPILE_FLAG ( -fno-reorder-functions	LINUX	)
+
+
+
+ADDX_LINK_LIBRARY ( xpcomglue	)
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE ( gtkmozembed_test.cpp		)
+
+#MESSAGE ( STATUS "My Message " ) 
+
+  

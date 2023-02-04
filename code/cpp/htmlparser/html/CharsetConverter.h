@@ -1,0 +1,28 @@
+#pragma once
+
+#include <iconv.h>
+#include <string>
+#include <stdexcept>
+
+namespace crawl
+{
+	class CharsetConverter
+	{
+		public:
+			class Exception : public std::runtime_error
+			{
+				public:
+					Exception(const std::string &arg)
+						: std::runtime_error(arg) {}
+			};
+			
+            CharsetConverter(const std::string &from, const std::string &to);
+			~CharsetConverter();
+			
+			std::string convert(const std::string &input);
+
+		private:
+			iconv_t mIconvDescriptor;;
+	};
+}
+

@@ -1,0 +1,11 @@
+2004-04-19 David Teller <Yoric@users.sourceforge.net>
+	*wxMozillaProtocol.h wxMozillaProtocol.cpp : created
+	*wxHtmlWindow.h : fixed the miswritten #define name
+	*helpers.h helpers.cpp: added wxString_to_nsURI, nsURI_to_wxString, wxUId_to_nsID
+	*protocols.cpp: created
+	*wxMozillaComponents.h: created
+	*demo/Makefile.am: added wxMozillaProtocolsDemo
+	*src/Makefile.am: added the aforementioned files
+	
+(2003-03-03) Initial import into cvs
+	-codebase from work provided by Jeremiah, Kevin, and Dave

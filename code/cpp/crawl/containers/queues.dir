@@ -1,0 +1,61 @@
+/** \dir
+!!! Queues
+Here all internet related %queues are implemented. Each time the parser 
+comes across a new webpage-link, external link, link to file/image or 
+perhaps needs Google to help spell checking a word the request is put 
+into the appropriate queue. 
+
+A lot of the requests will consists of just an Url and the queue will then 
+know what to do with it. For example the PageQueue will retrieve the content 
+of the page and make that string data available through the 
+XX_repository_XX_NAME. On the other hand the CheckLinkQueue will only check 
+to see that the link actually works and only store a boolean representing 
+the result.
+
+
+
+
+
+=================================================================
+
+!! Formatting examples - TODO: Remove Later XX
+Here follows DoxyS wikistyle formatting examples.
+These and more can also be found in Help (Top right corner) or here "Text Formatting".
+
+
+!!! Headline BIG
+!! Headline Medium 
+! Headline small
+
+#bold text#  }italic text} {underlined text{  $monospaced text$ 
+
+Will produce:
+
+! Bullets:
+(Omit the \# to make unnumbered) 
+
+-# First item
+-# Second item
+-# Third item
+  -# First subitem
+  -# Second subitem
+
+! Tables
+
+||HeadlineCell||HeadlineCell||HeadlineCell
+|Cell|Cell|Cell
+|Cell|Cell|Cell
+
+
+
+\code
+Raw unformatted blok
+Of text complete with all newlines
+Like this
+\endcode
+
+\image verify.png "Image caption goes here if you want one"
+
+*/
+
+

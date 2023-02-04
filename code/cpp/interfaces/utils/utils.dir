@@ -1,0 +1,51 @@
+/** \dir
+!!! Common utillity functions
+This directory contains common utillity functions. Please remember to regularely 
+see if a group of the functions here could be moved into a file or perhaps 
+directory with a better (les general) name. It would be nice if this directory 
+does {not{ end up like a total mess :-)
+
+
+=================================================================
+
+!! Formatting examples - TODO: Remove Later XX
+Here follows DoxyS wikistyle formatting examples.
+These and more can also be found in Help (Top right corner) or here "Text Formatting".
+
+
+!!! Headline BIG
+!! Headline Medium 
+! Headline small
+
+#bold text#  }italic text} {underlined text{  $monospaced text$ 
+
+Will produce:
+
+! Bullets:
+(Omit the \# to make unnumbered) 
+
+-# First item
+-# Second item
+-# Third item
+  -# First subitem
+  -# Second subitem
+
+! Tables
+
+||HeadlineCell||HeadlineCell||HeadlineCell
+|Cell|Cell|Cell
+|Cell|Cell|Cell
+
+
+
+\code
+Raw unformatted blok
+Of text complete with all newlines
+Like this
+\endcode
+
+\image verify.png "Image caption goes here if you want one"
+
+*/
+
+

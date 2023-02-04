@@ -1,0 +1,134 @@
+/*
+-------------------------------------
+--- String manipulation functions ---
+-------------------------------------*/
+A collection of functions that manipulate strings like eraseAll_fn, toUpper_fn, etc.
+
+NOTE: These are normal callable PHP functions. Use same names without _fn and in quotes
+      when using as modifiers in outputXX() functions, valueModify(), valueGet(),
+      valueCompare(), nodeCompare(), nodeValueParent(), nodeValuePos()
+      See "String Manipulators" for more.
+
+
+
+/* --- 0 parameters --- */
+std::string     trimDefault_fn      ( const std::string& sInput     );
+std::string     raw_fn              ( const std::string& sInput     );
+std::string     toUpper_fn          ( const std::string& sInput     );
+std::string     toLower_fn          ( const std::string& sInput     );
+std::string     trimEnds_fn         ( const std::string& sInput     );
+std::string     trimLeft_fn         ( const std::string& sInput     );
+std::string     trimRight_fn        ( const std::string& sInput     );
+std::string     trimYear_fn         ( const std::string& sInput     );
+std::string     trimInteger_fn      ( const std::string& sInput     );
+std::string     trimNumber_fn       ( const std::string& sInput     );
+
+/* --- 1 parameters --- */
+std::string     trimCharsEnds_fn    ( const std::string& sInput, const std::string& sCharsToTrim )  ;
+std::string     trimCharsLeft_fn    ( const std::string& sInput, const std::string& sCharsToTrim )  ;
+std::string     trimCharsRight_fn   ( const std::string& sInput, const std::string& sCharsToTrim )  ;
+std::string     trimRegex_fn        ( const std::string& sInput, const std::string& sRegex )                                                ;
+std::string     itrimRegex_fn       ( const std::string& sInput, const std::string& sRegex )                                                ;
+std::string     append_fn           ( const std::string& sInput, const std::string& sString )   ;
+std::string     prepend_fn          ( const std::string& sInput, const std::string& sString )   ;
+std::string     eraseFirst_fn       ( const std::string& sInput, const std::string& sSearchFor  )   ;
+std::string     ieraseFirst_fn      ( const std::string& sInput, const std::string& sSearchFor  )   ;
+std::string     eraseLast_fn        ( const std::string& sInput, const std::string& sSearchFor  )   ;
+std::string     ieraseLast_fn       ( const std::string& sInput, const std::string& sSearchFor  )   ;
+std::string     eraseAll_fn         ( const std::string& sInput, const std::string& sSearchFor  )   ;
+std::string     ieraseAll_fn        ( const std::string& sInput, const std::string& sSearchFor  )   ;
+std::string     eraseRegex_fn       ( const std::string& sInput, const std::string& sSearchFor  )   ;
+std::string     eraseAllRegex_fn    ( const std::string& sInput, const std::string& sSearchFor  )   ;
+
+/* --- 2 parameters --- */
+std::string     trimIntegerCustom_fn( const std::string& sInput, const std::string& iBase,          const std::string& sThousandsSep);
+std::string     trimNumberCustom_fn ( const std::string& sInput, const std::string& sDecimalPoint,  const std::string& sThousandsSep);
+std::string     replaceFirst_fn     ( const std::string& sInput, const std::string& sSearchFor,     const std::string& sReplaceWith );
+std::string     ireplaceFirst_fn    ( const std::string& sInput, const std::string& sSearchFor,     const std::string& sReplaceWith );
+std::string     replaceLast_fn      ( const std::string& sInput, const std::string& sSearchFor,     const std::string& sReplaceWith );
+std::string     ireplaceLast_fn     ( const std::string& sInput, const std::string& sSearchFor,     const std::string& sReplaceWith );
+std::string     replaceAll_fn       ( const std::string& sInput, const std::string& sSearchFor,     const std::string& sReplaceWith )   ;
+std::string     ireplaceAll_fn      ( const std::string& sInput, const std::string& sSearchFor,     const std::string& sReplaceWith )   ;
+std::string     replaceRegex_fn     ( const std::string& sInput, const std::string& sSearchFor,     const std::string& sReplaceWith )   ;
+std::string     replaceAllRegex_fn  ( const std::string& sInput, const std::string& sSearchFor,     const std::string& sReplaceWith )   ;
+
+/* --- 2 parameters (last is an integer ) --- */
+std::string     eraseNth_fn         ( const std::string& sInput, const std::string& sSearchFor, int iNth    )   ;
+std::string     ieraseNth_fn        ( const std::string& sInput, const std::string& sSearchFor, int iNth    )   ;
+
+/* --- 3 parameters (last is an integer ) --- */
+std::string     replaceNth_fn       ( const std::string& sInput, const std::string& sSearchFor, const std::string& sReplaceWith, int iNth   )   ;
+std::string     ireplaceNth_fn      ( const std::string& sInput, const std::string& sSearchFor, const std::string& sReplaceWith, int iNth   )   ;
+
+
+----------------------
+--- trimDefault_fn ---
+---------------------- 
+Syntax:
+std::string trimDefault_fn ( const std::string& sInput );
+
+Family: 
+String manipulation functions 
+
+Parameters:
+
+Description:
+Trims spaces and non-breakable-spaces (&nbsp;) or \302\240 in UTF-8 from the input string.
+
+See also:
+trimEnds_fn(), trimLeft_fn(), trimRight_fn() 
+
+Example 1:
+\code
+$s = trimDefault_fn("  do trim me ");
+printf("Res: '%s'\n"); // Prints: 'do trim me' 
+\endcode
+
+
+
+-------------------
+--- browserShow ---
+------------------- 
+Syntax:
+void browserShow ()
+
+Family: 
+Browser functions
+
+Parameters:
+
+Description:
+Makes the browser visible if previously hidden using browserHide(). By default the browser window is visible.
+
+See also:
+browserHide(), browserSetSize()
+
+Example 1:
+
+
+----------------------
+--- browserSetSize ---
+----------------------
+Syntax:
+void browserSetSize (int x, int y)
+
+Family: 
+Browser functions
+
+Parameters:
+int | x | Width of browser window in pixels 
+int | y | Height of browser window in pixels 
+
+Description:
+Sets the width and height of the browser window.
+
+Example 1:
+\code
+function MyScript_beginMining()          
+{
+    browserSetSize (1000, 500);
+    ...
+}
+\endcode
+
+

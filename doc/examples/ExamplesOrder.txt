@@ -1,0 +1,12 @@
+The examples are meant to be read/tried in this order:
+
+ExMinimal
+ExSimpleDataMining
+ExTypicalDataMining
+ExDoSearchActionsAndClickNext
+ExNavigatorAndSelects
+ExNavigatorUrlLoad
+ExNavigatorDomClickPos
+ExNavigatorTextInput
+ExNavigatorFileInput
+ExNavigatorFileInputFilter

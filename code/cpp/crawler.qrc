@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Copyright.txt</file>
+        <file>jquery.min.js</file>
+        <file>gui/default.txt</file>
+    </qresource>
+</RCC>

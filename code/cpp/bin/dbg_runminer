@@ -1,0 +1,8 @@
+#!/bin/bash 
+BITWIDTH=32
+if [ -f "/lib64/libm.so.6" ]; then  BITWIDTH=64; fi
+if [ -f "/usr/lib64/libz.so" ]; then  BITWIDTH=64; fi
+
+${VERIQUIN_CPP_DIR}/3rdparty/php-5.3.2/linux_${BITWIDTH}_debug/bin/php -c ${VERIQUIN_CPP_DIR}/build_cbs/libs/shared/Debug -f "$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"
+
+

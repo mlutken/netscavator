@@ -1,0 +1,769 @@
+/* File : scripting.i */
+%module scripting
+
+
+%{
+#include "scriptcrawl.h"
+#include <string>
+#include <vector>
+#include <url/UrlGetter.h>
+#include <utils/CommandLineParser.h>
+#include <utils/string_compare_functions.h>
+%}
+
+%include "std_string.i"
+%include "typemaps.i"
+
+
+class UrlGetter {
+public:
+     UrlGetter ( int iLinkType, string sUrlsMatch="",  const 
+string& sIdCompFun = "equals" );
+     ~UrlGetter();
+     int                count                    ();
+     bool            getNext                    ();
+     void            resetCurrent            ( int iNewCurrent = 0 );
+     bool            currentAtEnd            ();
+     string        current                    ();
+     string        current_raw                ();
+     string        currentProtocol            ();
+     string        currentPath                ();
+     string        currentParameters        ();
+     string        currentDomain            ();
+     string        currentTopDomain        ();
+     string        currentSecondLevelDomain();
+     string        currentSubDomains        ();
+     string        currentSiteDomain        ();
+};
+
+
+namespace crawl {
+
+     class DomSeq
+     {
+     public:
+
+
+         DomSeq    ( );
+         DomSeq    (    string sPattern, string sCompareFun, int iPostMatchSteps );
+         DomSeq    (    string sPattern, string sCompareFun, int iPostMatchSteps, string sCommaChar );
+         void    add    ( string sPattern )    ;
+         void    add    ( string sPattern, string sCompareFun );
+
+         int        getSize    ()     const;
+     };
+}
+
+/* --- Command line parsing --- */
+
+namespace crawl {
+     void            cmdDefaultValsSet    ( const string sDefaults    );
+     void            cmdParseStart        ();
+     bool            cmdParseArg            ( const string sArgument    );
+     string        cmdValStrGet        ( const string sArgName );
+     double            cmdValNumGet        ( const string sArgName );
+     void            cmdValStrForceSet    ( const string sArgName, string sVal );
+     void            cmdValNumForceSet    ( const string sArgName, double fVal );
+}
+
+
+
+
+/* ----------------------
+    --- Init functions ---
+    ---------------------- */
+void             initMining();
+void             addMiner( string sMinerName );
+void             runMiners( );
+
+/*----------------------
+--- Misc functions ---
+----------------------*/
+/*void             useLocale            ( string sLocale 
+)    ; */   /* Empty impl. for now */
+string        currentMiner        ()     ;
+string        currentDataFile     ()     ;
+
+/*
+-------------------------
+--- Browser functions ---
+------------------------- */
+void            browserHide            ();
+void            browserShow            ();
+void            browserSetSize         (int x, int y);
+int             browserGetSizeX        ();
+int             browserGetSizeY        ();
+bool            browserGoBack          ();
+
+/*------------------------------------------
+--- String operators/compare functions ---
+------------------------------------------*/
+typedef bool (*CompareStringsFnT)(const string&, const string&) ;
+bool          valuesCompare        ( string sInput, string sTest, string sCompareFun );
+
+
+/*
+--------------------------------
+--- Navigation (nav) functions ---
+----------------------------------*/
+%constant int ATTR;
+
+void            navActiveNavigatorSet   ( string sNavigatorName );
+string     navActiveNavigatorGet   ();
+void            navJavascriptExecuteCreate ( string sNavActionName );
+void            navUrlLoadCreate        ( string sNavActionName, string sBaseUrl = "" );
+void            navInputOptionsCreate   ( string sNavActionName );
+void            navDropDownSelectCreate ( string sNavActionName );
+void            navDomPosClickCreate    ( string sNavActionName, string sFindNextDomPosSequence );
+void            navAutoInputCreate      ( string sNavActionName, string sCharsList, int iMinLength, int iMaxLength );
+
+void            navAttributeNamesCreate ( string sAttrNames, string sDelimiter = "," );
+
+void            navBeginStateSet        ( string sState, string sActionSeparator );
+void            navBeginStateSet        ( string sState );
+void            navEndStateSet          ( string sState, string sActionSeparator );
+void            navEndStateSet          ( string sState );
+
+void            navOptionResourceAdd    ( string sResourcePath, string sScriptFilterFunction,  bool bForceDownload  );
+void            navOptionAdd            ( int iCount, string sValue, string sSearchFor  );
+void            navOptionAdd            ( int iCount, string sValue );
+void            navOptionAdd            ( string sValue, string sSearchFor );
+void            navOptionAdd            ( string sValue );
+void            navOptionAdd            ( int iCount );
+
+void            navOptionAdd            ( int iCount, string sValue, string sSearchFor,
+                                          int attrStart, string sAttributes, string sDelimiter = "," );
+void            navOptionAdd            ( int iCount, string sValue,
+                                          int attrStart, string sAttributes, string sDelimiter = "," );
+void            navOptionAdd            ( string sValue, string sSearchFor,
+                                           int attrStart, string sAttributes, string sDelimiter = "," );
+void            navOptionAdd            ( string sValue,
+                                          int attrStart, string sAttributes, string sDelimiter = "," );
+void            navOptionAdd            ( int iCount, int attrStart, string sAttributes, string sDelimiter = "," );
+
+void            navOptionAttributesAdd  ( string sAttrValue1, string sAttrValue2,
+                                          string sAttrValue3, string sAttrValue4  );
+void            navOptionAttributesAdd  ( string sAttrValue1, string sAttrValue2,
+                                           string sAttrValue3 );
+void            navOptionAttributesAdd  ( string sAttrValue1, string sAttrValue2 );
+void            navOptionAttributesAdd  ( string sAttrValue1 );
+
+
+string     navDomTextValueGet      ( string sNavActionName ) ;
+string     navDomValueGet          ( string sNavActionName ) ;
+string     navValueGet             ( string sNavActionName ) ;
+string     navSearchForGet         ( string sNavActionName ) ;
+string     navAttributeGet         ( string sNavActionName, string sAttrName ) ;
+string     navAttributeGet         ( string sAttrName );
+int             navCountGet             ( string sNavActionName ) ;
+int             navOptionIndexGet       ( string sNavActionName ) ;
+
+bool            navNextState            ();
+bool            navDoAction             ( string sNavActionName ) ;
+bool            navDoActionClickAll     ( string sNavActionName ) ;
+string     navStateString          ();
+void            navStart                ();
+bool            navNavigationDone       ();
+void            navAutoInputIncreaseLength ( bool bDoIncreaseLength );
+
+
+bool             equals_fn        	( string sInput, string sTest     )    ;
+bool             iequals_fn       	( string sInput, string sTest     )    ;
+bool             contains_fn      	( string sInput, string sTest     )    ;
+bool             icontains_fn    	( string sInput,  string sTest     )    ;
+bool             startsWith_fn    	( string sInput, string sTest     )    ;
+bool             istartsWith_fn    	( string sInput, string sTest     )    ;
+bool             endsWith_fn        ( string sInput, string sTest     )    ;
+bool             iendsWith_fn    	( string sInput, string sTest     )    ;
+bool             lessThan_fn        ( string sLhs, string sRhs     )    ;
+bool             ilessThan_fn    	( string sLhs, string sRhs     )    ;
+bool             greaterThan_fn    	( string sLhs, string sRhs     )    ;
+bool             igreaterThan_fn    ( string sLhs, string sRhs     )    ;
+bool             regexSearch_fn    	( string sInput, string sRegex     )    ;
+
+
+/*
+-------------------------------------
+--- String manipulation functions ---
+-------------------------------------*/
+/*
+NOTE: These are normal callable PHP functions. Use same names without _fn
+       when using as modifiers in outputXX() functions, valueModify(), 
+valueGet(),
+       valueCompare(), nodeCompare(), nodeValueParent(), nodeValuePos()
+*/
+/* --- 0 parameters --- */
+string        trimDefault_fn       ( string sInput      );
+string        raw_fn               ( string sInput      );
+string        toUpper_fn           ( string sInput      );
+string        toLower_fn           ( string sInput      );
+string        trimEnds_fn          ( string sInput      );
+string        trimLeft_fn          ( string sInput      );
+string        trimRight_fn        	( string sInput      );
+string        trimYear_fn          ( string sInput      );
+string        trimInteger_fn      	( string sInput      );
+string        trimNumber_fn    	( string sInput      );
+
+/* --- 1 parameters --- */
+string     trimCharsEnds_fn    ( string sInput, string sCharsToTrim )    ;
+string     trimCharsLeft_fn    ( string sInput, string sCharsToTrim )     ;
+string     trimCharsRight_fn    ( string sInput, string sCharsToTrim )    ;
+string     trimRegex_fn        ( string sInput, string sRegex )             ;
+string     itrimRegex_fn        ( string sInput, string sRegex )                     ;
+string     append_fn            ( string sInput, string sString    )    ;
+string     prepend_fn            ( string sInput, string sString    )    ;
+string     eraseFirst_fn        ( string sInput, string sSearchFor    )    ;
+string     ieraseFirst_fn        ( string sInput, string sSearchFor    )    ;
+string     eraseLast_fn        ( string sInput, string sSearchFor    )    ;
+string     ieraseLast_fn        ( string sInput, string sSearchFor    )    ;
+string     eraseAll_fn            ( string sInput, string sSearchFor    )    ;
+string     ieraseAll_fn        ( string sInput, string sSearchFor    )    ;
+string     eraseRegex_fn        ( string sInput, string sSearchFor    )    ;
+string     eraseAllRegex_fn    ( string sInput, string sSearchFor    )    ;
+
+/* --- 2 parameters --- */
+string     trimIntegerCustom_fn( string sInput, string iBase, string sThousandsSep);
+string     trimNumberCustom_fn    ( string sInput, string sDecimalPoint, string sThousandsSep);
+string     replaceFirst_fn        ( string sInput, string sSearchFor, string sReplaceWith    );
+string     ireplaceFirst_fn    ( string sInput, string sSearchFor, string sReplaceWith    );
+string     replaceLast_fn        ( string sInput, string sSearchFor, string sReplaceWith    );
+string     ireplaceLast_fn        ( string sInput, string sSearchFor, string sReplaceWith    );
+string     replaceAll_fn        ( string sInput, string sSearchFor,        string sReplaceWith    )    ;
+string     ireplaceAll_fn        ( string sInput, string sSearchFor,        string sReplaceWith    )    ;
+string     replaceRegex_fn        ( string sInput, string sSearchFor,        string sReplaceWith    )    ;
+string     replaceAllRegex_fn    ( string sInput, string sSearchFor,        string sReplaceWith    )    ;
+
+/* --- 2 parameters (last is an integer ) --- */
+string        eraseNth_fn            ( string sInput, string sSearchFor,    int iNth     )    ;
+string        ieraseNth_fn        ( string sInput, string sSearchFor,    int iNth     )    ;
+
+/* --- 3 parameters (last is an integer ) --- */
+string        replaceNth_fn        ( string sInput, string sSearchFor,  string sReplaceWith, int iNth    )    ;
+string        ireplaceNth_fn        ( string sInput, string sSearchFor,    string sReplaceWith, int iNth    )    ;
+
+
+/*---------------------
+--- URL functions ---
+---------------------*/
+string     urlSite();
+string     urlCurrent();
+bool            urlLoad        ( const string sURL    );
+bool            urlLoadWait    ( const string sURL    );
+
+
+/*--------------------------------
+--- DOM Node types (constants) ---
+----------------------------------*/
+%constant int ELEMENT_NODE                    ;
+%constant int ATTRIBUTE_NODE                 ;
+%constant int TEXT_NODE                     ;
+%constant int CDATA_SECTION_NODE             ;
+%constant int ENTITY_REFERENCE_NODE         ;
+%constant int ENTITY_NODE                     ;
+%constant int PROCESSING_INSTRUCTION_NODE    ;
+%constant int COMMENT_NODE                     ;
+%constant int DOCUMENT_NODE                 ;
+%constant int DOCUMENT_TYPE_NODE             ;
+%constant int DOCUMENT_FRAGMENT_NODE         ;
+%constant int NOTATION_NODE                 ;
+%constant int ATTRIBUTE_VALUE_NODE             ;
+%constant int ALL_NODE_TYPES                ;
+
+/*---------------------
+--- DOM functions ---
+---------------------*/
+void           domNewSearch            ();
+int            domFindParentPos        (     int iLevelsUp = 1 );
+int            domFindParent           (     int iLevelsUp = 1 );
+
+int            domFindNext             (     int iCount, const crawl::DomSeq& seq, int iNodeTypes );
+int            domFindNext             (     int iCount, string sSequence, string sCompareFun, int iNodeTypes );
+int            domFindNext             (     int iCount, string sSequence, string sCompareFun );
+int            domFindNext             (     int iCount, string sSequence, int iNodeTypes );
+int            domFindNext             (     int iCount, string sSequence );
+int            domFindNext             (     string sSequence, string sCompareFun );
+int            domFindPrev             (     string sSequence, string sCompareFun );
+int            domFindNextParams       (     int iCount, string sSequence, string sArgs );
+
+NEW int        domFind                 (     int iCount, string sSequence, string sCompareFun, int iPostMatchSteps, int iNodeTypes );
+NEW int        domFind                 (     int iCount, string sSequence, string sCompareFun, int iPostMatchSteps );
+OUT int        domFind                 (     int iCount, string sSequence, string sCompareFun, int iNodeTypes );
+int            domFind                 (     int iCount, string sSequence, string sCompareFun );
+OUT int        domFind                 (     int iCount, string sSequence, int iNodeTypes );
+int            domFind                 (     int iCount, string sSequence );
+NEW int        domFind                 (     string sSequence );
+int            domFind                 (     string sSequence, string sCompareFun );
+NEW int        domFind                 (     string sSequence, string sCompareFun, int iPostMatchSteps );
+
+int            domFindNextPos          (     int iCount, string sSequence, string sCompareFun, int iNodeTypes );
+int            domFindNextPos          (     int iCount, string sSequence, string sCompareFun );
+int            domFindNextPos          (     int iCount, string sSequence, int iNodeTypes );
+int            domFindNextPos          (     int iCount, string sSequence );
+int            domFindNextPos          (     string sSequence, string sCompareFun );
+int            domFindPrevPos          (     string sSequence, string sCompareFun );
+
+
+int            domClickInput           (      int iCount     );
+int            domClickInputNext       (      int iCount     );
+int            domSetInput             (      int iCount, string sValue     );
+int            domSetInput             (      int iCount, int iValue                 );
+int            domSetInputNext         (      int iCount, string sValue     );
+int            domSetInputNext         (      int iCount,    int iValue );
+int            domStep                 (      int iCount, int iNodeTypes = ALL_NODE_TYPES );
+bool           domAtEnd                ();
+void           domPointerPush          ();
+int            domPointerPop           ();
+int            domSize                 ();
+int            domEndPos               ();
+int            domGetPos               ();
+int            domSetPos               ( int iNewPos );
+int            domGetStopPos           ();
+int            domSetStopPos           ( int iStopPos );
+void           domClearStopPos         ();
+void           domSetAtEnd             ();
+
+/*
+--- DOM Sequence create functions --- */
+void        domSeqCreate            (   string sName, string sSequence, string sCompareFun,
+                                        int iPostMatchSteps, string sCommaChar  );
+void        domSeqCreate            (   string sName, string sSequence, string sCompareFun,
+                                        int iPostMatchSteps  );
+void        domSeqCreate            (   string sName, string sSequence, string sCompareFun );
+void        domSeqCreate            (   string sName, string sSequence, int iPostMatchSteps );
+void        domSeqCreate            (   string sName, string sSequence );
+
+
+/*
+------------------------------------
+--- Node actions ---
+------------------------------------ */
+%constant int NEAREST_FORWARD    ;
+%constant int NEAREST_BACKWARD    ;
+%constant int NEAREST_BOTH        ;
+%constant int NEAREST_PARENT    ;
+%constant int NEAREST_AUTO        ;
+%constant int NEAREST_THIS_NODE    ;
+%constant int FWD    ;
+%constant int REV    ;
+int         nodeType              ();
+bool        nodeClick                ( int iSearchDir = NEAREST_AUTO, bool bLoadHref = true )                                             ;
+bool        nodeClickWait            ( int iSearchDir = NEAREST_AUTO, bool bLoadHref = true )                                             ;
+bool        nodeMouseEvent            ( string sEvent, int iButton, int iSearchDir );
+bool        nodeMouseEvent            ( string sEvent, int iSearchDir);
+bool        nodeMouseEvent            ( string sEvent  );
+bool        inputSet                 ( string sValue, int iSearchDir = NEAREST_AUTO )                                             ;
+bool        inputSet                 ( int                  iValue, int iSearchDir = NEAREST_AUTO )                                     ;
+bool        formSubmit                ( int iSearchDir = NEAREST_AUTO ) ;
+bool        formReset                ( int iSearchDir = NEAREST_AUTO ) ;
+int         selectLength            ( int iSearchDir = NEAREST_AUTO );
+int         selectSelectedIndex        ( int iSearchDir = NEAREST_AUTO )                                                 ;
+int         selectSelectedDomPos     ( int iSearchDir = NEAREST_AUTO );
+bool        selectIndex            ( int iIndex, int iSearchDir = NEAREST_AUTO )                                     ;
+bool        selectOption            ( int iSearchDir = NEAREST_AUTO );
+/* bool        doActionPos                ( int iDomPos, const 
+string& sAction, string sParam1, string 
+sParam2, int iSearchDir = NEAREST_AUTO );*/
+
+
+/*
+--- DOM doAction functions ---*/
+bool        doAction                ( string sAction, string sParam1, string sParam2, int iSearchDir );
+bool        doAction                ( string sAction, string sParam1, string sParam2 );
+bool        doAction                ( string sAction, string sParam1, int iSearchDir = NEAREST_AUTO );
+bool        doAction                ( string sAction, int iSearchDir = NEAREST_AUTO );
+
+/*
+--- DOM doActionFindNext functions ---*/
+int        doActionFindNext            (    int iCount, string sSequence, string sAction, string sParam1,
+                                         string sParam2, int iSearchDir );
+int        doActionFindNext            (    int iCount, string sSequence, string sAction, string sParam1,
+                                         string sParam2 );
+int        doActionFindNext            (    int iCount, string sSequence, string sAction, string sParam1,
+                                         int iSearchDir = NEAREST_AUTO );
+int        doActionFindNext            (    int iCount, string sSequence, string sAction, int iSearchDir = NEAREST_AUTO );
+
+/*
+--- DOM doActionFind functions --- */
+int        doActionFind                (    int iCount, string sSequence, string sAction, string sParam1,
+                                         string sParam2, int iSearchDir );
+int        doActionFind                (    int iCount, string sSequence, string sAction, string sParam1,
+                                         string sParam2 );
+int        doActionFind                (    int iCount, string sSequence, string sAction, string sParam1,
+                                         int iSearchDir = NEAREST_AUTO );
+int        doActionFind                (    int iCount, string sSequence, string sAction, int iSearchDir = NEAREST_AUTO );
+
+
+/*
+--- DOM Action create functions --- */
+void        domActionCreate            (     string sName, string sAction, string sParam1,
+                                         string sParam2, int iSearchDir );
+void        domActionCreate            (     string sName, string sAction, string sParam1,
+                                         string sParam2 );
+void        domActionCreate            (     string sName, string sAction, string sParam1,
+                                         int iSearchDir = NEAREST_AUTO );
+void        domActionCreate            (     string sName, string sAction, int iSearchDir = NEAREST_AUTO );
+
+
+/*
+-----------------------
+--- Value functions ---
+----------------------- */
+
+/*--- Modifier create functions (OutputModifier create functions)  --- */
+void modifierCreate                    (    string sModifierID, string sMainipFunID, string sManipParam1,
+                                         string sManipParam2, string sManipParam3, string sManipParam4 );
+void modifierCreate                    (    string sModifierID, string sMainipFunID, string sManipParam1,
+                                         string sManipParam2, string sManipParam3 );
+void modifierCreate                    (    string sModifierID, string sMainipFunID, string sManipParam1,
+                                         string sManipParam2 );
+void modifierCreate                    (    string sModifierID, string sMainipFunID, string sManipParam1 );
+void modifierCreate                    (    string sModifierID, string sMainipFunID );
+
+
+/*--- valueSet functions ---*/
+void        valueSet                ( string sValue );
+
+/*--- valueGet functions --- */
+string    valueGet                ( string sModifierID, string sManipParam1, string sManipParam2,
+                                       string sManipParam3, string sManipParam4 );
+string    valueGet                ( string sModifierID,string sManipParam1, string sManipParam2,
+                                       string sManipParam3 );
+string    valueGet                ( string sModifierID,string sManipParam1, string sManipParam2 );
+string    valueGet                ( string sModifierID,string sManipParam1 );
+string    valueGet                ( string sModifierID );
+string    valueGet                ();
+
+
+/*--- valueCompare functions --- */
+bool    valueCompare                ( string sPattern, string sCompareFun, string sModifierID,
+                                       string sManipParam1, string sManipParam2, string sManipParam3,
+                                       string sManipParam4 );
+bool    valueCompare                ( string sPattern, string sCompareFun, string sModifierID,
+                                       string sManipParam1, string sManipParam2, string sManipParam3 );
+bool    valueCompare                ( string sPattern, string sCompareFun, string sModifierID,
+                                       string sManipParam1, string sManipParam2 );
+bool    valueCompare                ( string sPattern, string sCompareFun, string sModifierID,
+                                       string sManipParam1 );
+bool    valueCompare                ( string sPattern, string sCompareFun, string sModifierID );
+bool    valueCompare                ( string sPattern, string sCompareFun );
+
+
+/* --- Modify value functions ---*/
+string    valueModify          ( string sModifierID, string sManipParam1, string sManipParam2,
+									  string sManipParam3, string sManipParam4 );
+string    valueModify          ( string sModifierID, string sManipParam1, string sManipParam2,
+                                      string sManipParam3 );
+string    valueModify          ( string sModifierID, string sManipParam1, string sManipParam2 );
+string    valueModify          ( string sModifierID, string sManipParam1 );
+string    valueModify          ( string sModifierID );
+
+/*--- nodeValuePos functions ---*/
+string    nodeValuePos            ( int iDomPos, string sModifierID, string sManipParam1,
+                                       string sManipParam2, string sManipParam3,
+                                       string sManipParam4 );
+string    nodeValuePos            ( int iDomPos, string sModifierID, string sManipParam1,
+                                       string sManipParam2, string sManipParam3 );
+string    nodeValuePos            ( int iDomPos, string sModifierID, string sManipParam1,
+                                       string sManipParam2 );
+string    nodeValuePos            ( int iDomPos, string sModifierID, string sManipParam1 );
+string    nodeValuePos            ( int iDomPos, string sModifierID );
+string    nodeValuePos            ( int iDomPos );
+
+
+/*--- nodeValue functions ---*/
+string    nodeValue        ( string sModifierID, string sManipParam1,
+                                  string sManipParam2, string sManipParam3,
+                                  string sManipParam4 );
+string    nodeValue        ( string sModifierID,string sManipParam1,
+                                  string sManipParam2, string sManipParam3 );
+string    nodeValue        ( string sModifierID, string sManipParam1,
+                                  string sManipParam2 );
+string    nodeValue        ( string sModifierID, string sManipParam1 );
+string    nodeValue        ( string sModifierID );
+string    nodeValue        ();
+
+/*--- nodeValueParent functions --- */
+string    nodeValueParent     	( int iLevelsUp, string sModifierID, string sManipParam1, 
+									 string sManipParam2, string sManipParam3,string sManipParam4 );
+string    nodeValueParent    	( int iLevelsUp, string sModifierID, string sManipParam1,
+                                      string sManipParam2,string sManipParam3 );
+string    nodeValueParent      ( int iLevelsUp, string sModifierID, string sManipParam1,
+                                      string sManipParam2 );
+string    nodeValueParent      ( int iLevelsUp, string sModifierID, string sManipParam1 );
+string    nodeValueParent      ( int iLevelsUp, string sModifierID );
+string    nodeValueParent      ( int iLevelsUp );
+
+/*--- nodeCompare functions ---*/
+bool        nodeCompare                ( string sPattern, 
+string sCompareFun, string sModifierID,
+                                       string sManipParam1, 
+string sManipParam2,
+                                       string sManipParam3, 
+string sManipParam4 );
+bool        nodeCompare                ( string sPattern, 
+string sCompareFun, string sModifierID,
+                                       string sManipParam1, 
+string sManipParam2,
+                                       string sManipParam3 );
+bool        nodeCompare                ( string sPattern, 
+string sCompareFun, string sModifierID,
+                                       string sManipParam1, 
+string sManipParam2 );
+bool        nodeCompare                ( string sPattern, 
+string sCompareFun, string sModifierID,
+                                       string sManipParam1 );
+bool        nodeCompare                ( string sPattern, 
+string sCompareFun, string sModifierID );
+bool        nodeCompare                ( string sPattern, 
+string sCompareFun );
+
+
+
+/*-----------------------
+--- Parse functions ---
+-----------------------*/
+%constant int MATCH_FIRST;
+%constant int MATCH_LAST;
+bool        parseRegex            (   int iCount, string sRegex,
+									  int postMarkerPos = MATCH_FIRST     );
+bool        iparseRegex           (  int iCount, string sRegex
+									, int postMarkerPos = MATCH_FIRST     );
+bool        parseToRegex        (    int iCount, string sRegex
+									, int postMarkerPos = MATCH_FIRST     );
+bool        iparseToRegex        (    int iCount, string sRegex
+									, int postMarkerPos = MATCH_FIRST     );
+bool        parseToString        ( int iCount, string sSubstring
+								  , int postMarkerPos = MATCH_FIRST ) ;
+bool        iparseToString        (   int iCount, string sSubstring
+									, int postMarkerPos = MATCH_FIRST ) ;
+bool        parseToEnd            ();
+string    getParseMatch        ( int iMatchNumber );
+string    getParseRest        () ;
+int            getParseMatchCount  ();
+
+/*------------------------
+--- Text functions ---
+------------------------*/
+void        textNewSearch        ();
+bool        findBegin            ( int iCount, string sSearchFor
+								   , int setBeginToPos = MATCH_LAST     )                    
+                             ;
+bool        findEnd                (    int iCount, string 
+sSearchFor,     int setBeginToPos = MATCH_FIRST     )                    
+                             ;
+bool        findBeginNext        (    int iCount, string 
+sSearchFor,     int setBeginToPos = MATCH_LAST     )                    
+                             ;
+bool        findEndNext            (    int iCount, string 
+sSearchFor,     int setBeginToPos = MATCH_FIRST     )                    
+                             ;
+bool        ifindBegin            (    int iCount, string 
+sSearchFor,     int setBeginToPos = MATCH_LAST     )                    
+                             ;
+bool        ifindEnd            (    int iCount, string 
+sSearchFor,     int setBeginToPos = MATCH_FIRST     )                    
+                             ;
+bool        ifindBeginNext        (    int iCount, string 
+sSearchFor,     int setBeginToPos = MATCH_LAST     )                    
+                             ;
+bool        ifindEndNext        (    int iCount, string 
+sSearchFor,     int setBeginToPos = MATCH_FIRST     )                    
+                             ;
+bool        findRegexBegin        (    int iCount, string 
+sRegex,        int setBeginToPos = MATCH_LAST     )                    
+                             ;
+bool        findRegexEnd        (    int iCount, string 
+sRegex,         int setBeginToPos = MATCH_FIRST     )                    
+                             ;
+bool        findRegexBeginNext    (    int iCount, string 
+sRegex,        int setBeginToPos = MATCH_LAST     )                    
+                             ;
+bool        findRegexEndNext    (    int iCount, string 
+sRegex,         int setBeginToPos = MATCH_FIRST     )                    
+                             ;
+bool        stepBegin            (    int iCount    )                 
+                 ;
+bool        stepEnd                (    int iCount    )                 
+                     ;
+
+
+/*-----------------------------
+--- (URL) queue functions ---
+-----------------------------*/
+%constant int LINK_TYPE_LOCAL        ;
+%constant int LINK_TYPE_EXTERNAL    ;
+%constant int LINK_TYPE_ALL            ;
+
+int        	urlQueueSize          	();
+int         urlQueueSizeProcessed   ();
+bool        urlQueueAlreadyProcessed( string sUrl );
+void        urlQueueClear           ()    ;
+string urlQueueFront           ()    ;
+void        urlQueueAppend          (    int iLinkType, string sUrlsMatch ="", string sCompareFun = DefaultCompareFun );
+void        urlQueueAppendUnique    (    int iLinkType, string sUrlsMatch ="", string sCompareFun = DefaultCompareFun );
+void        urlQueueAppend          (    string sUrl )    ;
+void        urlQueueAppendUnique    (    string sUrl )    ;
+void        urlQueuePrepend         (    string sUrl)    ;
+void        urlQueuePrependUnique   (    string sUrl  )    ;
+
+
+
+/*
+-------------------------
+--- Context functions ---
+------------------------- */
+void        dataPushContext         	(    string sContext, string const& sUnit = "" );
+void        dataPushContextAlias    	(    string sContext, string sContextAlias, string sUnit = "" );
+void        dataPopContext          	();
+
+void        contextBegin            	(    string sContextName );
+void        contextEnd              	();
+void        contextOutputSaveAs         ( string sContextName );
+void        contextFallbackOutputLoad   ( string sContextName );
+void        contextFallbackOutputClear  ();
+string contextFallbackValueGet     ( string sFieldName );
+void        contextFallbackValueSet     ( string sFieldName, string sValue ) ;
+bool        contextFallbackValueExists  ( string sFieldName );
+void        contextFallbackValueDelete  ( string sFieldName );
+bool        contextSavedOutputExists    ( string sContextName );
+void        contextSavedOutputDelete    ( string sContextName );
+
+/*
+------------------------
+--- Output functions ---
+------------------------ */
+
+/*--- outputDirect functions ---*/
+void        outputDirect            ( string sFieldName, string sValue, string sModifierID,
+                                       string sManipParam1,string sManipParam2, string sManipParam3,
+                                       string sManipParam4 );
+void        outputDirect            ( string sFieldName, string sValue, string sModifierID,
+                                       string sManipParam1, string sManipParam2, string sManipParam3 );
+void        outputDirect            ( string sFieldName, string sValue, string sModifierID,
+                                       string sManipParam1, string sManipParam2 );
+void        outputDirect            ( string sFieldName, string sValue, string sModifierID,
+                                       string sManipParam1 );
+void        outputDirect            ( string sFieldName, string sValue, string sModifierID );
+void        outputDirect            ( string sFieldName, string sValue );
+
+
+/* --- outputValue functions */
+void        outputValue                ( string sFieldName, string sModifierID, string sManipParam1,
+                                       string sManipParam2, string sManipParam3, string sManipParam4 );
+void        outputValue                ( string sFieldName, string sModifierID, string sManipParam1,
+                                       string sManipParam2, string sManipParam3 );
+void        outputValue                ( string sFieldName, string sModifierID, string sManipParam1,
+                                       string sManipParam2 );
+void        outputValue                ( string sFieldName, string sModifierID, string sManipParam1 );
+void        outputValue                ( string sFieldName, string sModifierID );
+void        outputValue                ( string sFieldName );
+
+/*--- outputValueFindNext functions ---*/
+
+int            outputValueFindNext        ( int iCount, string sSequence,    string sFieldName, string sManipFun,
+                                       string sManipParam1, string sManipParam2, string sManipParam3,
+                                       string sManipParam4 );
+int            outputValueFindNext        ( int iCount, string sSequence,    string sFieldName, string sManipFun,
+                                       string sManipParam1, string sManipParam2, string sManipParam3    );
+int            outputValueFindNext        ( int iCount, string sSequence,    string sFieldName, string sManipFun,
+                                       string sManipParam1, string sManipParam2    );
+int            outputValueFindNext        ( int iCount, string sSequence,    string sFieldName, string sManipFun,
+                                       string sManipParam1 );
+int            outputValueFindNext        ( int iCount, string sSequence,    string sFieldName, string sManipFun );
+int            outputValueFindNext        ( int iCount, string sSequence,    string sFieldName );
+
+/*--- outputValueFind functions --- */
+int            outputValueFind      ( int iCount, string sSequence,    string sFieldName, string sManipFun,
+                                      string sManipParam1, string sManipParam2, string sManipParam3,
+                                      string sManipParam4 );
+int            outputValueFind      ( int iCount, string sSequence,    string sFieldName, string sManipFun,
+                                      string sManipParam1, string sManipParam2, string sManipParam3    );
+int            outputValueFind      ( int iCount, string sSequence,    string sFieldName, string sManipFun,
+                                      string sManipParam1, string sManipParam2    );
+int            outputValueFind      ( int iCount, string sSequence,    string sFieldName, string sManipFun,
+                                      string sManipParam1 );
+int            outputValueFind      ( int iCount, string sSequence,    string sFieldName, string sManipFun );
+int            outputValueFind      ( int iCount, string sSequence,    string sFieldName );
+
+/* --- outputValueGet functions --- */
+string    outputValueGet            ( string sFieldName, string sContextName = ""    );
+
+
+/*----------------------------
+--- Javascript functions ---
+----------------------------*/
+bool         javaScriptExecuteRetVal  ( string sScript, string& sScriptReturnValue     );
+bool         javaScriptExecute        ( string sScript  )     ;
+
+/*-------------------------
+--- Utility functions ---
+-------------------------*/
+int         curlPostUploadFileSimple	( string sURL, string sFieldName, string sFilePath ) ;
+bool        gzCompressFile            	( string sSrcFilePath, string sDstFilePath ) ;
+bool        gzUnCompressFile        	( string sSrcFilePath, string sDstFilePath )         ;
+
+/*
+--------------------------
+--- Settings functions ---
+-------------------------- */
+void        settingDelete           (    string sName );
+void        settingSet              (    string sName, string sValue );
+string settingGet              (    string sName );
+bool        hasSetting              (    string sName ) ;
+
+
+/*------------------------
+--- Config functions ---
+------------------------*/
+void         configUrlStart            	( string sUrl    );
+void         configUrlUploadDataSet    	( string sUrl    );
+string  configUrlUploadDataGet    	();
+void         configDisableLoadImages    ();
+void         configForceLoadImages    	();
+void         configAddIncludeUrl        ( string sPattern, string sCompareFun )    ;
+void         configAddExcludeUrl        ( string sPattern, string sCompareFun )    ;
+void        configForceSendXmlData		();
+void        configReloadTimeOut        	( int iMinutes, int iSecs ) ;
+void        configKeepActiveInterval	( int iSecs ) ;
+void        configProgressOutputSet    	( bool bEnable );
+void        configDebugOutputSet    	( bool bEnable );
+bool        configDebugOutputGet    	();
+void        configParseDecimalPointSet	( string sDecimalPoint ) ;
+void         configParseThousandsSepSet	( string sThousandsSep  );
+void        configOutputEncloseCDATA	( bool bDoEncloseInCDATA ) ;
+void        configOutputWriteToFile 	( bool bDoWriteOutputToFile );
+string configGetRunMode        	();
+void         configInsertEndTagNodes 	( bool bInsertEndTagNodes );
+void         configSkipEmptyNodes     	( bool bSkipEmptyNodes );
+void         configTrimBlanks         	( bool bTrimBlanks );
+
+/*-----------------------
+--- Debug functions ---
+-----------------------*/
+void        domDebugPrint            ( string sFileName="");
+void        nodeDebugPrint            ( int iNodesBefore, int iNodesAfter, bool bPrintNodeTypes = false )     ;
+void        nodeDebugPrint            ( int iNodesAround=10, bool bPrintNodeTypes = false )                                        ;
+string    nodeValueDebug            ( int iNodesBefore, int iNodesAfter, bool bPrintNodeTypes = false )     ;
+string    nodeValueDebug            ( int iNodesAround=10, bool bPrintNodeTypes = false )                                        ;
+bool        domFindNextTest            ( int iCount, string sSearchFor, int idCompFun, int iNodeTypes = ALL_NODE_TYPES );
+void        linksGetterDebugPrint    ();
+
+
+-------------------------------------------------------
+HOTEL / POOLS
+- Hotellets fysiske rammer er fantastiske.
+- Vandet i pools måtte gerne være lige så varmt som havet, særligt børnepools. Vores børn foretrak havet grundet temperaturen. Det burde være enkelt at varme op med solfangere på taget af hotellet.
+
+RESTAURATIONER:
+-Personalet der har med servering at gøre kunne godt trænge til at komme lidt på flinkeskole. I buffet-områderne var de ok uden at være super imødekommende - kunne sagtens forbedres. Fino var en udmærket restaurant og den aften var en god oplevelse. 
+- De andre "restauranter" (Italiensk, Tysk, Mexicansk) var rene katastrofer -det kan I ikke byde folk: Betjeningen er sur og man har tydeligt indtryk af de helst så man gik hurtigtst muligt. Maden på især den tyske og mexicanske havde intet med temaet at gøre og var generelt ringere end frossen færdigmad fra Netto. 
+Iøvrigt har vi svært ved at forstå man partout skal reservere på forhånd. Det er fint man kan, man har de frie borde burde man kunne komme ind fra gaden, som man kan på en normal restaurant.
+ 
+Der åbnede en ny buffet restaurant mens vi var der, som første aften ikke tillod vi sad ude. mange brokkede sig og der skal roses meget herfra for at dette allerede næste dag var bragt i orden.
+
+POOL SERVERING: 
+Nu havde vi meget små børn så vi "lå" ikke ved poolen som sådan. Dog undrer det os at drikkevarer som sodavand absolut skal serveresi små "fingerbøl" fremfor en mere normal portion på ca. 0.3 - 0.5 L.
+
+GENERELT:
+Det gik aldrik op for os hvorfor man ikke måtte gå af stranden i sydlig retning efter klokken 18:00?
+Personalet og betjeningen kunne til tider virke rigid og lidt som Østeuropa før murens fald.

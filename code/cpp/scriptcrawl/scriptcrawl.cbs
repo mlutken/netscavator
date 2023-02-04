@@ -1,0 +1,24 @@
+
+# -------------------
+# --- Build setup ---
+# -------------------
+SET_DEFAULT( WEBMINER_PHP_EXTENSION_DIR		${CBS_SHARED_LIBRARY_PATH_PREBUILD}	)
+SET_DEFAULT( WEBMINER_PHP_XULRUNNER_PATH	${XULRUNNER_SDK_BASE}/xulrunner	WINDOWS	)
+SET_DEFAULT( WEBMINER_PHP_XULRUNNER_PATH	${XULRUNNER_SDK_BASE}/xulrunner	LINUX	)
+
+
+
+
+# SWIG code produces tons of: [g++] warning: deprecated conversion from string constant to ‘char*’,
+## see fx. http://blog.wolffmyren.com/2008/05/02/g-warning-deprecated-conversion-from-string-constant-to-%E2%80%98char%E2%80%99/
+ADD_COMPILER_OPTION ( "-Wno-write-strings" 	COMPILER_GCC	)
+
+WARNING_DISABLE ( W_UNREFERENCED_LABEL		COMPILER_MSVC	)
+WARNING_DISABLE ( W_FORCING_VALUE_TO_BOOL	COMPILER_MSVC	)
+
+
+ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR} )
+
+
+ADD_SUBDIR ( cpp_crawl		)
+#ADD_SUBDIR ( php_crawl		)

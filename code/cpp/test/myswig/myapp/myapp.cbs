@@ -1,0 +1,19 @@
+# -------------------
+# --- Build setup ---
+# -------------------
+# ADDX_DEPENDS_ON ( wx_core	)
+# ADDX_DEPENDS_ON ( wx_base	)
+# 
+# ADD_DEFINE ( __WXGTK__						1		LINUX						)
+# ADD_DEFINE ( __WXMSW__						1		WINDOWS						)
+# ADD_DEFINE ( WEBBROWSE_ENABLE_GTK			1		WEBBROWSE_ENABLE_GTK		)
+# ADD_DEFINE ( WEBBROWSE_ENABLE_WX			1		WEBBROWSE_ENABLE_WX			)
+# ADD_COMPILE_FLAG ( /Zc:wchar_t-				COMPILER_MSVC	)
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE ( myapp.cpp	)
+
+
+

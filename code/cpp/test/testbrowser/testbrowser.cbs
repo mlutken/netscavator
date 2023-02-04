@@ -1,0 +1,26 @@
+# *** EXECUTABLE: 'wxMinimal' main cbs file. ***
+# # SET_DEFAULT ( WEBBROWSE_ENABLE_GTK			""	) 
+# # SET_DEFAULT ( WEBBROWSE_ENABLE_WX			1	) 
+
+# -------------------
+# --- Build setup ---
+# -------------------
+ADDX_DEPENDS_ON ( webbrowse	)
+
+ADDX_INCLUDE_DIR ( ${CMAKE_CURRENT_SOURCE_DIR}			)
+
+
+ADD_DEFINE ( XPCOM_GLUE						1										)
+ADD_DEFINE ( __WXGTK__						1		LINUX						)
+ADD_DEFINE ( __WXMSW__						1		WINDOWS						)
+ADD_DEFINE ( WEBBROWSE_ENABLE_GTK			1		WEBBROWSE_ENABLE_GTK		)
+ADD_DEFINE ( WEBBROWSE_ENABLE_WX			1		WEBBROWSE_ENABLE_WX			)
+#ADD_COMPILE_FLAG ( /Zc:wchar_t-				COMPILER_MSVC	)
+
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE ( testbrowser.cpp		)
+
+  

@@ -1,0 +1,37 @@
+
+# --- Config stuff ---
+SET_DEFAULT ( USE_CURL		""	)
+
+# -------------------
+# --- Build setup ---
+# -------------------
+ADDX_DEPENDS_ON  ( webbrowse							)
+ADDX_DEPENDS_ON  ( curl						USE_CURL	)
+#ADDX_DEPENDS_ON  ( tidy									)
+ADDX_DEPENDS_ON  ( boost_filesystem						)
+ADDX_DEPENDS_ON  ( cpaf_filesystem						)
+
+ADDX_INCLUDE_DIR  	( ${cpaf_ROOT_DIR}/cul/boost_process 			)
+ADDX_INCLUDE_DIR  	( ${CMAKE_CURRENT_SOURCE_DIR} 					)
+
+# ADD_DEFINE ( VERIQUIN_CODE_DIR		\\\\"$ENV{VERIQUIN_CODE_DIR}\\\\"			)
+# ADD_DEFINE ( XPCOM_GLUE				1											)
+# ADD_DEFINE ( XP_WIN					1		WINDOWS								)
+# ADD_DEFINE ( USE_CURL				1		USE_CURL							)
+# ADD_DEFINE ( __WXGTK__				1		LINUX								)
+# ADD_DEFINE ( __WXMSW__				1		WINDOWS								)
+# ADD_DEFINE ( WEBBROWSE_ENABLE_GTK	1		WEBBROWSE_ENABLE_GTK				)
+# ADD_DEFINE ( WEBBROWSE_ENABLE_WX	1		WEBBROWSE_ENABLE_WX					)
+# ADD_COMPILE_FLAG ( /Zc:wchar_t-				COMPILER_MSVC						)
+
+
+# -------------------
+# --- Add sources ---
+# -------------------
+ADD_SOURCE_FILE ( XX.cpp 						)
+
+#MESSAGE( STATUS "DDDDDDDD ${CBS_CURRENT}.cbs" 		)
+
+
+
+

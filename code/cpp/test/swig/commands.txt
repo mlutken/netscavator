@@ -1,0 +1,4 @@
+swig -c++ -php5 myclass.i
+c++ -c -fpic myclass.cpp myclass_wrap.cpp -I/usr/include/php5 -I/usr/include/php5/Zend -I/usr/include/php5/TSRM -I/usr/include/php5/main
+c++ -shared myclass.o myclass_wrap.o -o myclass.so
+php5 ./phpintro.php
