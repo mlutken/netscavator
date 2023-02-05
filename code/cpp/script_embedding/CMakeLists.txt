@@ -28,7 +28,7 @@ IF ( NOT CBS_BUILD )
     # --- Build instructions ---
     # --------------------------
     get_filename_component(PARENT_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
-    target_link_libraries(${library_name} "php-sleipner5;Qt${QT_VER}::Widgets;Qt${QT_VER}::Core" )
+    target_link_libraries(${library_name} "php-sleipner8;Qt${QT_VER}::Widgets;Qt${QT_VER}::Core" )
     target_link_libraries(${library_name} "cpaf_compression;cpaf_utils;cpaf_system;cpaf_filesystem;loki")
 
     set_target_properties(${library_name} PROPERTIES LINKER_LANGUAGE CXX)

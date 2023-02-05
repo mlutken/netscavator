@@ -51,15 +51,15 @@ set ( WEBMINER_PHP_EXTENSION_DIR    "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}" )
 set ( PHP_HARDCODED_INI_FILE_PATH   "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/php.ini" )
 configure_file (${CMAKE_CURRENT_LIST_DIR}/scriptcrawl/cpp_crawl/php.ini.in ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/php.ini )
 
-set  ( swig_EXECUTABLE   ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/swig-3.0.12/linux_64/bin/swig )
+set  ( swig_EXECUTABLE   ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/swig-4.1.1/linux_64/bin/swig )
 
 # ---------------------------------------
 # --- Custom PHP Includes and defines ---
 # ---------------------------------------
 set (CUSTOM_PHP_INCLUDES "${CUSTOM_PHP_BASE_DIR}/include/php;${CUSTOM_PHP_BASE_DIR}/include/php/Zend;${CUSTOM_PHP_BASE_DIR}/include/php/TSRM;${CUSTOM_PHP_BASE_DIR}/include/php/main")
 set (CUSTOM_PHP_LIBRARIES "")
-add_library(php-sleipner5 SHARED IMPORTED)
-set_target_properties(php-sleipner5 PROPERTIES IMPORTED_LOCATION "${CUSTOM_PHP_BASE_DIR}/lib/libphp-sleipner5.so")
+add_library(php-sleipner8 SHARED IMPORTED)
+set_target_properties(php-sleipner8 PROPERTIES IMPORTED_LOCATION "${CUSTOM_PHP_BASE_DIR}/lib/libphp-sleipner8.so")
 
 # -----------------------------------
 # --- Webkit Includes and defines ---

@@ -17,7 +17,7 @@ set (SCRIPTCRAWL_WRAP_CPP_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/scriptcrawl_wra
 ADD_CUSTOM_COMMAND(
     OUTPUT 				${SCRIPTCRAWL_WRAP_CPP_PATH}
     SOURCE				${scriptcrawl_dir}/scriptcrawl.i
-    COMMAND 			${swig_EXECUTABLE} -c++ -php5 -outdir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} -module ${library_name} -o ${SCRIPTCRAWL_WRAP_CPP_PATH} ${scriptcrawl_dir}/scriptcrawl.i
+    COMMAND 			${swig_EXECUTABLE} -c++ -php7 -outdir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} -module ${library_name} -o ${SCRIPTCRAWL_WRAP_CPP_PATH} ${scriptcrawl_dir}/scriptcrawl.i
     WORKING_DIRECTORY	${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
     DEPENDS				${scriptcrawl_dir}/scriptcrawl.i
 )
@@ -44,7 +44,7 @@ set_property(SOURCE ${SCRIPTCRAWL_WRAP_CPP_PATH} PROPERTY SKIP_AUTOGEN ON) # Pre
 # --- Build instructions ---
 # --------------------------
 get_filename_component(PARENT_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
-target_link_libraries(${library_name} PUBLIC "${CUSTOM_PHP_BASE_DIR}/lib/libphp-sleipner5.so")
+target_link_libraries(${library_name} PUBLIC "${CUSTOM_PHP_BASE_DIR}/lib/libphp-sleipner8.so")
 target_link_libraries(${library_name} PUBLIC "crawl;interfaces")
 target_link_libraries(${library_name} PUBLIC "cpaf_net;loki")
 

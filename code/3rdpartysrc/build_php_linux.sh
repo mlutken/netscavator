@@ -4,7 +4,7 @@
 # objdump -R -x ../3rdparty/php-5.3.8/linux_64_release/lib/libphp5ts.so | grep SONAME
 
 # --- Verision to build ---
-PHP_VERSION="5.6.40"
+PHP_VERSION="8.1.14"
 PHP_DIR=./php-${PHP_VERSION}
 
 

@@ -60,10 +60,11 @@ template <>
 bool	getPhpRetVal<bool> 	( zval*	pRetval )
 {
     bool bRetVal = false;
-    if ( Z_TYPE_P(pRetval) == IS_BOOL 	) 	bRetVal = static_cast<bool>(Z_BVAL_P(pRetval));
-    if ( Z_TYPE_P(pRetval) == IS_LONG 	) 	bRetVal = static_cast<bool>(Z_LVAL_P(pRetval));
-    if ( Z_TYPE_P(pRetval) == IS_DOUBLE ) 	bRetVal = static_cast<bool>(Z_DVAL_P(pRetval));
-    if ( (Z_TYPE_P(pRetval) == IS_STRING) && pRetval->value.str.val ) {
+    if      ( Z_TYPE_P(pRetval) == IS_FALSE ) 	bRetVal = static_cast<bool>(false);
+    else if ( Z_TYPE_P(pRetval) == IS_TRUE 	) 	bRetVal = static_cast<bool>(true);
+    else if ( Z_TYPE_P(pRetval) == IS_LONG 	) 	bRetVal = static_cast<bool>(Z_LVAL_P(pRetval));
+    else if ( Z_TYPE_P(pRetval) == IS_DOUBLE ) 	bRetVal = static_cast<bool>(Z_DVAL_P(pRetval));
+    else if ( (Z_TYPE_P(pRetval) == IS_STRING) && pRetval->value.str) {
         std::string sRetVal = Z_STRVAL_P(pRetval);
         if ( sRetVal != "" && sRetVal != "0" && sRetVal != "false" )	bRetVal = true;
     }
@@ -85,7 +86,7 @@ template <>
 std::string	getPhpRetVal<std::string> 	( zval*	pRetval )
 {
     std::string 	sRetVal	= "";
-    if ( (Z_TYPE_P(pRetval) == IS_STRING) && pRetval->value.str.val ) {	sRetVal = Z_STRVAL_P(pRetval);	}
+    if ( (Z_TYPE_P(pRetval) == IS_STRING) && pRetval->value.str) {	sRetVal = Z_STRVAL_P(pRetval);	}
     return sRetVal;
 }
 
@@ -94,10 +95,11 @@ template <>
 boost::any	getPhpRetVal<boost::any> 	( zval*	pRetval )
 {
     boost::any anyRetVal;
-    if ( Z_TYPE_P(pRetval) == IS_BOOL 	) 	anyRetVal = static_cast<bool>(Z_BVAL_P(pRetval));
-    if ( Z_TYPE_P(pRetval) == IS_LONG 	) 	anyRetVal = static_cast<long>(Z_LVAL_P(pRetval));
-    if ( Z_TYPE_P(pRetval) == IS_DOUBLE ) 	anyRetVal = static_cast<double>(Z_DVAL_P(pRetval));
-    if ( (Z_TYPE_P(pRetval) == IS_STRING) && pRetval->value.str.val ) {
+    if      ( Z_TYPE_P(pRetval) == IS_FALSE ) 	anyRetVal = static_cast<bool>(false);
+    else if ( Z_TYPE_P(pRetval) == IS_TRUE 	) 	anyRetVal = static_cast<bool>(true);
+    else if ( Z_TYPE_P(pRetval) == IS_LONG 	) 	anyRetVal = static_cast<long>(Z_LVAL_P(pRetval));
+    else if ( Z_TYPE_P(pRetval) == IS_DOUBLE ) 	anyRetVal = static_cast<double>(Z_DVAL_P(pRetval));
+    else if ( (Z_TYPE_P(pRetval) == IS_STRING) && pRetval->value.str ) {
         std::string sRetVal = Z_STRVAL_P(pRetval);
         anyRetVal = sRetVal;
     }
@@ -116,8 +118,7 @@ boost::any	getPhpRetVal<boost::any> 	( zval*	pRetval )
     zval* 				pFunctionName;										\
     zval*				pRetval;											\
     TSRMLS_FETCH();															\
-    ALLOC_INIT_ZVAL		( pFunctionName									);	\
-    ZVAL_STRING			( pFunctionName, (char*)sFunName.c_str(), 1 	);
+    ZVAL_STRING			( pFunctionName, (char*)sFunName.c_str() 	);
                                                                                                                         \
 
 #define CALL_PHP_FUN_END                                                                            \
@@ -139,17 +140,17 @@ RETTYPE callScriptFunction (
     std::string const& sFunName 	///< Name of (global/free) function to be called
 )
 {
-    CALL_PHP_FUN_BEGIN
-    if ( call_user_function_ex( CG(function_table ), NULL, pFunctionName, &pRetval, 0, NULL, 0, NULL TSRMLS_CC ) != SUCCESS )
-    { bOk = false; }
+    bool bOk = false;
+    constexpr int params_count = 1;
 
-    RETTYPE retval = getPhpRetVal<RETTYPE>( pRetval );
-
-    if ( true == bOk ) {
-      zval_ptr_dtor(&pRetval);
-    } else {
-        printf("ERROR: RETTYPE callScriptFunction() Function call from C++ to php function '%s' failed\n", sFunName.c_str() );
+    zval fn_name;
+    ZVAL_STRINGL(&fn_name, sFunName.c_str(), sFunName.length());
+    zval return_value;
+    if ( call_user_function( CG(function_table ), NULL, &fn_name, &return_value, 0, NULL) != SUCCESS ) {
+        bOk = true;
     }
+
+    RETTYPE retval = getPhpRetVal<RETTYPE>( &return_value );
     return retval;
 }
 
@@ -163,27 +164,19 @@ RETTYPE callScriptFunction (
     std::string const& sParam 		///< Parameter to call with
 )
 {
-    CALL_PHP_FUN_BEGIN
-    const int iParamCount = 1;
-    zval**				params[iParamCount]; 		// Creates array of parameters with 1 element allocated.
-    zval* 				pParamString;
+    bool bOk = false;
+    constexpr int params_count = 1;
+    zval params[params_count];
+    ZVAL_STRINGL(&params[0], sParam.c_str(), sParam.length());
 
-    ALLOC_INIT_ZVAL		( pParamString									);
-    ZVAL_STRING			( pParamString, (char*)sParam.c_str(), 1 		);
-    params[0] = &pParamString; // Makes pParamString the first parameter to php function we are calling.
-
-    if ( call_user_function_ex( CG(function_table ), NULL, pFunctionName, &pRetval, iParamCount, params, 0, NULL TSRMLS_CC ) != SUCCESS )
-    { bOk = false; }
-
-    RETTYPE retval = getPhpRetVal<RETTYPE>( pRetval );
-
-    zval_ptr_dtor(&pParamString);
-
-    if ( true == bOk ) {
-      zval_ptr_dtor(&pRetval);
-    } else {
-        printf("ERROR: RETTYPE callScriptFunction(sParam) Function call from C++ to php function '%s' failed\n", sFunName.c_str() );
+    zval fn_name;
+    ZVAL_STRINGL(&fn_name, sFunName.c_str(), sFunName.length());
+    zval return_value;
+    if ( call_user_function( CG(function_table ), NULL, &fn_name, &return_value, params_count, params) != SUCCESS ) {
+        bOk = true;
     }
+
+    RETTYPE retval = getPhpRetVal<RETTYPE>( &return_value );
     return retval;
 }
 
@@ -197,31 +190,20 @@ RETTYPE	callScriptFunction (
     ,const std::string& sParam2
 )
 {
-    CALL_PHP_FUN_BEGIN
-    const int iParamCount = 2;
-    zval**				params[iParamCount]; 		// Creates array of parameters with 2 elements allocated.
-    zval* 				pParamString1;
-    zval* 				pParamString2;
+    bool bOk = false;
+    constexpr int params_count = 2;
+    zval params[params_count];
+    ZVAL_STRINGL(&params[0], sParam1.c_str(), sParam1.length());
+    ZVAL_STRINGL(&params[1], sParam2.c_str(), sParam2.length());
 
-    ALLOC_INIT_ZVAL		( pParamString1									);
-    ZVAL_STRING			( pParamString1, (char*)sParam1.c_str(), 1 		);
-    ALLOC_INIT_ZVAL		( pParamString2									);
-    ZVAL_STRING			( pParamString2, (char*)sParam2.c_str(), 1 		);
-    params[0] = &pParamString1;
-    params[1] = &pParamString2;
-
-    if ( call_user_function_ex( CG(function_table ), NULL, pFunctionName, &pRetval, iParamCount, params, 0, NULL TSRMLS_CC) != SUCCESS )
-    { bOk = false; }
-
-    RETTYPE retval = getPhpRetVal<RETTYPE>( pRetval );
-
-    zval_ptr_dtor(&pParamString1);
-    zval_ptr_dtor(&pParamString2);
-    if ( true == bOk ) {
-      zval_ptr_dtor(&pRetval);
-    } else {
-        printf("ERROR: RETTYPE callScriptFunction(sParam1, sParam2) Function call from C++ to php function '%s' failed\n", sFunName.c_str() );
+    zval fn_name;
+    ZVAL_STRINGL(&fn_name, sFunName.c_str(), sFunName.length());
+    zval return_value;
+    if ( call_user_function( CG(function_table ), NULL, &fn_name, &return_value, params_count, params) != SUCCESS ) {
+        bOk = true;
     }
+
+    RETTYPE retval = getPhpRetVal<RETTYPE>( &return_value );
     return retval;
 }
 
@@ -236,36 +218,21 @@ RETTYPE	callScriptFunction	(
     const std::string& sParam3
 )
 {
-    CALL_PHP_FUN_BEGIN
-    const int iParamCount = 3;
-    zval**				params[iParamCount]; 		// Creates array of parameters with 3 elements allocated.
-    zval* 				pParamString1;
-    zval* 				pParamString2;
-    zval* 				pParamString3;
+    bool bOk = false;
+    constexpr int params_count = 3;
+    zval params[params_count];
+    ZVAL_STRINGL(&params[0], sParam1.c_str(), sParam1.length());
+    ZVAL_STRINGL(&params[1], sParam2.c_str(), sParam2.length());
+    ZVAL_STRINGL(&params[2], sParam3.c_str(), sParam3.length());
 
-    ALLOC_INIT_ZVAL		( pParamString1									);
-    ZVAL_STRING			( pParamString1, (char*)sParam1.c_str(), 1 		);
-    ALLOC_INIT_ZVAL		( pParamString2									);
-    ZVAL_STRING			( pParamString2, (char*)sParam2.c_str(), 1 		);
-    ALLOC_INIT_ZVAL		( pParamString3									);
-    ZVAL_STRING			( pParamString3, (char*)sParam3.c_str(), 1 		);
-    params[0] = &pParamString1;
-    params[1] = &pParamString2;
-    params[2] = &pParamString3;
-
-    if ( call_user_function_ex( CG(function_table ), NULL, pFunctionName, &pRetval, iParamCount, params, 0, NULL TSRMLS_CC ) != SUCCESS )
-    { bOk = false; }
-
-    RETTYPE retval = getPhpRetVal<RETTYPE>( pRetval );
-
-    zval_ptr_dtor(&pParamString1);
-    zval_ptr_dtor(&pParamString2);
-    zval_ptr_dtor(&pParamString3);
-    if ( true == bOk ) {
-      zval_ptr_dtor(&pRetval);
-    } else {
-        printf("ERROR: RETTYPE callScriptFunction(sParam1, sParam2, sParam3) Function call from C++ to php function '%s' failed\n", sFunName.c_str() );
+    zval fn_name;
+    ZVAL_STRINGL(&fn_name, sFunName.c_str(), sFunName.length());
+    zval return_value;
+    if ( call_user_function( CG(function_table ), NULL, &fn_name, &return_value, params_count, params) != SUCCESS ) {
+        bOk = true;
     }
+
+    RETTYPE retval = getPhpRetVal<RETTYPE>( &return_value );
     return retval;
 }
 
@@ -283,41 +250,22 @@ RETTYPE	callScriptFunction	(
     const std::string& sParam4
 )
 {
-    CALL_PHP_FUN_BEGIN
-    const int iParamCount = 4;
-    zval**				params[iParamCount]; 		// Creates array of parameters with 4 elements allocated.
-    zval* 				pParamString1;
-    zval* 				pParamString2;
-    zval* 				pParamString3;
-    zval* 				pParamString4;
+    bool bOk = false;
+    constexpr int params_count = 4;
+    zval params[params_count];
+    ZVAL_STRINGL(&params[0], sParam1.c_str(), sParam1.length());
+    ZVAL_STRINGL(&params[1], sParam2.c_str(), sParam2.length());
+    ZVAL_STRINGL(&params[2], sParam3.c_str(), sParam3.length());
+    ZVAL_STRINGL(&params[3], sParam4.c_str(), sParam4.length());
 
-    ALLOC_INIT_ZVAL		( pParamString1									);
-    ZVAL_STRING			( pParamString1, (char*)sParam1.c_str(), 1 		);
-    ALLOC_INIT_ZVAL		( pParamString2									);
-    ZVAL_STRING			( pParamString2, (char*)sParam2.c_str(), 1 		);
-    ALLOC_INIT_ZVAL		( pParamString3									);
-    ZVAL_STRING			( pParamString3, (char*)sParam3.c_str(), 1 		);
-    ALLOC_INIT_ZVAL		( pParamString4									);
-    ZVAL_STRING			( pParamString4, (char*)sParam4.c_str(), 1 		);
-    params[0] = &pParamString1;
-    params[1] = &pParamString2;
-    params[2] = &pParamString3;
-    params[3] = &pParamString4;
-
-    if ( call_user_function_ex( CG(function_table ), NULL, pFunctionName, &pRetval, iParamCount, params, 0, NULL TSRMLS_CC ) != SUCCESS )
-    { bOk = false; }
-
-    RETTYPE retval = getPhpRetVal<RETTYPE>( pRetval );
-
-    zval_ptr_dtor(&pParamString1);
-    zval_ptr_dtor(&pParamString2);
-    zval_ptr_dtor(&pParamString3);
-    zval_ptr_dtor(&pParamString4);
-    if ( true == bOk ) {
-      zval_ptr_dtor(&pRetval);
-    } else {
-        printf("ERROR: RETTYPE callScriptFunction(sParam1, sParam2, sParam3, sParam4) Function call from C++ to php function '%s' failed\n", sFunName.c_str() );
+    zval fn_name;
+    ZVAL_STRINGL(&fn_name, sFunName.c_str(), sFunName.length());
+    zval return_value;
+    if ( call_user_function( CG(function_table ), NULL, &fn_name, &return_value, params_count, params) != SUCCESS ) {
+        bOk = true;
     }
+
+    RETTYPE retval = getPhpRetVal<RETTYPE>( &return_value );
     return retval;
 }
 
@@ -332,14 +280,12 @@ phpCallScriptFunction_Void (
     std::string const& sFunName 	///< Name of (global/free) function to be called
 )
 {
-    CALL_PHP_FUN_BEGIN
-    if ( call_user_function_ex( CG(function_table ), NULL, pFunctionName, &pRetval, 0, NULL, 0, NULL TSRMLS_CC ) != SUCCESS )		\
-    { bOk = false; }
+    constexpr int params_count = 1;
 
-    if ( true == bOk ) {
-      zval_ptr_dtor(&pRetval);
-    } else {
-        printf("ERROR: void callScriptFunction() Function call from C++ to php function '%s' failed\n", sFunName.c_str() );
+    zval fn_name;
+    ZVAL_STRINGL(&fn_name, sFunName.c_str(), sFunName.length());
+    zval return_value;
+    if ( call_user_function( CG(function_table ), NULL, &fn_name, &return_value, 0, NULL) != SUCCESS ) {
     }
 }
 
@@ -350,24 +296,14 @@ phpCallScriptFunction_Void (
     std::string const& sParam 		///< Parameter to call with
 )
 {
-    CALL_PHP_FUN_BEGIN
-    const int iParamCount = 1;
-    zval**				params[iParamCount]; 		// Creates array of parameters with 1 element allocated.
-    zval* 				pParamString;
+    constexpr int params_count = 1;
+    zval params[params_count];
+    ZVAL_STRINGL(&params[0], sParam.c_str(), sParam.length());
 
-    ALLOC_INIT_ZVAL		( pParamString									);
-    ZVAL_STRING			( pParamString, (char*)sParam.c_str(), 1 		);
-    params[0] = &pParamString; // Makes pParamString the first parameter to php function we are calling.
-
-    if ( call_user_function_ex( CG(function_table ), NULL, pFunctionName, &pRetval, iParamCount, params, 0, NULL TSRMLS_CC ) != SUCCESS )
-    { bOk = false; }
-
-
-    zval_ptr_dtor(&pParamString);
-    if ( true == bOk ) {
-      zval_ptr_dtor(&pRetval);
-    } else {
-        printf("ERROR: void callScriptFunction(sParam1) Function call from C++ to php function '%s' failed\n", sFunName.c_str() );
+    zval fn_name;
+    ZVAL_STRINGL(&fn_name, sFunName.c_str(), sFunName.length());
+    zval return_value;
+    if ( call_user_function( CG(function_table ), NULL, &fn_name, &return_value, params_count, params) != SUCCESS ) {
     }
 }
 

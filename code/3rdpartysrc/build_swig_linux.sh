@@ -7,7 +7,7 @@
 # There is a branch called php8-support, which tries to use PHP8, but so far it does not compile.
 # Help would be appreciated greatly :)
 # --- Version to build ---
-SWIG_VERSION="3.0.12"
+SWIG_VERSION="4.1.1"
 SWIG_DIR=./swig-${SWIG_VERSION}
 
 

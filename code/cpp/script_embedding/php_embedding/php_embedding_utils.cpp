@@ -2,9 +2,12 @@
 #include "php_embedding_utils.h"
 #include <stdio.h>
 #include <string.h>
+
 #include <sapi/embed/php_embed.h>
 
 #include "php_embedding_callbacks.h"
+
+//https://www.phpinternalsbook.com/php7/extensions_design/zend_extensions.html
 
 using namespace std;
  
@@ -79,9 +82,9 @@ static void embed_flush(void* server_context)
     }
 }
 
-static int embed_ub_write( const char* str, unsigned int strLength TSRMLS_DC )
+static size_t embed_ub_write( const char* str, size_t strLength )
 {
-    int consumed = strLength;
+    auto consumed = strLength;
     if ( g_phpEmbedCallbacks::Instance().writeFun ) {
         consumed = g_phpEmbedCallbacks::Instance().writeFun( str, strLength );
         if (g_phpEmbedCallbacks::Instance().logToStdOut)
@@ -94,7 +97,8 @@ static int embed_ub_write( const char* str, unsigned int strLength TSRMLS_DC )
 }
 
 //static void embed_log_message( char* str )  // php-5.3.8
-static void embed_log_message( char* str TSRMLS_DC )  // php-5.4.9
+// char *message, int syslog_type_int
+static void embed_log_message( const char* str, int syslog_type_int )  // php-5.4.9
 {
     if ( g_phpEmbedCallbacks::Instance().logMsgFun ) {
         g_phpEmbedCallbacks::Instance().logMsgFun( str );
@@ -144,11 +148,12 @@ void startupPhp( const char* szPhpIniPath )
     if ( original_embed_shutdown == NULL )  original_embed_shutdown = php_embed_module.shutdown;  /*Save original shutdown */
     php_embed_module.shutdown= embed_shutdown_callback;
 
-	php_embed_module.flush			= embed_flush;
+    php_embed_module.flush			= embed_flush;
     php_embed_module.ub_write		= embed_ub_write;
     php_embed_module.log_message	= embed_log_message;
     php_embed_module.sapi_error		= embed_error_message;
-    php_embed_init( ac, av PTSRMLS_CC );
+//    php_embed_init( ac, av PTSRMLS_CC );
+    php_embed_init( ac, av);
     g_phpRunning = true;
 }
 
@@ -170,11 +175,12 @@ void startupPhpScript (
     if ( original_embed_shutdown == NULL )  original_embed_shutdown = php_embed_module.shutdown;  /*Save original shutdown */
     php_embed_module.shutdown= embed_shutdown_callback;
 
-	php_embed_module.flush			= embed_flush;
+    php_embed_module.flush			= embed_flush;
     php_embed_module.ub_write		= embed_ub_write;
     php_embed_module.log_message	= embed_log_message;
     php_embed_module.sapi_error		= embed_error_message;
-    php_embed_init( argc, argv PTSRMLS_CC );
+//    php_embed_init( argc, argv PTSRMLS_CC );
+    php_embed_init( argc, argv);
     g_phpRunning = true;
 }
 
@@ -182,7 +188,7 @@ void startupPhpScript (
 void shutdownPhp()
 {
     if ( true == g_phpRunning ) {
-        php_embed_shutdown(TSRMLS_C);
+        php_embed_shutdown();
     }
     g_phpRunning = false;
 }
@@ -200,7 +206,7 @@ void executePhpString ( const char* szPhpCode )
     zend_first_try {
         char* szCode;
         spprintf( &szCode, 0, "%s", szPhpCode );
-        zend_eval_string( szCode, NULL, szCode TSRMLS_CC );
+        zend_eval_string( szCode, NULL, szCode );
         efree ( szCode );
     } zend_end_try();
 }
@@ -223,10 +229,19 @@ void iniFileAddIncludePath ( const char* szIncludePath )
     strcat(szNewIncludePath, ":");
 #endif
     strcat(szNewIncludePath, szIncludePath );
+//    ZEND_API int zend_alter_ini_entry(zend_string *name, zend_string *new_value, int modify_type, int stage);
 
-    zend_alter_ini_entry( "include_path", sizeof("include_path")
-                          , szNewIncludePath, strlen(szNewIncludePath)
-                          , PHP_INI_SYSTEM, PHP_INI_STAGE_ACTIVATE );
+//    zend_string const_include_path;
+//    zval include_path;
+    zend_string* const_include_path = zend_string_init("include_path", strlen("include_path"), 0);
+    zend_string* include_path = zend_string_init(szIncludePath, strlen(szIncludePath), 0);
+//    ZVAL_STRING(&const_include_path, "include_path");
+//    ZVAL_STRING(&include_path, szIncludePath);
+
+    zend_alter_ini_entry( const_include_path, include_path, PHP_INI_SYSTEM, PHP_INI_STAGE_ACTIVATE );
+//    zend_alter_ini_entry( "include_path", sizeof("include_path")
+//                          , szNewIncludePath, strlen(szNewIncludePath)
+//                          , PHP_INI_SYSTEM, PHP_INI_STAGE_ACTIVATE );
 }
 
 
@@ -235,7 +250,7 @@ void executePhpFileCharPtr ( char* szFileName )
     zend_first_try {
         char* include_script;
         spprintf( &include_script, 0, "include '%s';", szFileName );
-        zend_eval_string( include_script, NULL, szFileName TSRMLS_CC );
+        zend_eval_string( include_script, NULL, szFileName );
         efree ( include_script );
     } zend_end_try();
 }
@@ -245,7 +260,7 @@ void executePhpStringCharPtr ( char* szPhpCode )
     zend_first_try {
         char* szCode;
         spprintf( &szCode, 0, "%s", szPhpCode );
-        zend_eval_string( szCode, NULL, szPhpCode TSRMLS_CC );
+        zend_eval_string( szCode, NULL, szPhpCode );
         efree ( szCode );
     } zend_end_try();
 }
@@ -341,7 +356,9 @@ bool phpFunctionExists(const char *szFunctionName, int nameLenght)
         name_len--;
     }
 
-    retval = (zend_hash_find(EG(function_table), name, name_len+1, (void **)&func) == SUCCESS);
+//    retval = (zend_hash_find(EG(function_table), name, name_len+1, (void **)&func) == SUCCESS);
+    zval* fun_name = zend_hash_str_find(EG(function_table), name, name_len+1);
+    return fun_name != nullptr;
 
     efree(lcname);
 
@@ -349,10 +366,10 @@ bool phpFunctionExists(const char *szFunctionName, int nameLenght)
      * A bit of a hack, but not a bad one: we see if the handler of the function
      * is actually one that displays "function is disabled" message.
      */
-    if (retval && func->type == ZEND_INTERNAL_FUNCTION &&
-        func->internal_function.handler == zif_display_disabled_function) {
-        retval = 0;
-    }
+///    if (retval && func->type == ZEND_INTERNAL_FUNCTION &&
+///        func->internal_function.handler == zif_display_disabled_function) {
+///        retval = 0;
+///    }
 
     ///RETURN_BOOL(retval);
     return retval != 0;
