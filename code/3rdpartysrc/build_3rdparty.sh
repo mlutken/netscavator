@@ -57,9 +57,5 @@ cd ${thirdparty_src_dir}
 ./build_qscintilla_linux_system_qt.sh --build-type=release --jobs=${JOBS}
 ./build_qscintilla_linux_system_qt.sh --build-type=debug --jobs=${JOBS}
 
-# For now we use htmlparser version in crawler/code/cpp/htmlparser
-# ./build_htmlcxx_linux.sh --build-type=debug --jobs=${JOBS}
-# ./build_htmlcxx_linux.sh --build-type=release --jobs=${JOBS}
-
 
 cd ${thirdparty_startup_dir}
