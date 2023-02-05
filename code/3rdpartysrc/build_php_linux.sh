@@ -4,7 +4,7 @@
 # objdump -R -x ../3rdparty/php-5.3.8/linux_64_release/lib/libphp5ts.so | grep SONAME
 
 # --- Verision to build ---
-PHP_VERSION="5.6.12"
+PHP_VERSION="5.6.40"
 PHP_DIR=./php-${PHP_VERSION}
 
 
@@ -165,9 +165,6 @@ then
 	pushd ${PHP_DIR}
 	make install
 	popd
-# 	pushd ${DST_DIR_BASE_ABS}
-# 	tar cjvf ${LEAF_DIR}.tar.bz2 ${LEAF_DIR}
-# 	popd
 fi
 
 echo "DST_DIR		: ${DST_DIR}"

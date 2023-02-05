@@ -145,16 +145,6 @@ then
 	make install
 	popd
 	pushd ${DST_DIR_BASE_ABS}
-	# --- Fix compile error, that we otherwise get ---
-	# UPDATE: Seems this was needed in version 2.0.7 to 2.0.9
-	# So we can skip it again
-	# See SWIG change log:
-	#     2013-01-08: olly
-    #          [PHP] Fix to work with a ZTS build of PHP (broken in 2.0.7).
-    ##sed  -i '' -e "s/#define SWIG_fail goto fail/#define SWIG_fail goto fail\\n\\n#ifdef ZTS\\n\\tvoid*** tsrm_ls;\\n#endif\\n/" ./${LEAF_DIR}/share/swig/${SWIG_VERSION}/php/phprun.swg
-
-	tar cjvf ${LEAF_DIR}.tar.bz2 ${LEAF_DIR}
-	popd
 fi
 
 echo "DST_DIR		: ${DST_DIR}"
