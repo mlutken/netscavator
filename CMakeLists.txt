@@ -109,3 +109,5 @@ message ("CMAKE_COMPILE_PDB_OUTPUT_DIRECTORY: '${CMAKE_COMPILE_PDB_OUTPUT_DIRECT
 message ("RELEASE_BUILD_DIR                 : '${RELEASE_BUILD_DIR}'")
 message ("CPAF_INSTALL_DIR                  : '${CPAF_INSTALL_DIR}'")
 
+# Get tarball from Github netscavator: https://api.github.com/repos/mlutken/netscavator/tarball
+# Get tarball from Github cpaf: https://api.github.com/repos/mlutken/cpaf/tarball
