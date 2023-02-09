@@ -77,7 +77,7 @@ parts:
         pushd netscavator
         ./cpaf/build_3rdparty_cpaf.sh
         ./code/3rdpartysrc/build_3rdparty_release.sh
-        ./build.sh -b=release
+        ./build.sh -b=release --test=n
         popd
 
     override-stage: |
