@@ -48,6 +48,7 @@ SRC_DIR_SCRIPTCRAWL=${PROJECT_CPP_DIR}/scriptcrawl
 SRC_DATA_DIR=${PROJECT_CPP_DIR}/data
 
 DST_BIN_DIR=/root/stage/bin
+DST_LIB_DIR=/root/stage/lib
 
 echo "DISTRIB_ID                : ${DISTRIB_ID}"
 echo "DISTRIB_RELEASE           : ${DISTRIB_RELEASE}"
@@ -114,6 +115,10 @@ cp ${SRC_DIR_EXE}/qtwebengine_resources.pak ${DST_BIN_DIR}
 
 # Copy all dynamic dependencies of minercreator
 ${PROJECT_CPP_DIR}/bin/copy_dependencies.sh ${SRC_DIR_EXE}/netcreator ${DST_BIN_DIR}
+
+${PROJECT_CPP_DIR}/bin/copy_dependencies.sh ${SRC_DIR_EXE}/netcreator ${DST_LIB_DIR}
+cp ${SRC_DIR_LIBS}/cpp_crawl.so ${DST_LIB_DIR}
+cp ${SRC_DIR_PHP}/libphp-sleipner5.so ${DST_LIB_DIR}
 
 # --- strip files ---
 strip ${DST_BIN_DIR}/*.so

@@ -8,7 +8,7 @@ description: |
   DOM sequence approach ensures very robust scripts.
 
 grade: devel # must be 'stable' to release into candidate/stable channels
-confinement: devmode # use 'strict' once you have the right plugs and slots
+confinement: classic # use 'strict' once you have the right plugs and slots
 
 apps:
   netscavator:
@@ -95,6 +95,7 @@ parts:
         popd
 
     override-stage: |
+        echo "Touch stage step 1"
         pwd
         cd ~/parts/netscavator-main/src
         pushd netscavator
