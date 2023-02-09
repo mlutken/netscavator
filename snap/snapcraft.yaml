@@ -1,0 +1,85 @@
+name: netscavator # you probably want to 'snapcraft register <name>'
+base: core22 # the base snap is the execution environment for this snap
+version: '6.5.0' # just for humans, typically '1.2+git' or '1.3.2'
+summary: Webscraper robot and IDE for large scale automated scraping # 79 char long summary
+description: |
+  IDE and robot for easy automated webscraping. System can scrape using
+  simple plain HTML (Beautiful soup style) and full browser like Selenium.
+  DOM sequence approach ensures very robust scripts.
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+
+apps:
+  netscavator:
+    command: bin/netscavator
+  netcreator:
+    command: bin/netcreator
+
+build-packages:
+  - python3-pip
+  - libbz2-dev
+  - qt6-base-dev
+  - qt6-base-dev-tools
+  - qt6-webengine-dev
+  - qt6-webengine-dev-tools
+  - qt6-quick3d-dev
+  - qt6-quick3d-dev-tools
+  - qt6-declarative-dev
+  - libqt6opengl6-dev
+  - libqt6webenginewidgets6
+  - libqt6widgets6
+  - libboost-all-dev
+  - libssl-dev
+  - libcurl4-openssl-dev
+  - pkg-config
+  - libavcodec-dev
+  - libavdevice-dev
+  - libavdevice58
+  - libavfilter-dev
+  - libavformat-dev
+  - libavutil-dev
+  - libdlna-dev
+  - libffmpeg-nvenc-dev
+  - libffmpeg-ocaml-dev
+  - libffmpegthumbnailer-dev
+  - libpostproc-dev
+  - libsdl-kitchensink-dev
+  - libswresample-dev
+  - libswscale-dev
+  - mkchromecast
+  - libsdl2-dev
+  - libsdl2-gfx-dev
+  - libsdl2-image-dev
+  - libsdl2-mixer-dev
+  - libsdl2-net-dev
+  - libsdl2-ttf-dev
+  - libsndifsdl2-dev
+
+
+parts:
+  install-needed:
+    plugin: nil
+    override-pull: |
+      pip install conan
+
+
+  netscavator-main:
+    source: https://github.com/mlutken/netscavator.git
+    override-pull: |
+      git clone https://github.com/mlutken/netscavator.git
+      pushd netscavator
+      git clone https://github.com/mlutken/cpaf.git
+      popd
+
+    override-build: |
+        pushd netscavator
+        ./cpaf/build_3rdparty_cpaf.sh
+        ./code/3rdpartysrc/build_3rdparty_release.sh
+        ./build.sh
+        popd
+
+    plugin: dump
+    after:
+      - install-needed
+
