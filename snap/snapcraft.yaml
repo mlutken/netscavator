@@ -74,6 +74,9 @@ parts:
         git clone https://github.com/mlutken/netscavator.git
         pushd netscavator
         git clone https://github.com/mlutken/cpaf.git
+        git pull
+        git submodule init
+        git submodule update --recursive
         popd
 
     override-build: |
