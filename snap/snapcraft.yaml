@@ -80,12 +80,12 @@ parts:
         popd
 
     override-build: |
-        echo "Touch buildstep 2"
+        echo "Touch buildstep 3"
         pushd netscavator
-        ./cpaf/build_3rdparty_cpaf.sh
+        ./code/3rdpartysrc/build_3rdparty_release.sh --delete-src=n --do-build=y --copy-build=y
         popd
         pushd netscavator
-        ./code/3rdpartysrc/build_3rdparty_release.sh
+        ./cpaf/build_3rdparty_cpaf.sh
         popd
         pushd netscavator
         ./build.sh -b=release --test=n
