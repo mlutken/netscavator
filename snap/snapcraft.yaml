@@ -68,7 +68,7 @@ parts:
 
 
   netscavator-main:
-    #source: https://github.com/mlutken/netscavator.git
+    source: https://github.com/mlutken/netscavator.git
     override-pull: |
         git clone https://github.com/mlutken/netscavator.git
         pushd netscavator
