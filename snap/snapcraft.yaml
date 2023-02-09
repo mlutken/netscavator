@@ -70,7 +70,7 @@ parts:
   netscavator-main:
     source: https://github.com/mlutken/netscavator.git
     override-pull: |
-        echo "Touch pullstep 1"
+        echo "Touch pullstep 2"
         git clone https://github.com/mlutken/netscavator.git
         pushd netscavator
         git clone https://github.com/mlutken/cpaf.git
@@ -80,7 +80,7 @@ parts:
         popd
 
     override-build: |
-        echo "Touch buildstep 1"
+        echo "Touch buildstep 2"
         pushd netscavator
         ./cpaf/build_3rdparty_cpaf.sh
         popd
