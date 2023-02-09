@@ -101,7 +101,7 @@ parts:
         ./snapcraft-stage.sh
         popd
 
-   override-prime: |
+    override-prime: |
         pwd
         cp -r ~/stage/* ~/prime
 
