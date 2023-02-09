@@ -68,7 +68,7 @@ parts:
 
 
   netscavator-main:
-    source: https://github.com/mlutken/netscavator.git
+    #source: https://github.com/mlutken/netscavator.git
     override-pull: |
         git clone https://github.com/mlutken/netscavator.git
         pushd netscavator
@@ -81,9 +81,9 @@ parts:
         popd
 
     override-build: |
-        echo "Touch buildstep 3"
+        echo "Touch buildstep 4"
         pwd
-        cd /root/parts
+        cd ~/parts/netscavator-main/src
         pushd netscavator
         ./code/3rdpartysrc/build_3rdparty_release.sh --delete-src=n --do-build=y --copy-build=y
         popd
@@ -96,6 +96,7 @@ parts:
 
     override-stage: |
         pwd
+        cd ~/parts/netscavator-main/src
         pushd netscavator
         ./snapcraft-stage.sh
         popd
