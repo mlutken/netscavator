@@ -70,9 +70,10 @@ parts:
   netscavator-main:
     source: https://github.com/mlutken/netscavator.git
     override-pull: |
-        echo "Touch pullstep 2"
         git clone https://github.com/mlutken/netscavator.git
         pushd netscavator
+        echo "Touch pullstep 3"
+        pwd
         git clone https://github.com/mlutken/cpaf.git
         git pull
         git submodule init
@@ -81,6 +82,8 @@ parts:
 
     override-build: |
         echo "Touch buildstep 3"
+        pwd
+        cd /root/parts
         pushd netscavator
         ./code/3rdpartysrc/build_3rdparty_release.sh --delete-src=n --do-build=y --copy-build=y
         popd
