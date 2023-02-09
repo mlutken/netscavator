@@ -17,6 +17,7 @@ apps:
     command: bin/netcreator
 
 build-packages:
+  - cmake
   - python3-pip
   - libbz2-dev
   - qt6-base-dev

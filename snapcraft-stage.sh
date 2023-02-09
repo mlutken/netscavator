@@ -29,11 +29,8 @@ SRC_DIR_QT=${PROJECT_CODE_DIR}/3rdparty/${WEBKIT_DIR}/linux_${BITWIDTH}_release
 SRC_DIR_SCRIPTCRAWL=${PROJECT_CPP_DIR}/scriptcrawl
 SRC_DATA_DIR=${PROJECT_CPP_DIR}/data
 
-DST_DIR=/root/stage
+DST_BIN_DIR=/root/stage/bin
 
-echo "DISTRIB_ID            : ${DISTRIB_ID}"
-echo "DISTRIB_RELEASE       : ${DISTRIB_RELEASE}"
-echo "DISTRIB               : ${DISTRIB}"
 echo "CRAWLER_BUILD_ROOT_DIR: ${CRAWLER_BUILD_ROOT_DIR}"
 echo "PROJECT_CODE_DIR      : ${PROJECT_CODE_DIR}"
 echo "PROJECT_CPP_DIR       : ${PROJECT_CPP_DIR}"
@@ -44,69 +41,69 @@ echo "SRC_DIR_LIBS          : ${SRC_DIR_LIBS}"
 echo "SRC_DATA_DIR          : ${SRC_DATA_DIR}"
 echo "SRC_DIR_PHP           : ${SRC_DIR_PHP}"
 echo " "
-echo "DST_DIR               : ${DST_DIR}"
+echo "DST_BIN_DIR           : ${DST_BIN_DIR}"
 echo "SRC_DIR_QT            : ${SRC_DIR_QT}"
 
 # exit 1; # FIXMENM
 
-mkdir -p ${DST_DIR}
-mkdir -p ${DST_DIR}/doc
-mkdir -p ${DST_DIR}/robot
-mkdir -p ${DST_DIR}/data
-mkdir -p ${DST_DIR}/data/php/miner_utils
-mkdir -p ${DST_DIR}/data/php/miner_templates
+mkdir -p ${DST_BIN_DIR}
+mkdir -p ${DST_BIN_DIR}/doc
+mkdir -p ${DST_BIN_DIR}/robot
+mkdir -p ${DST_BIN_DIR}/data
+mkdir -p ${DST_BIN_DIR}/data/php/miner_utils
+mkdir -p ${DST_BIN_DIR}/data/php/miner_templates
 
 
 echo Copy Netscavator files to staging ...
 
-cp -r ${SRC_DIR_MANUAL} ${DST_DIR}
-cp ${SRC_DATA_DIR}/bin/linux/install-xvfb.sh ${DST_DIR}
-cp -r ${SRC_DATA_DIR}/robot/* ${DST_DIR}/robot/
-cp ${SRC_DATA_DIR}/config/php.ini.in ${DST_DIR}
-cp ${SRC_DATA_DIR}/config/testcreator.cfg.in ${DST_DIR}
-cp ${SRC_DATA_DIR}/config/minercreator.cfg.in ${DST_DIR}
-cp ${SRC_DATA_DIR}/config/crawler.cfg.in ${DST_DIR}
-cp ${SRC_DATA_DIR}/config/netscavator.cfg.in ${DST_DIR}
-cp ${SRC_DATA_DIR}/config/netcreator.cfg.in ${DST_DIR}
-cp ${SRC_DIR_SCRIPTCRAWL}/cpp_crawl/webminer.php ${DST_DIR}
-cp ${SRC_DATA_DIR}/php/miner_utils/*.php ${DST_DIR}/data/php/miner_utils
-cp ${SRC_DATA_DIR}/php/miner_templates/*.php ${DST_DIR}/data/php/miner_templates
-cp ${SRC_DATA_DIR}/bin/linux/*.in ${DST_DIR}
-cp -r ${SRC_DATA_DIR}/icons/ ${DST_DIR}/data
-##find ${DST_DIR}/data -name "*.svn" | xargs rm -rf
+cp -r ${SRC_DIR_MANUAL} ${DST_BIN_DIR}
+cp ${SRC_DATA_DIR}/bin/linux/install-xvfb.sh ${DST_BIN_DIR}
+cp -r ${SRC_DATA_DIR}/robot/* ${DST_BIN_DIR}/robot/
+cp ${SRC_DATA_DIR}/config/php.ini.in ${DST_BIN_DIR}
+cp ${SRC_DATA_DIR}/config/testcreator.cfg.in ${DST_BIN_DIR}
+cp ${SRC_DATA_DIR}/config/minercreator.cfg.in ${DST_BIN_DIR}
+cp ${SRC_DATA_DIR}/config/crawler.cfg.in ${DST_BIN_DIR}
+cp ${SRC_DATA_DIR}/config/netscavator.cfg.in ${DST_BIN_DIR}
+cp ${SRC_DATA_DIR}/config/netcreator.cfg.in ${DST_BIN_DIR}
+cp ${SRC_DIR_SCRIPTCRAWL}/cpp_crawl/webminer.php ${DST_BIN_DIR}
+cp ${SRC_DATA_DIR}/php/miner_utils/*.php ${DST_BIN_DIR}/data/php/miner_utils
+cp ${SRC_DATA_DIR}/php/miner_templates/*.php ${DST_BIN_DIR}/data/php/miner_templates
+cp ${SRC_DATA_DIR}/bin/linux/*.in ${DST_BIN_DIR}
+cp -r ${SRC_DATA_DIR}/icons/ ${DST_BIN_DIR}/data
+##find ${DST_BIN_DIR}/data -name "*.svn" | xargs rm -rf
 
-cp ${SRC_DIR_LIBS}/cpp_crawl.php ${DST_DIR}
+cp ${SRC_DIR_LIBS}/cpp_crawl.php ${DST_BIN_DIR}
 
 ## --- Copy Qt libs and plugins Only needed for custom Qt builds !! ---
-## cp -r ${SRC_DIR_QT}/plugins/ ${DST_DIR}
-## cp ${SRC_DIR_QT}/lib/lib*.so.6 ${DST_DIR}
+## cp -r ${SRC_DIR_QT}/plugins/ ${DST_BIN_DIR}
+## cp ${SRC_DIR_QT}/lib/lib*.so.6 ${DST_BIN_DIR}
 
 # --- Copy Netscavator libraries and executables ---
-cp ${SRC_DIR_LIBS}/cpp_crawl.so ${DST_DIR}
-# ### cp ${SRC_DIR_LIBS}/libscript_embedding.so ${DST_DIR}  # TODO: Statically built now! If no problems remove this line!
-cp ${SRC_DIR_PHP}/libphp-sleipner5.so ${DST_DIR}
-cp ${SRC_DIR_EXE}/netscavator ${DST_DIR}
-cp ${SRC_DIR_EXE}/netcreator ${DST_DIR}
-cp ${SRC_DIR_EXE}/qtwebengine_devtools_resources.pak ${DST_DIR}
-cp ${SRC_DIR_EXE}/qtwebengine_resources_100p.pak ${DST_DIR}
-cp ${SRC_DIR_EXE}/qtwebengine_resources_200p.pak ${DST_DIR}
-cp ${SRC_DIR_EXE}/qtwebengine_resources.pak ${DST_DIR}
+cp ${SRC_DIR_LIBS}/cpp_crawl.so ${DST_BIN_DIR}
+# ### cp ${SRC_DIR_LIBS}/libscript_embedding.so ${DST_BIN_DIR}  # TODO: Statically built now! If no problems remove this line!
+cp ${SRC_DIR_PHP}/libphp-sleipner5.so ${DST_BIN_DIR}
+cp ${SRC_DIR_EXE}/netscavator ${DST_BIN_DIR}
+cp ${SRC_DIR_EXE}/netcreator ${DST_BIN_DIR}
+cp ${SRC_DIR_EXE}/qtwebengine_devtools_resources.pak ${DST_BIN_DIR}
+cp ${SRC_DIR_EXE}/qtwebengine_resources_100p.pak ${DST_BIN_DIR}
+cp ${SRC_DIR_EXE}/qtwebengine_resources_200p.pak ${DST_BIN_DIR}
+cp ${SRC_DIR_EXE}/qtwebengine_resources.pak ${DST_BIN_DIR}
 
 ## Copy all dynamic dependencies of libqxcb.so # Only needed for custom Qt builds !!
-##${PROJECT_CPP_DIR}/bin/copy_dependencies.sh ${DST_DIR}/plugins/platforms/libqxcb.so ${DST_DIR}
+##${PROJECT_CPP_DIR}/bin/copy_dependencies.sh ${DST_BIN_DIR}/plugins/platforms/libqxcb.so ${DST_BIN_DIR}
 
 # Copy all dynamic dependencies of minercreator
-${PROJECT_CPP_DIR}/bin/copy_dependencies.sh ${SRC_DIR_EXE}/netcreator ${DST_DIR}
+${PROJECT_CPP_DIR}/bin/copy_dependencies.sh ${SRC_DIR_EXE}/netcreator ${DST_BIN_DIR}
 
 # --- strip files ---
-strip ${DST_DIR}/*.so
-strip ${DST_DIR}/cpp_crawl.so
-# ### strip ${DST_DIR}/libscript_embedding.so # TODO: Statically built now! If no problems remove this line!
-strip ${DST_DIR}/libphp-sleipner5.so
-strip ${DST_DIR}/netscavator
-strip ${DST_DIR}/netcreator
+strip ${DST_BIN_DIR}/*.so
+strip ${DST_BIN_DIR}/cpp_crawl.so
+# ### strip ${DST_BIN_DIR}/libscript_embedding.so # TODO: Statically built now! If no problems remove this line!
+strip ${DST_BIN_DIR}/libphp-sleipner5.so
+strip ${DST_BIN_DIR}/netscavator
+strip ${DST_BIN_DIR}/netcreator
 
 # --- doc ---
-cp ${PROJECT_CPP_DIR}/scriptcrawl/scriptcrawl.i ${DST_DIR}/doc
+cp ${PROJECT_CPP_DIR}/scriptcrawl/scriptcrawl.i ${DST_BIN_DIR}/doc
 
 
