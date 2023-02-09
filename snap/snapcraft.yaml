@@ -101,6 +101,10 @@ parts:
         ./snapcraft-stage.sh
         popd
 
+   override-prime: |
+        pwd
+        cp -r ~/stage/* ~/prime
+
     plugin: dump
     after:
       - install-needed
