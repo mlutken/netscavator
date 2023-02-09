@@ -1,4 +1,0 @@
-xul-dir=@WEBMINER_PHP_XULRUNNER_PATH@   
-php-ini-path=@PHP_INI_PATH@
-
-

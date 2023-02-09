@@ -521,7 +521,7 @@ default_mimetype = "text/html"
 ;include_path = ".:/usr/share/php5:/usr/share/php5/PEAR"
 ;include_path = ".:/usr/share/php5:/usr/share/php5/PEAR:~/code/veriquin/code/cpp/build_cbs/libs/shared/Debug"
 
-include_path = "@WEBMINER_PHP_INCLUDE_PATH@"
+include_path = "/bin:/bin/data/php/miner_utils:/bin/data/php/miner_templates"
 ;
 ; Windows: "\path1;\path2"
 ;include_path = ".;c:\php\includes"
@@ -539,9 +539,9 @@ user_dir =
 
 ; Directory in which the loadable extensions (modules) reside.
 ; extension_dir = /usr/lib/php5/extensions
-extension_dir = "@WEBMINER_PHP_EXTENSION_DIR@"
+extension_dir = "/bin"
 
-@WEBMINER_PHP_EXTENSIONS@
+
 
 ; Whether or not to enable the dl() function.  The dl() function does NOT work
 ; properly in multithreaded servers, such as IIS or Zeus, and is automatically

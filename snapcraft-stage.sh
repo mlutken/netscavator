@@ -82,12 +82,9 @@ echo Copy Netscavator files to staging ...
 cp -r ${REPOSITORY_ROOT_DIR}/doc /usr/share/netscavator/doc
 cp ${SRC_DATA_DIR}/bin/linux/install-xvfb.sh ${DST_BIN_DIR}
 cp -r ${SRC_DATA_DIR}/robot/* ${DST_BIN_DIR}/robot/
-cp ${SRC_DATA_DIR}/config/php.ini.in ${DST_BIN_DIR}
-cp ${SRC_DATA_DIR}/config/testcreator.cfg.in ${DST_BIN_DIR}
-cp ${SRC_DATA_DIR}/config/minercreator.cfg.in ${DST_BIN_DIR}
-cp ${SRC_DATA_DIR}/config/crawler.cfg.in ${DST_BIN_DIR}
-cp ${SRC_DATA_DIR}/config/netscavator.cfg.in ${DST_BIN_DIR}
-cp ${SRC_DATA_DIR}/config/netcreator.cfg.in ${DST_BIN_DIR}
+cp ${SRC_DATA_DIR}/config/php.ini.snap ${DST_BIN_DIR}/php.ini
+cp ${SRC_DATA_DIR}/config/netscavator.cfg.snap ${DST_BIN_DIR}/netscavator.cfg
+cp ${SRC_DATA_DIR}/config/netscavator.cfg.snap ${DST_BIN_DIR}/netcreator.cfg
 cp ${SRC_DIR_SCRIPTCRAWL}/cpp_crawl/webminer.php ${DST_BIN_DIR}
 cp ${SRC_DATA_DIR}/php/miner_utils/*.php ${DST_BIN_DIR}/data/php/miner_utils
 cp ${SRC_DATA_DIR}/php/miner_templates/*.php ${DST_BIN_DIR}/data/php/miner_templates
