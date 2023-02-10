@@ -96,15 +96,11 @@ parts:
 
     override-stage: |
         echo "Touch stage step 1"
-        mkdir -p ~/stage/usr/lib/x86_64-linux-gnu/nss
-        mkdir -p ~/stage/usr/bin
-
         pwd
         cd ~/parts/netscavator-main/src
         pushd netscavator
         ./snapcraft-stage.sh
         popd
-        cp /usr/lib/x86_64-linux-gnu/nss/libsoftokn3.so
 
     override-prime: |
         pwd
