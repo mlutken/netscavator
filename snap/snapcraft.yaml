@@ -72,7 +72,7 @@ parts:
     override-pull: |
         git clone https://github.com/mlutken/netscavator.git
         pushd netscavator
-        echo "Touch pullstep 5"
+        echo "Touch pullstep 6"
         pwd
         git clone https://github.com/mlutken/cpaf.git
         git pull
@@ -85,13 +85,13 @@ parts:
         pwd
         cd ~/parts/netscavator-main/src
         pushd netscavator
-        #./code/3rdpartysrc/build_3rdparty_release.sh
+        ./code/3rdpartysrc/build_3rdparty_release.sh
         popd
         pushd netscavator
-        #./cpaf/build_3rdparty_cpaf.sh
+        ./cpaf/build_3rdparty_cpaf.sh
         popd
         pushd netscavator
-        #./build.sh -b=release --test=n
+        ./build.sh -b=release --test=n
         popd
 
     override-stage: |
