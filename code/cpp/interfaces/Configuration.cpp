@@ -606,7 +606,7 @@ std::string Configuration::defaultConfigPathGet( const boost::filesystem::path& 
     p = cpaf::filesystem::special_dirs::app_data_local() / string(".netscavator") / leafName;
     if ( boost::filesystem::exists(p) )
         return p.string();
-    p = boost::filesystem::path("/etc/") / "netscavator" / "config" / leafName;
+    p = boost::filesystem::path("/etc/") / "netscavator" / leafName;
     return p.string();
 }
 
@@ -739,11 +739,11 @@ void Configuration::createDefaultConfigFiles ()
     boost::filesystem::path phpIniInPath = defaultPhpIniInPathGet(exedir);
 
     if ( !boost::filesystem::exists( configInPath ) ) {
-        printf("Error default config.in file not found: '%s'. Please re-install. ", configInPath.c_str() );
+        std::cerr << "Error default config.in file not found: '" << configInPath << "'. Please re-install.\n";
         exit(1);
     }
     if ( !boost::filesystem::exists( phpIniInPath ) ) {
-        printf("Error default Php ini.in  file not found: '%s'. Please re-install. ", phpIniInPath.c_str() );
+        std::cerr << "Error default php.ini.in file not found: '" << configInPath << "'. Please re-install.\n";
         exit(1);
     }
     boost::filesystem::path configDirPath = special_dirs::app_data_local() / string(".netscavator");
