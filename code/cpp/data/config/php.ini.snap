@@ -518,10 +518,9 @@ default_mimetype = "text/html"
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; UNIX: "/path1:/path2"
-;include_path = ".:/usr/share/php5:/usr/share/php5/PEAR"
-;include_path = ".:/usr/share/php5:/usr/share/php5/PEAR:~/code/veriquin/code/cpp/build_cbs/libs/shared/Debug"
 
-include_path = "/bin:/bin/data/php/miner_utils:/bin/data/php/miner_templates"
+;include_path = "/usr/bin:/usr/bin/data/php/miner_utils:/usr/bin/data/php/miner_templates"
+include_path = "/usr/bin:/usr/share/netscavator/data/php/miner_utils:/usr/share/netscavator/data/php/miner_templates"
 ;
 ; Windows: "\path1;\path2"
 ;include_path = ".;c:\php\includes"
@@ -539,7 +538,7 @@ user_dir =
 
 ; Directory in which the loadable extensions (modules) reside.
 ; extension_dir = /usr/lib/php5/extensions
-extension_dir = "/bin"
+extension_dir = "/usr/bin"
 
 
 

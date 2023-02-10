@@ -1,3 +1,1 @@
-php-ini-path=/bin/php.ini
-
-
+php-ini-path=/etc/netscvator/php.ini

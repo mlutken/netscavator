@@ -12,9 +12,9 @@ confinement: classic # use 'strict' once you have the right plugs and slots
 
 apps:
   netscavator:
-    command: bin/netscavator
+    command: usr/bin/netscavator
   netcreator:
-    command: bin/netcreator
+    command: usr/bin/netcreator
 
 build-packages:
   - nano
@@ -96,11 +96,15 @@ parts:
 
     override-stage: |
         echo "Touch stage step 1"
+        mkdir -p ~/stage/usr/lib/x86_64-linux-gnu/nss
+        mkdir -p ~/stage/usr/bin
+
         pwd
         cd ~/parts/netscavator-main/src
         pushd netscavator
         ./snapcraft-stage.sh
         popd
+        cp /usr/lib/x86_64-linux-gnu/nss/libsoftokn3.so
 
     override-prime: |
         pwd

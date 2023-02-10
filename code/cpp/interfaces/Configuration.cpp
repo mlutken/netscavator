@@ -634,7 +634,7 @@ std::string Configuration::defaultResourcePathGet( const boost::filesystem::path
     p = standardDataPathGet(exedir);
     if ( boost::filesystem::exists(p) )
         return p.string();
-    p = boost::filesystem::path("/usr/share/netscavator");
+    p = boost::filesystem::path("/usr/share/netscavator/data");
 
     return p.string();
 }
