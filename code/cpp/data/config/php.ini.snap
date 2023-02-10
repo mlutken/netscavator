@@ -520,7 +520,10 @@ default_mimetype = "text/html"
 ; UNIX: "/path1:/path2"
 
 ;include_path = "/usr/bin:/usr/bin/data/php/miner_utils:/usr/bin/data/php/miner_templates"
-include_path = "/usr/bin:/usr/share/netscavator/data/php/miner_utils:/usr/share/netscavator/data/php/miner_templates"
+
+;include_path = "/usr/bin:/usr/share/netscavator/data/php/miner_utils:/usr/share/netscavator/data/php/miner_templates"
+include_path = "/lib/x86_64-linux-gnu:/usr/share/netscavator/data/php/miner_utils:/usr/share/netscavator/data/php/miner_templates"
+
 ;
 ; Windows: "\path1;\path2"
 ;include_path = ".;c:\php\includes"
@@ -538,7 +541,9 @@ user_dir =
 
 ; Directory in which the loadable extensions (modules) reside.
 ; extension_dir = /usr/lib/php5/extensions
-extension_dir = "/usr/bin"
+
+; extension_dir = "/usr/bin"
+extension_dir = "/lib/x86_64-linux-gnu"
 
 
 
