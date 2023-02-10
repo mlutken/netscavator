@@ -613,14 +613,14 @@ std::string Configuration::defaultConfigPathGet( const boost::filesystem::path& 
 
 std::string Configuration::defaultPhpIniPathGet( const boost::filesystem::path& exedir ) const
 {
-    string leafName = valueStrGet("config-stemname") + "_php.ini";
+    string leafName =  "php.ini";
     boost::filesystem::path p = exedir / leafName;
     if ( boost::filesystem::exists(p) )
         return p.string();
     p = cpaf::filesystem::special_dirs::app_data_local() / string(".netscavator") / leafName;
     if ( boost::filesystem::exists(p) )
         return p.string();
-    p = boost::filesystem::path("/etc/netscavator/config") / leafName;
+    p = boost::filesystem::path("/etc/netscavator") / leafName;
     return p.string();
 }
 
