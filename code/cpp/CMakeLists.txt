@@ -2,6 +2,7 @@
 find_package(Qt${QT_VER} REQUIRED
     Core
     Network
+    WebEngineCore
     WebEngineWidgets
     Gui
     Widgets

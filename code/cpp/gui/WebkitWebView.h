@@ -3,15 +3,14 @@
 
 #include <QWidget>
 #include <QtWebEngineWidgets>
-//FIXME OLD QWebView #include <QWebView>
-//FIXME OLD QWebView #include <QWebElement>
-//FIXME OLD QWebView #include <QtWebKit/QtWebKit>
-//FIXME OLD QWebView #include <QtWebKitWidgets/QWebView>
 #include <LinearDomIF.h>
 #include <BrowserViewIF.h>
 
 class GuiGlobals;
 class QProgressBar;
+
+// https://www.qt.io/blog/qt-webengine-in-qt-6
+// https://doc.qt.io/qt-6/qtwebenginewidgets-module.html
 
 class WebkitWebView : public QWebEngineView
 {

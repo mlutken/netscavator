@@ -3,6 +3,7 @@ gtest/cci.20210126
 #nlohmann_json/3.11.2
 fmt/9.1.0
 #qt/6.3.1
+#qt/6.4.2
 #qt/5.15.6
 
 [options]
