@@ -70,7 +70,7 @@ parts:
   netscavator-main:
     source: https://github.com/mlutken/netscavator.git
     override-pull: |
-        echo "Touch pullstep 11"
+        echo "Touch pullstep 12"
         if [ -d netscavator ]; then
             rm -rf netscavator
         fi
