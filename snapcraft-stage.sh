@@ -127,8 +127,10 @@ cp ${SRC_DIR_BIN}/qtwebengine_resources.pak ${DST_BIN_DIR}
 cp ${SRC_DATA_DIR}/config/php.ini.snap ${DST_NETSCAVATOR_ETC_DIR}/php.ini
 cp ${SRC_DATA_DIR}/config/netscavator.cfg.snap ${DST_NETSCAVATOR_ETC_DIR}/netscavator.cfg
 cp ${SRC_DATA_DIR}/config/netscavator.cfg.snap ${DST_NETSCAVATOR_ETC_DIR}/netcreator.cfg
-# # cp ${SRC_DATA_DIR}/config/netscavator.cfg.snap ${DST_BIN_DIR}/netscavator.cfg
-# # cp ${SRC_DATA_DIR}/config/netscavator.cfg.snap ${DST_BIN_DIR}/netcreator.cfg
+
+cp ${SRC_DATA_DIR}/config/php.ini.snap ${DST_BIN_DIR}/php.ini
+cp ${SRC_DATA_DIR}/config/netscavator.cfg.snap ${DST_BIN_DIR}/netscavator.cfg
+cp ${SRC_DATA_DIR}/config/netscavator.cfg.snap ${DST_BIN_DIR}/netcreator.cfg
 
 
 # ----------------------
