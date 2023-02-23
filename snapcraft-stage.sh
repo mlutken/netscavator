@@ -62,6 +62,7 @@ DST_ROOT_LIB64_DIR=${STAGE_FS_ROOT}/lib64
 DST_NSS_LIB_DIR=${STAGE_FS_ROOT}/usr/lib/x86_64-linux-gnu/nss
 
 DST_USR_SHARE_DIR=${STAGE_FS_ROOT}/usr/share/netscavator
+DST_USR_SHARE_CONFIG_DIR=${DST_USR_SHARE_DIR}/config
 DST_MANUAL_DIR=${DST_USR_SHARE_DIR}/doc
 DST_PHP_DIR=${DST_USR_SHARE_DIR}/php
 DST_DATA_DIR=${DST_USR_SHARE_DIR}/data
@@ -91,6 +92,7 @@ echo "DST_ROOT_LIB64_DIR            : ${DST_ROOT_LIB64_DIR}"
 echo "DST_NSS_LIB_DIR               : ${DST_NSS_LIB_DIR}"
 echo "DST_USR_SHARE_DIR             : ${DST_USR_SHARE_DIR}"
 echo "DST_MANUAL_DIR                : ${DST_MANUAL_DIR}"
+echo "DST_USR_SHARE_CONFIG_DIR      : ${DST_USR_SHARE_CONFIG_DIR}"
 echo "DST_PHP_DIR                   : ${DST_PHP_DIR}"
 echo "DST_DATA_DIR                  : ${DST_DATA_DIR}"
 echo "DST_ICONS_DIR                 : ${DST_ICONS_DIR}"
@@ -104,6 +106,7 @@ mkdir -p ${DST_ROOT_LIB64_DIR}
 mkdir -p ${DST_NSS_LIB_DIR}
 mkdir -p ${DST_USR_SHARE_DIR}
 mkdir -p ${DST_MANUAL_DIR}
+mkdir -p ${DST_USR_SHARE_CONFIG_DIR}
 mkdir -p ${DST_PHP_DIR}
 mkdir -p ${DST_DATA_DIR}
 mkdir -p ${DST_ICONS_DIR}
@@ -131,6 +134,10 @@ cp ${SRC_DATA_DIR}/config/netscavator.cfg.snap ${DST_NETSCAVATOR_ETC_DIR}/netcre
 cp ${SRC_DATA_DIR}/config/php.ini.snap ${DST_BIN_DIR}/php.ini
 cp ${SRC_DATA_DIR}/config/netscavator.cfg.snap ${DST_BIN_DIR}/netscavator.cfg
 cp ${SRC_DATA_DIR}/config/netscavator.cfg.snap ${DST_BIN_DIR}/netcreator.cfg
+
+cp ${SRC_DATA_DIR}/config/php.ini.in ${DST_USR_SHARE_CONFIG_DIR}/php.ini.in
+cp ${SRC_DATA_DIR}/config/netscavator.cfg.in ${DST_USR_SHARE_CONFIG_DIR}/netscavator.cfg.in
+cp ${SRC_DATA_DIR}/config/netscavator.cfg.in ${DST_USR_SHARE_CONFIG_DIR}/netcreator.cfg.in
 
 
 # ----------------------
