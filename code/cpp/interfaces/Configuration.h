@@ -89,7 +89,7 @@ private:
     void					valueSetIfEmpty			( const std::string& sName, const std::string& sValue );
     std::string				defaultConfigPathGet	( const boost::filesystem::path& exedir ) const;
     std::string				defaultPhpIniPathGet	( const boost::filesystem::path& exedir ) const;
-    std::string				defaultResourcePathGet	( const boost::filesystem::path& exedir ) const;
+    std::string				defaultResourceDirGet	( const boost::filesystem::path& exedir ) const;
     boost::filesystem::path defaultConfigInPathGet	( const boost::filesystem::path& exedir ) const;
     boost::filesystem::path defaultPhpIniInPathGet	( const boost::filesystem::path& exedir ) const;
 	boost::filesystem::path standardDataPathGet		( const boost::filesystem::path& exedir ) const;

@@ -600,13 +600,16 @@ void Configuration::valueSetIfEmpty     (
 std::string Configuration::defaultConfigPathGet( const boost::filesystem::path& exedir ) const
 {
     string leafName = valueStrGet("exe-stemname") + ".cfg";
-    boost::filesystem::path p = exedir / leafName;
-    if ( boost::filesystem::exists(p) )
-        return p.string();
-    p = cpaf::filesystem::special_dirs::app_data_local() / string(".netscavator") / leafName;
-    if ( boost::filesystem::exists(p) )
-        return p.string();
+    boost::filesystem::path p;
     p = boost::filesystem::path("/etc/") / "netscavator" / leafName;
+    if ( boost::filesystem::exists(p) ) {
+        return p.string();
+    }
+    p = cpaf::filesystem::special_dirs::app_data_local() / string(".netscavator") / leafName;
+    if ( boost::filesystem::exists(p) ) {
+        return p.string();
+    }
+    p = exedir / leafName;
     return p.string();
 }
 
@@ -614,27 +617,33 @@ std::string Configuration::defaultConfigPathGet( const boost::filesystem::path& 
 std::string Configuration::defaultPhpIniPathGet( const boost::filesystem::path& exedir ) const
 {
     string leafName =  "php.ini";
-    boost::filesystem::path p = exedir / leafName;
-    if ( boost::filesystem::exists(p) )
-        return p.string();
-    p = cpaf::filesystem::special_dirs::app_data_local() / string(".netscavator") / leafName;
-    if ( boost::filesystem::exists(p) )
-        return p.string();
+    boost::filesystem::path p;
     p = boost::filesystem::path("/etc/netscavator") / leafName;
+    if ( boost::filesystem::exists(p) ) {
+        return p.string();
+    }
+    p = cpaf::filesystem::special_dirs::app_data_local() / string(".netscavator") / leafName;
+    if ( boost::filesystem::exists(p) ) {
+        return p.string();
+    }
+    p = exedir / leafName;
     return p.string();
 }
 
 
-std::string Configuration::defaultResourcePathGet( const boost::filesystem::path& exedir ) const
+std::string Configuration::defaultResourceDirGet( const boost::filesystem::path& exedir ) const
 {
     string leafName = "data";
-    boost::filesystem::path p = exedir / "data";
-    if ( boost::filesystem::exists(p) )
-        return p.string();
-    p = standardDataPathGet(exedir);
-    if ( boost::filesystem::exists(p) )
-        return p.string();
+    boost::filesystem::path p;
     p = boost::filesystem::path("/usr/share/netscavator/data");
+    if ( boost::filesystem::exists(p) ) {
+        return p.string();
+    }
+    p = exedir / "data";
+    if ( boost::filesystem::exists(p) ) {
+        return p.string();
+    }
+    p = standardDataPathGet(exedir);
 
     return p.string();
 }
@@ -699,7 +708,7 @@ void Configuration::setExeNames ( const char* /*argv0*/ )
     valueSet("config-stemname", "netscavator" );
     valueSet("default-cfg-path", defaultConfigPathGet(exedir) );
     valueSet("default-php-ini-path", defaultPhpIniPathGet(exedir) );
-    const string defaultResourceDir = defaultResourcePathGet(exedir);
+    const string defaultResourceDir = defaultResourceDirGet(exedir);
     valueSet("default-resource-dir", defaultResourceDir );
 }
 
