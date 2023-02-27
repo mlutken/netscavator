@@ -9,7 +9,7 @@ typedef std::map<std::string,std::string>   AttributesMap;
 
 enum RunModeE { rmNormalE, rmCrawlerE, rmDesignE, rmDebugE };
 
-enum MiningStepE { stepNoneE, stepMatchE, stepMineE, stepNavigateE, stepLoadPageE };
+enum struct MiningStepE { stepNoneE, stepStartMiningE, stepEndMiningE, stepMatchE, stepMineE, stepNavigateE, stepLoadPageE };
 
 enum LogLevelE {
         logInfoE        =   1 << 0

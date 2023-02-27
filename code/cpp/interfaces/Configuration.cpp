@@ -635,7 +635,7 @@ std::string Configuration::defaultResourceDirGet( const boost::filesystem::path&
 {
     string leafName = "data";
     boost::filesystem::path p;
-    p = boost::filesystem::path("/usr/share/netscavator/data");
+    p = boost::filesystem::path("/usr/share/netscavator");
     if ( boost::filesystem::exists(p) ) {
         return p.string();
     }

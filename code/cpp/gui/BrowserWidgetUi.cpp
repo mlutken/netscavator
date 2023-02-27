@@ -22,8 +22,7 @@ BrowserWidgetUi::BrowserWidgetUi (crawl::NetscavatorFactoryIF* netscavatorFactor
 
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addWidget(m_pTabs);
-//    addBrowserTab(QUrl("about:blank"));
-    addBrowserTab(QUrl("https://www.w3.org"));
+    addBrowserTab(QUrl("about:blank"));
     setLayout(layout);
 }
 

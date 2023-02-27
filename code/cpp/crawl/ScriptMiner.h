@@ -1252,7 +1252,8 @@ private:
     std::string					m_sConfigUrlUploadData;
     std::string 				m_sDecimalPoint;
     std::string 				m_sThousandsSep;
-    crawl::MiningStepE          m_nextMiningStepE;
+    crawl::MiningStepE          m_curMiningStepE = crawl::MiningStepE::stepNoneE;
+    crawl::MiningStepE          m_nextMiningStepE  = crawl::MiningStepE::stepNoneE;
     volatile bool               m_waitingForDomReady = false;
     volatile bool               m_workerIsExecutingPhp = false;
     std::string                 m_scriptStatus;

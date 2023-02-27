@@ -531,9 +531,11 @@ void ScriptMiner::runSetupFunctions()
 
 void ScriptMiner::startMining(bool restart)
 {
+    m_curMiningStepE = crawl::MiningStepE::stepStartMiningE;
     using namespace boost::posix_time;
     using namespace boost::gregorian;
     m_tStartUTC 	= second_clock::universal_time();
+
 
     //m_sitemapGetter.clear();    //TODO: Should we do this ?
 
@@ -573,7 +575,7 @@ void ScriptMiner::startMining(bool restart)
     writeMiningStatusFile();
 
 
-    m_nextMiningStepE = crawl::stepMatchE;
+    m_nextMiningStepE = crawl::MiningStepE::stepMatchE;
     const std::string startState = config()->startStateGet();
     if ( startState != "" ) navCurrentStateSet( startState );
 
@@ -583,6 +585,7 @@ void ScriptMiner::startMining(bool restart)
     domSearchMgr()->prepareForRun();
 
     std::cerr << "ScriptMiner::startMining Url: " << m_urlStart << "\n";
+    m_curMiningStepE = crawl::MiningStepE::stepLoadPageE;
     urlLoad( m_urlStart.string() );  // Load initial page.
     emit emptyCrawlerCommandQueueSignal(); // And actually start loading!!!
 }
@@ -606,6 +609,7 @@ void ScriptMiner::signalMiningDone()
 
 void ScriptMiner::endMining(  int iMiningDoneStatus )
 {
+    m_curMiningStepE = crawl::MiningStepE::stepEndMiningE;
     using namespace boost::posix_time;
     using namespace cpaf::time;
 
@@ -649,9 +653,9 @@ void ScriptMiner::endMining(  int iMiningDoneStatus )
 
 
 
-void
-ScriptMiner::match()
+void ScriptMiner::match()
 {
+    m_curMiningStepE = crawl::MiningStepE::stepMatchE;
     m_sHandlerContextName = "";
 
     // First try Crawler match functions in order
@@ -678,12 +682,12 @@ ScriptMiner::match()
     }
 
     webBrowser()->signalsManager()->signalOnMatch();
-    m_nextMiningStepE = crawl::stepMineE;
+    m_nextMiningStepE = crawl::MiningStepE::stepMineE;
 }
 
-void
-ScriptMiner::mine()
+void ScriptMiner::mine()
 {
+    m_curMiningStepE = crawl::MiningStepE::stepMineE;
     const std::string& sHandlerContextName = handlerContextName();
     m_lookForWordDomFinder->lfwInitPageLoaded(lookForWordMgr(sHandlerContextName));
     // Call regular '_mine' function, if present
@@ -698,7 +702,7 @@ ScriptMiner::mine()
             scriptingClass()->callScriptFunction_Void ( sFunName );
         }
     }
-    m_nextMiningStepE = crawl::stepNavigateE;
+    m_nextMiningStepE = crawl::MiningStepE::stepNavigateE;
     updateScriptStatusString(); // Possibly update the script's status string for writing to the Crawler.status file!
 }
 
@@ -709,8 +713,9 @@ Call the script navigate function.
 bool
 ScriptMiner::navigate()
 {
+    m_curMiningStepE = crawl::MiningStepE::stepNavigateE;
+    m_nextMiningStepE = crawl::MiningStepE::stepMatchE;
     const std::string& sHandlerContextName = handlerContextName();
-    m_nextMiningStepE = crawl::stepMatchE;
 
     if ( sHandlerContextName == "" ) {
         printf("ML: Warning: ScriptMiner::navigate no page name\n"); return false;
@@ -903,6 +908,8 @@ bool ScriptMiner::waitForDomReady(int timeoutInMs)
         QThread::msleep(sleepStepInMs);
         timeoutInMs -= sleepStepInMs;
     }
+    m_curMiningStepE = crawl::MiningStepE::stepNoneE;
+
     if (m_waitingForDomReady) {
        cout << "Warning: waitForDomReady( " << timeoutInMs << " ), miliseconds timeout reached!" << endl;
        return false;
@@ -1697,6 +1704,7 @@ ScriptMiner::urlLoad (
     )
 {
     using namespace std;
+    m_curMiningStepE = crawl::MiningStepE::stepLoadPageE;
     const auto urlProto = ensureProtocol(sUrl);
     auto&& fn =
             [=,this]() -> bool
@@ -5986,6 +5994,8 @@ void ScriptMiner::doOnPageLoadedMainThread()
         }
     }
 
+    m_curMiningStepE = crawl::MiningStepE::stepNoneE;
+    m_nextMiningStepE = crawl::MiningStepE::stepMatchE;
     waitingForDomReadySet(false); // Signal any script in waiting for dom ready that it can continue.
 
     webBrowser()->resetPageRequestCounters();
@@ -6013,13 +6023,13 @@ void ScriptMiner::slotPageLoaded(
     }
 }
 
-
 void ScriptMiner::slotContinuousTimer()
 {
     // TODO: Don't timeout if we are starting up... For example while
     //       we are trying to download sitemap files.
-    const auto rm = runMode();
-    if (m_iMiningDoneStatus || rm == crawl::rmDesignE || rm == rmDebugE) {
+
+
+    if (m_iMiningDoneStatus || runModeCreator()) {
         return;
     }
 
@@ -6027,6 +6037,11 @@ void ScriptMiner::slotContinuousTimer()
     const auto timeLastPageLoad = timeNow - m_timeLastPageLoadFinished;
     const auto timeOutInSeconds = cpaf::to_int(settingGet("force_next_page_timeout_seconds", "30"));
     if (timeLastPageLoad > boost::posix_time::seconds(timeOutInSeconds)) {
+
+        if (m_curMiningStepE != crawl::MiningStepE::stepLoadPageE) {
+            return;
+        }
+
         std::cerr << "ERROR Timeout page load! Force load main site URL.\n"
                   << "m_timeLastPageLoadFinished: " << m_timeLastPageLoadFinished << "\n"
                   << "timeNow                   : " << timeNow << "\n"
