@@ -319,7 +319,6 @@ be loaded and this function returns true.
 bool SiteMapGetter::checkUrlExclude (std::string const& url 		///< [in] In URL to check.
         )	const
 {
-    UrlCompareVecT::const_iterator it;
     for (auto fn : m_excludeUrlFunctors) {
         if ( fn(url) ) {
             return true;
