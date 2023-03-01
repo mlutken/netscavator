@@ -4,6 +4,7 @@
 #include <QStringList>
 #include <QSettings>
 
+class QFileInfo;
 
 class GuiGlobals
 {
@@ -12,8 +13,6 @@ public:
     ~GuiGlobals();
     void readFromSettings   ();
     void writeToSettings    ();
-
-    QStringList     recentCrawlers;
 
     float browserZoomLevel() const;
     void browserZoomLevelSet(float value);
@@ -42,6 +41,14 @@ public:
 
     QSettings& settings () { return m_settings; }
 
+    QString fileOpenDir() const;
+    void fileOpenDirSet(const QString& dir);
+
+    const QStringList&  recentCrawlers          () const;
+    QStringList         readRecentCrawlers      () const;
+    void                writeRecentCrawlers     ( const QStringList& list );
+    void                updateRecentCrawlersList(const QFileInfo& filePath );
+
 private:
     int         m_mainWindowWidth = 600;
     int         m_mainWindowHeight = 400;
@@ -52,5 +59,6 @@ private:
     int         m_phpQuickZoomLevel = 1;
     int         m_linearDomTableViewFontPointSize = 8;
     QString     m_phpQuickCode;
-    QSettings   m_settings;
+    mutable QSettings   m_settings;
+    mutable QStringList  m_recentCrawlers;
 };

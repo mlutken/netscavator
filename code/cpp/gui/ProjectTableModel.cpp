@@ -14,7 +14,7 @@ ProjectTableModel::ProjectTableModel(QObject *parent) :
 
 int ProjectTableModel::rowCount        ( const QModelIndex& /*parent*/ ) const
 {
-    return crawl::g()->gui()->recentCrawlers.count();
+    return crawl::g()->gui()->recentCrawlers().count();
     ////return 6;
 }
 
@@ -27,7 +27,7 @@ QVariant ProjectTableModel::data       ( const QModelIndex& index, int role ) co
 {
     if ( !index.isValid() ) return QVariant();
     if ( Qt::DisplayRole == role ) {
-        const QStringList& recentCrawlers = crawl::g()->gui()->recentCrawlers;
+        const auto& recentCrawlers = crawl::g()->gui()->recentCrawlers();
         const int row = index.row();
         const int col = index.column();
         if ( row < recentCrawlers.count() ) {

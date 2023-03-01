@@ -1,5 +1,4 @@
-#ifndef GUI_UTILS_H
-#define GUI_UTILS_H
+#pragma once
 
 #include <QPoint>
 #include <QStringList>
@@ -18,9 +17,4 @@ QString leafFileName ( const QString& filePath );
 // --- Recent crawlers list functions ---
 // --------------------------------------
 
-void    readRecentCrawlers          ( QStringList& list       );
-void    writeRecentCrawlers         ( const QStringList& list );
-void    updateRecentCrawlersList    ( const QFileInfo& filePath         );
 void    leftMouseClick              (QWidget* eventsReciverWidget, QPoint clickPos);
-
-#endif // GUI_UTILS_H

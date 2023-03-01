@@ -9,6 +9,7 @@
 #include <QColor>
 
 #include <Globals.h>
+#include <GuiGlobals.h>
 #include <Configuration.h>
 #include <EditorViewUi.h>
 #include <gui_utils.h>
@@ -95,7 +96,7 @@ void EditorWidgetUi::openCrawler( const QFileInfo& filePath )
 //    int index = crawlerIndex();
 //    openFile( index, filePath );
     m_pCrawlerEditor->openFile( filePath );
-    updateRecentCrawlersList( filePath );
+    crawl::g()->gui()->updateRecentCrawlersList( filePath );
 }
 
 void EditorWidgetUi::openCrawler( const QString& filePath )
@@ -148,7 +149,7 @@ bool EditorWidgetUi::saveCrawlerAsSlot()
 {
     bool saved = m_pCrawlerEditor->saveFileAsSlot();
     if ( saved ) {
-        updateRecentCrawlersList( m_pCrawlerEditor->filePath() );
+        crawl::g()->gui()->updateRecentCrawlersList( m_pCrawlerEditor->filePath() );
     }
     return saved;
 }
@@ -162,14 +163,14 @@ bool EditorWidgetUi::saveFileAsSlot()
 bool EditorWidgetUi::openCrawlerSlot()
 {
     bool ok = m_pCrawlerEditor->openFileSlot();
-    if (ok) updateRecentCrawlersList( m_pCrawlerEditor->filePath() );
+    if (ok) crawl::g()->gui()->updateRecentCrawlersList( m_pCrawlerEditor->filePath() );
     return ok;
 }
 
 bool EditorWidgetUi::openCrawlerPathSlot ( const QString& path )
 {
     bool ok = m_pCrawlerEditor->openFile( path );
-    if (ok) updateRecentCrawlersList( m_pCrawlerEditor->filePath() );
+    if (ok) crawl::g()->gui()->updateRecentCrawlersList( m_pCrawlerEditor->filePath() );
     return ok;
 }
 
