@@ -212,9 +212,11 @@ bool EditorViewUi::openFileSlot()
     dialog.setFileMode(QFileDialog::ExistingFile);
     dialog.setNameFilter(tr("Scripts (*.php *.cpp *.h)"));
     dialog.setViewMode(QFileDialog::Detail);
+    dialog.setDirectory(g()->gui()->fileOpenDir());
     QStringList fileNames;
     if (dialog.exec()) {
         fileNames = dialog.selectedFiles();
+        g()->gui()->fileOpenDirSet(dialog.directory().canonicalPath());
         QFileInfo path (fileNames[0]);
         return openFile(path);
     }
