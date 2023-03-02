@@ -17,8 +17,6 @@ createPhpScriptingClass();
 crawl::ScriptingClassIF*
 createPhpScriptingClassRaw();
 
-std::string		getXulRunnerPathFromPhpIni ();
-
 
 // ------------------------------------------
 // --- Call PHP script function functions ---

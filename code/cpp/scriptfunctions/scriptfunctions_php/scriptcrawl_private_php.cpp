@@ -576,37 +576,3 @@ void phpVarSet ( const std::string& sName, const std::string& sValue	)
 //    strcpy(szType, sName.c_str() );
 //    ZEND_SET_SYMBOL (&EG(symbol_table), szType, type )
 }
-
-
-
-
-std::string
-getXulRunnerPathFromPhpIni ()
-{
-    namespace fs = boost::filesystem;
-    fs::path xulPath("");
-    if ( !sapi_module.php_ini_path_override ) return xulPath.string();
-
-    fs::path iniPath( sapi_module.php_ini_path_override );
-    iniPath /= "php.ini";
-    printf( "INFO: php.ini path: %s\n", iniPath.string().c_str() );
-    std::string sLine;
-    fs::ifstream iniFile ( iniPath );
-    if ( iniFile.is_open() )
-    {
-        while (! iniFile.eof() )
-        {
-            getline (iniFile,sLine);
-            if ( boost::algorithm::contains( sLine, "xul_runner_path" ) ) {
-                cpaf::StringVecT vec = cpaf::splitv( sLine, "=" );
-                std::string sPath = boost::algorithm::trim_copy( vec[1] ) ;
-                boost::algorithm::erase_all ( sPath, "\"" );
-                xulPath = fs::path( boost::algorithm::trim_copy(sPath) );
-
-            }
-        }
-        iniFile.close();
-    }
-    return xulPath.string();
-}
-

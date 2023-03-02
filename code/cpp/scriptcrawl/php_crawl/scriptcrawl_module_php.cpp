@@ -110,9 +110,6 @@ bool ScriptCrawlApp::OnInit()
 
     boost::shared_ptr<crawl::ScriptingClassIF> pScriptingClass = createPhpScriptingClass();
 
-    fs::path xulPath = getXulRunnerPathFromPhpIni();
-    initXulrunner( xulPath, "XUL_RUNNER_PATH" );
-
     boost::shared_ptr<ScriptMiner> pMiner ;
     std::string sMinerName = currentMinerName();
     std::string sBaseOutputName = sMinerName;
