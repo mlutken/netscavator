@@ -2,6 +2,8 @@
 #include <functional>
 #include <boost/tokenizer.hpp>
 #include <utils/cpaf_string_utils.hpp>
+#include <cpaf_libs/filesystem/cpaf_special_dirs.h>
+#include <cpaf_libs/filesystem/cpaf_file_directory_functions.h>
 #include <net/cpaf_http_convenience.h>
 #include <utils/utils.h>
 #include <utils/StringFinder.h>
@@ -121,12 +123,12 @@ void SiteMapGetter::downloadSiteMap()
 
 void SiteMapGetter::handleRobotsTxtCb(const QByteArray& data, const QUrl& url, bool)
 {
-    std::cout << "INFO: Got robots.txt from URL: " << toString(url) << std::endl;
+    std::cerr << "INFO: Got robots.txt from URL: " << toString(url) << "\n";
     m_robotsTxt = data.constData();
     string newLocation = checkLocationMoved(m_robotsTxt);
     if (!newLocation.empty()) {
         m_robotsTxtUrl = newLocation;
-        std::cout << "INFO: robots.txt was moved to: " << m_robotsTxtUrl <<  " . Fetching again ... " << std::endl;
+        std::cerr << "INFO: robots.txt was moved to: " << m_robotsTxtUrl <<  " . Fetching again ... \n";
         getRobotsTxt();
         return;
     }
@@ -137,13 +139,14 @@ void SiteMapGetter::handleRobotsTxtCb(const QByteArray& data, const QUrl& url, b
 // --- PRIVATE: Helper functions ---
 string SiteMapGetter::downloadUrl(const string &url) const
 {
+    std::cerr << "INFO: Downloading sitemap file: '" << url << "'\n";
     return cpaf::net::curl_http_download_to_string(url);
 }
 
 void SiteMapGetter::getRobotsTxt()
 {
     using namespace std::placeholders;
-    std::cout << "INFO: Getting robots.txt: " << m_robotsTxtUrl << std::endl;
+    std::cerr << "INFO: Getting robots.txt: " << m_robotsTxtUrl << "\n";
     auto cb = [this] (const QByteArray& data, const QUrl& url, bool ok) {
         this->handleRobotsTxtCb(data, url, ok);
     };
@@ -158,7 +161,7 @@ bool SiteMapGetter::getNextSitemapFile()
         this->addLocationsFromXmlSiteMap(data.constData(), url, downloadedOk);
     };
     auto url = toQUrl(m_siteMapUrls.front());
-    std::cout << "INFO: Downloading next sitemap file: " << toString(url.toString()) << std::endl;
+    std::cerr << "INFO: Downloading next sitemap file: " << toString(url.toString()) << "\n";
     m_siteMapUrls.pop_front();
     m_httpDownloader.downloadToByteArray (url, cb);
     return true;
@@ -223,12 +226,17 @@ void SiteMapGetter::addLocationsFromXmlSiteMap(const string& siteMapData, const 
     sf.ignoreCaseSet(true);
 
     if (downloadedOk) {
-        std::cout << "INFO: Sitemap file '" << toString(sitemapUrl.toString())
+        const auto sitemapFilePath = cpaf::filesystem::special_dirs::temp() / "sitemap.xml";
+
+        cpaf::filesystem::write_file(sitemapFilePath, siteMapData);
+
+        std::cerr << "INFO: Sitemap file '" << toString(sitemapUrl.toString())
                   << "' downloaded ok. Data text size is " << sf.size() << " \"chars\" "
-                  << std::endl;
+                  << " wrote sitemap to: " << sitemapFilePath.native() << " \"chars\" "
+                  << "\n";
     }
     else {
-        std::cout << "ERROR: Sitemap file '" << toString(sitemapUrl.toString()) << "' failed to download." << std::endl;
+        std::cerr << "ERROR: Sitemap file '" << toString(sitemapUrl.toString()) << "' failed to download.\n";
     }
 
     const bool isSitemapIndex = sf.searchIn().indexOf(QString("</sitemapindex>"), 0, Qt::CaseInsensitive) != -1;
@@ -244,9 +252,9 @@ void SiteMapGetter::addLocationsFromXmlSiteMap(const string& siteMapData, const 
             if (moreLocations) {
                 const auto& url = toString(sf.currentValue());
                 if (isSitemapIndex) {
-//                    cout << "Is index '" << isSitemapIndex << "' "
-//                         << " loc: '" << url << "'"
-//                         << " count: '" << m_locationUrls.size() << "'" << endl;
+                    cout << "Is index '" << isSitemapIndex << "' "
+                         << " loc: '" << url << "'"
+                         << " count: '" << m_locationUrls.size() << "'" << endl;
                     if (okToAddLocationUrl(url)) {
                         m_siteMapUrls.push_back(url);
                         std::cout << "INFO: Adding sitemap url from '"
@@ -267,6 +275,7 @@ void SiteMapGetter::addLocationsFromXmlSiteMap(const string& siteMapData, const 
     }
     std::cout << "INFO: Done adding locations from '" << toString(sitemapUrl.toString())
               << "'  added/total: " << locationUrlsAdded << " / " << m_locationUrls.size()
+              << "'  siteMapUrls total: " << m_siteMapUrls.size()
               << std::endl;
 
     getAllLocations();
