@@ -17,6 +17,7 @@ target_sources(${target_name}
     PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/${target_name}.cpp
     ${CMAKE_CURRENT_LIST_DIR}/../crawler.qrc
+    ${CMAKE_CURRENT_LIST_DIR}/../creator.qrc
 )
 
 # --------------------------

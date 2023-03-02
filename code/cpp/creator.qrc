@@ -1,0 +1,47 @@
+<RCC>
+    <qresource prefix="/">
+        <file>data/icons/128x128/blank.png</file>
+        <file>data/icons/128x128/browser_back.png</file>
+        <file>data/icons/128x128/browser_forward.png</file>
+        <file>data/icons/128x128/browser.png</file>
+        <file>data/icons/128x128/crawler_editor.png</file>
+        <file>data/icons/128x128/crawler_settings.png</file>
+        <file>data/icons/128x128/debug.png</file>
+        <file>data/icons/128x128/design.png</file>
+        <file>data/icons/128x128/dom_sequences.png</file>
+        <file>data/icons/128x128/find.png</file>
+        <file>data/icons/128x128/findall.png</file>
+        <file>data/icons/128x128/findnext.png</file>
+        <file>data/icons/128x128/force_page_loaded.png</file>
+        <file>data/icons/128x128/help.png</file>
+        <file>data/icons/128x128/htmlsource.png</file>
+        <file>data/icons/128x128/load_url.png</file>
+        <file>data/icons/128x128/match_step.png</file>
+        <file>data/icons/128x128/mine_step.png</file>
+        <file>data/icons/128x128/navigate_step.png</file>
+        <file>data/icons/128x128/new_browser.png</file>
+        <file>data/icons/128x128/next_step.png</file>
+        <file>data/icons/128x128/nodeclick.png</file>
+        <file>data/icons/128x128/pause.png</file>
+        <file>data/icons/128x128/php.png</file>
+        <file>data/icons/128x128/reload_script.png</file>
+        <file>data/icons/128x128/run.png</file>
+        <file>data/icons/128x128/spider.png</file>
+        <file>data/icons/128x128/stop.png</file>
+        <file>data/icons/128x128/welcome.png</file>
+        <file>data/icons/48x48/book.png</file>
+        <file>data/icons/48x48/close_crawler.png</file>
+        <file>data/icons/48x48/crawler_modified.png</file>
+        <file>data/icons/48x48/exit.png</file>
+        <file>data/icons/48x48/file_modified.png</file>
+        <file>data/icons/48x48/new_crawler.png</file>
+        <file>data/icons/48x48/new_file.png</file>
+        <file>data/icons/48x48/new_php_file.png</file>
+        <file>data/icons/48x48/new.png</file>
+        <file>data/icons/48x48/nodeclick.png</file>
+        <file>data/icons/48x48/open_crawler.png</file>
+        <file>data/icons/48x48/open_file.png</file>
+        <file>data/icons/48x48/print.png</file>
+        <file>data/icons/48x48/spider.png</file>
+    </qresource>
+</RCC>
