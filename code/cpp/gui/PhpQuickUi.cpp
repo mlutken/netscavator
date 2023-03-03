@@ -22,12 +22,10 @@ PhpQuickUi::PhpQuickUi(QWidget *parent) :
 {
     m_guiGlobals = g()->gui();
     boost::shared_ptr<crawl::Configuration> c= crawl::g()->configuration();
-    std::string iconsDir48  = c->valueStrGet("resource-dir") + "/icons/48x48/";
-    std::string iconsDir128 = c->valueStrGet("resource-dir") + "/icons/128x128/";
     QAction* pAction;
 
     m_pMainLayout = new QVBoxLayout;
-    m_pExecutePhpBtn = new QPushButton(QIcon( (iconsDir128+"php.png").c_str() ), tr("Execute PHP"), this);
+    m_pExecutePhpBtn = new QPushButton(QIcon(":/data/icons/128x128/php.png"), tr("Execute PHP"), this);
     m_pPhpEdit = new QsciScintilla(this);
 
     m_pPhpEdit->setFolding(QsciScintilla::NoFoldStyle);

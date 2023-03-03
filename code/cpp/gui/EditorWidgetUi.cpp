@@ -19,8 +19,7 @@ EditorWidgetUi::EditorWidgetUi(QWidget *parent) :
 {
     // --- Load textModifiedIcon
     boost::shared_ptr<crawl::Configuration> c= crawl::g()->configuration();
-    std::string iconsDir = c->valueStrGet("resource-dir") + "/icons/48x48/";
-    m_fileModifiedIcon = QIcon ( (iconsDir+"file_modified.png").c_str() );
+    m_fileModifiedIcon = QIcon (":/data/icons/48x48/file_modified.png");
 
     m_pTabs = new QTabWidget(this);
     m_pTabs->setTabsClosable(true);
