@@ -3,5 +3,15 @@
         <file>Copyright.txt</file>
         <file>jquery.min.js</file>
         <file>gui/default.txt</file>
+        <file>data/config/netcreator.cfg.in</file>
+        <file>data/config/netscavator.cfg.in</file>
+        <file>data/config/php.ini.in</file>
+        <file>data/php/miner_templates/standard_project_item_template.tpl.php</file>
+        <file>data/php/miner_utils/CrawlerLog.php</file>
+        <file>data/php/miner_utils/miner_soap.php</file>
+        <file>data/php/miner_utils/parsing_utils.php</file>
+        <file>data/php/miner_utils/string_utils.php</file>
+        <file>data/php/miner_utils/utils.php</file>
+        <file>data/config/php.ini.tmp</file>
     </qresource>
 </RCC>
