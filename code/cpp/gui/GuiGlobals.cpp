@@ -213,7 +213,7 @@ void GuiGlobals::updateRecentCrawlersList ( const QFileInfo& filePath )
     QString absPath = filePath.absoluteFilePath();
     recentCrawlers.removeAll( absPath );
     recentCrawlers.push_front( absPath );
-    if ( recentCrawlers.count() > 6 ) {
+    if ( recentCrawlers.count() > 15 ) {
         recentCrawlers.pop_back();
     }
     writeRecentCrawlers( recentCrawlers );
