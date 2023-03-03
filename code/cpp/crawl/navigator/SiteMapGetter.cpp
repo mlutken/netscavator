@@ -255,13 +255,11 @@ void SiteMapGetter::addLocationsFromXmlSiteMap(const string& siteMapData, const 
                     cout << "Is index '" << isSitemapIndex << "' "
                          << " loc: '" << url << "'"
                          << " count: '" << m_locationUrls.size() << "'" << endl;
-                    if (okToAddLocationUrl(url)) {
-                        m_siteMapUrls.push_back(url);
-                        std::cout << "INFO: Adding sitemap url from '"
-                                  << toString(sitemapUrl.toString()) << "' "
-                                  << url << " . Total sitemaps found: " << m_siteMapUrls.size()
-                                  << std::endl;
-                    }
+                    m_siteMapUrls.push_back(url);
+                    std::cout << "INFO: Adding sitemap url from '"
+                              << toString(sitemapUrl.toString()) << "' "
+                              << url << " . Total sitemaps found: " << m_siteMapUrls.size()
+                              << std::endl;
                 }
                 else {
                     if (okToAddLocationUrl(url)) {
