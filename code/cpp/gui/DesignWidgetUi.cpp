@@ -35,6 +35,8 @@ void DesignWidgetUi::urlQueueTableModelSet(UrlQueueTableModel* model)
 {
     if (m_urlQueueTableView) {
         m_urlQueueTableView->setModel(model);
+        m_urlQueueTableView->resizeColumnsToContents();
+        m_urlQueueTableView->setSelectionMode( QAbstractItemView::NoSelection );
     }
 }
 
