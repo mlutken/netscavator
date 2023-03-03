@@ -13,5 +13,6 @@
         <file>data/php/miner_utils/string_utils.php</file>
         <file>data/php/miner_utils/utils.php</file>
         <file>data/config/php.ini.tmp</file>
+        <file>scriptcrawl/cpp_crawl/webminer.php</file>
     </qresource>
 </RCC>
