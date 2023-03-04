@@ -42,15 +42,22 @@ else ()
     set ( QT_WEBKIT_HDR_DIR         ${BASE_3RD_PARTY_DIR}/qtlibs/linux_64_release/include                )
 endif ()
 
-# -----------------------------------------
-# --- CUSTOM_PHP (crawler PHP) ini file ---
-# -----------------------------------------
-set ( WEBMINER_PHP_INCLUDE_PATH     "${CMAKE_CURRENT_LIST_DIR}/scriptcrawl/cpp_crawl:${CMAKE_CURRENT_LIST_DIR}/data/php/miner_utils:${CMAKE_CURRENT_LIST_DIR}/data/php/miner_templates:${CMAKE_RUNTIME_OUTPUT_DIRECTORY}" )
-set ( WEBMINER_PHP_EXTENSION_DIR    "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}" )
-
 # --- Set define for hardcoded php.ini file path. Mostly used for debugging/testing purposes ---
 set ( PHP_HARDCODED_INI_FILE_PATH   "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/php.ini" )
+
+# ------------------------------------------
+# --- DEVELOP PHP (crawler PHP) ini file ---
+# ------------------------------------------
+set ( WEBMINER_PHP_INCLUDE_PATH     "${CMAKE_CURRENT_LIST_DIR}/scriptcrawl/cpp_crawl:${CMAKE_CURRENT_LIST_DIR}/data/php/miner_utils:${CMAKE_CURRENT_LIST_DIR}/data/php/miner_templates:${CMAKE_RUNTIME_OUTPUT_DIRECTORY}" )
+set ( WEBMINER_PHP_EXTENSION_DIR    "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}" )
 configure_file (${CMAKE_CURRENT_LIST_DIR}/scriptcrawl/cpp_crawl/php.ini.in ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/php.ini )
+
+# ------------------------------------------
+# --- INSTALL PHP (crawler PHP) ini file ---
+# ------------------------------------------
+set ( WEBMINER_PHP_INCLUDE_PATH     "${CMAKE_INSTALL_PREFIX}/share/netscavator:${CMAKE_INSTALL_PREFIX}/lib" )
+set ( WEBMINER_PHP_EXTENSION_DIR    "${CMAKE_INSTALL_PREFIX}/lib" )
+configure_file (${CMAKE_CURRENT_LIST_DIR}/scriptcrawl/cpp_crawl/php.ini.in ${CMAKE_BINARY_DIR}/php.ini )
 
 set  ( swig_EXECUTABLE   ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/swig-3.0.12/linux_64/bin/swig )
 
