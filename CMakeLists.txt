@@ -3,6 +3,7 @@ project(netscavator)
 SET(QT_CREATOR_SKIP_PACKAGE_MANAGER_SETUP TRUE)
 SET(QT_CREATOR_SKIP_CONAN_SETUP TRUE)
 
+
 enable_testing()
 include (${CMAKE_CURRENT_LIST_DIR}/cpaf/tools/cmake/default_vars.cmake)
 include (${CMAKE_CURRENT_LIST_DIR}/cpaf/tools/cmake/default_versions.cmake)
@@ -13,8 +14,8 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cpaf/tools/cmake)
 
 # --- Crawler version ---
 set ( NETSCAVATOR_VERSION_MAJOR     6   )
-set ( NETSCAVATOR_VERSION_MINOR     5   )
-set ( NETSCAVATOR_VERSION_PATCH     9   )
+set ( NETSCAVATOR_VERSION_MINOR     6   )
+set ( NETSCAVATOR_VERSION_PATCH     1   )
 set ( NETSCAVATOR_VERSION_STRING    "${NETSCAVATOR_VERSION_MAJOR}.${NETSCAVATOR_VERSION_MINOR}.${NETSCAVATOR_VERSION_PATCH}"    )
 set ( VERSION_DIR                   ${CMAKE_CURRENT_LIST_DIR}/version)
 
@@ -108,6 +109,40 @@ message ("CMAKE_ARCHIVE_OUTPUT_DIRECTORY    : '${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}
 message ("CMAKE_COMPILE_PDB_OUTPUT_DIRECTORY: '${CMAKE_COMPILE_PDB_OUTPUT_DIRECTORY}'")
 message ("RELEASE_BUILD_DIR                 : '${RELEASE_BUILD_DIR}'")
 message ("CPAF_INSTALL_DIR                  : '${CPAF_INSTALL_DIR}'")
+message ("CMAKE_INSTALL_PREFIX              : '${CMAKE_INSTALL_PREFIX}'")
+
+
+set (DATA_PHP_SRC_DIR ${CMAKE_CURRENT_LIST_DIR}/code/cpp/data/php )
+set (PHP_SLEIPNER_LIB_SRC_DIR ${CMAKE_CURRENT_LIST_DIR}/code/3rdparty/php-${CRAWLER_PHP_VERSION}/linux_64_release/lib)
+configure_file(netcreator.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/netcreator.desktop)
+
+install (TARGETS netscavator        DESTINATION bin)
+install (TARGETS netcreator         DESTINATION bin)
+install (TARGETS cpp_crawl          DESTINATION lib)
+install (FILES netcreator.png       DESTINATION share/pixmaps/)
+
+install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cpp_crawl.php  DESTINATION lib/ )
+install (FILES ${PHP_SLEIPNER_LIB_SRC_DIR}/libphp-sleipner5.so  DESTINATION lib/ )
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/netcreator.desktop   DESTINATION share/applications/)
+
+
+install (FILES ${CMAKE_BINARY_DIR}/php.ini DESTINATION share/netscavator/)
+install (FILES ${CMAKE_CURRENT_LIST_DIR}/code/cpp/scriptcrawl/cpp_crawl/webminer.php DESTINATION share/netscavator/)
+install (FILES ${DATA_PHP_SRC_DIR}/miner_templates/standard_project_item_template.tpl.php DESTINATION share/netscavator/)
+install (FILES ${DATA_PHP_SRC_DIR}/miner_utils/CrawlerLog.php DESTINATION share/netscavator/)
+install (FILES ${DATA_PHP_SRC_DIR}/miner_utils/parsing_utils.php DESTINATION share/netscavator/)
+install (FILES ${DATA_PHP_SRC_DIR}/miner_utils/string_utils.php DESTINATION share/netscavator/)
+install (FILES ${DATA_PHP_SRC_DIR}/miner_utils/utils.php DESTINATION share/netscavator/)
+
+
+install (FILES ${CMAKE_BINARY_DIR}/php.ini DESTINATION share/netscavator/)
+
+
+#${CMAKE_BINARY_DIR}/php.ini.install
+    #if(SNAP)
+        #install(FILES sandboxed.png
+            #DESTINATION share/pixmaps/)
+
 
 # Get tarball from Github netscavator: https://api.github.com/repos/mlutken/netscavator/tarball
 # Get tarball from Github cpaf: https://api.github.com/repos/mlutken/cpaf/tarball
