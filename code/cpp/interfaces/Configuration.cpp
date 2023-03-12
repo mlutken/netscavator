@@ -289,7 +289,7 @@ bool Configuration::parseCommandLine ( const std::string& sAppTypeName, int argc
     string sDefaultCfgPath = valueStrGet("default-cfg-path");
 
     if ( !boost::filesystem::exists(sDefaultCfgPath) ) {
-        createDefaultConfigFiles();
+        //FIXMENM: Can we get rid of this? createDefaultConfigFiles();
         setExeNames( argv[0] );
         sDefaultCfgPath = valueStrGet("default-cfg-path");
     }
@@ -318,6 +318,7 @@ bool Configuration::parseCommandLine ( const std::string& sAppTypeName, int argc
             ("load-images", po::value<string>()->default_value(""), "Load images during crawling. Values: yes/no or empty which leaves the decision to the script or based on the runmode. In 'crawler' we do not load images by default.")
             ("php-ini-path,i", po::value<string>()->default_value(valueStrGet("default-php-ini-path")), "Php ini file path")
             ("script-include-dir,I",   po::value< vector<string> >()->composing(), "PHP additional include dirs")
+            ("print-settings,P",   po::value<string>()->default_value("no"), "Print settings and exit")
             ("resource-dir",   po::value<string>()->default_value(valueStrGet("default-resource-dir")), "Resource path")
             ("exit-when-done", po::value<string>()->default_value(defaultExitWhenDone), "Exit program on mining done. Values: 'yes'','no'")
             ("upload-result", po::value<string>()->default_value(""), "Upload to server Values: yes/no or empty which leaves the decision to the script or based on the runmode. In 'crawler' we upload by default.")
@@ -373,17 +374,24 @@ bool Configuration::parseCommandLine ( const std::string& sAppTypeName, int argc
         po::store(po::command_line_parser(argc, argv).options(cmdline_options).positional(p).run(), m_vm);
         po::notify(m_vm);
 
-        ifstream ifs(m_sConfigFile.c_str());
-        if (!ifs)
-        {
-            cout << "Warning: Can not open config file: " << m_sConfigFile << "\n";
+        if (valueBoolGet("print-settings")) {
+            printSettings();
             return false;
         }
-        else
-        {
-            store(parse_config_file(ifs, config_file_options), m_vm);
-            notify(m_vm);
-        }
+
+// FIXMENM: Test that we can work without hte config file
+
+//        ifstream ifs(m_sConfigFile.c_str());
+//        if (!ifs)
+//        {
+//            cout << "Warning: Can not open config file: " << m_sConfigFile << "\n";
+//            return false;
+//        }
+//        else
+//        {
+//            store(parse_config_file(ifs, config_file_options), m_vm);
+//            notify(m_vm);
+//        }
 
         if (m_vm.count("help")) {
             cout << visible << "\n";
@@ -618,7 +626,9 @@ std::string Configuration::defaultPhpIniPathGet( const boost::filesystem::path& 
 {
     string leafName =  "php.ini";
     boost::filesystem::path p;
-    p = boost::filesystem::path("/etc/netscavator") / leafName;
+//    p = exedir.parent_path() / "share/netscavator" / leafName;
+//    std::cerr << "FIXMENM PHP INI PATH: " << p << "\n";
+    p = exedir / leafName;
     if ( boost::filesystem::exists(p) ) {
         return p.string();
     }
@@ -626,8 +636,11 @@ std::string Configuration::defaultPhpIniPathGet( const boost::filesystem::path& 
     if ( boost::filesystem::exists(p) ) {
         return p.string();
     }
-    p = exedir / leafName;
-    return p.string();
+    p = exedir.parent_path() / "share/netscavator" / leafName;
+    if ( boost::filesystem::exists(p) ) {
+        return p.string();
+    }
+    return "";
 }
 
 

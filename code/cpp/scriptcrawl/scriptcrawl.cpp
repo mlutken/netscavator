@@ -4525,13 +4525,15 @@ int	outputValueFind (const std::string& sSequence, const std::string& sFieldName
     return curMiner()->outputValueFind( sSequence, sFieldName, sModifierID, sManipParam1, sManipParam2 );
 }
 
-int		outputValueFind ( const std::string& sSequence, const std::string& sFieldName, const std::string& sModifierID, const std::string& sManipParam1)
+int	outputValueFind ( const std::string& sSequence, const std::string& sFieldName, const std::string& sModifierID, const std::string& sManipParam1)
 {
     return curMiner()->outputValueFind( sSequence, sFieldName, sModifierID, sManipParam1 );
 }
 
 int	outputValueFind ( const std::string& sSequence ,const std::string& sFieldName ,const std::string& sModifierID)
 {
+//    static int counter = 0;
+//    ++counter;    std::cerr  << "[" << counter << "] FIXMENM outputValueFind(" << sSequence << ", " << sFieldName << ", " << sModifierID << ")\n";
     return curMiner()->outputValueFind( sSequence, sFieldName, sModifierID );
 }
 

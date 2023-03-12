@@ -111,6 +111,9 @@ message ("RELEASE_BUILD_DIR                 : '${RELEASE_BUILD_DIR}'")
 message ("CPAF_INSTALL_DIR                  : '${CPAF_INSTALL_DIR}'")
 message ("CMAKE_INSTALL_PREFIX              : '${CMAKE_INSTALL_PREFIX}'")
 
+# ----------------------
+# --- install target ---
+# ----------------------
 
 set (DATA_PHP_SRC_DIR ${CMAKE_CURRENT_LIST_DIR}/code/cpp/data/php )
 set (PHP_SLEIPNER_LIB_SRC_DIR ${CMAKE_CURRENT_LIST_DIR}/code/3rdparty/php-${CRAWLER_PHP_VERSION}/linux_64_release/lib)
@@ -134,9 +137,18 @@ install (FILES ${DATA_PHP_SRC_DIR}/miner_utils/parsing_utils.php DESTINATION sha
 install (FILES ${DATA_PHP_SRC_DIR}/miner_utils/string_utils.php DESTINATION share/netscavator/)
 install (FILES ${DATA_PHP_SRC_DIR}/miner_utils/utils.php DESTINATION share/netscavator/)
 
+# ------------------------
+# --- uninstall target ---
+# ------------------------
+if(NOT TARGET uninstall)
+  configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY)
 
-install (FILES ${CMAKE_BINARY_DIR}/php.ini DESTINATION share/netscavator/)
-
+  add_custom_target(uninstall
+    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+endif()
 
 #${CMAKE_BINARY_DIR}/php.ini.install
     #if(SNAP)

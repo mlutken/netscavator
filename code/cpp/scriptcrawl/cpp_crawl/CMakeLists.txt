@@ -61,11 +61,6 @@ else ()
     target_compile_definitions(${library_name} PUBLIC ZEND_DEBUG=0 )
 endif ()
 
-message ("XXX CMAKE_RUNTIME_OUTPUT_DIRECTORY    : '${CMAKE_RUNTIME_OUTPUT_DIRECTORY}'")
-message ("XXX CMAKE_LIBRARY_OUTPUT_DIRECTORY    : '${CMAKE_LIBRARY_OUTPUT_DIRECTORY}'")
-message ("XXX CMAKE_CURRENT_BINARY_DIR    : '${CMAKE_CURRENT_BINARY_DIR}'")
-message ("XXX LIB_SOURCE_PATH    : '${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${library_name}${CMAKE_SHARED_LIBRARY_SUFFIX}'")
-
 add_custom_command(TARGET ${library_name} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
         ${CMAKE_BINARY_DIR}/lib/${library_name}${CMAKE_SHARED_LIBRARY_SUFFIX}
