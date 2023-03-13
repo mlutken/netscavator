@@ -159,7 +159,9 @@ endif()
 # - AppImage repo: https://flathub.org/apps
 # - linuxdeploy: https://docs.appimage.org/packaging-guide/from-source/linuxdeploy-user-guide.html#ref-linuxdeploy
 # - AppImageTool download: https://github.com/AppImage/AppImageKit/releases/continuous
-
+# https://docs.appimage.org/packaging-guide/from-source/native-binaries.html#bundle-qtquickapp-with-cmake
+# - LD_PRELOAD: https://www.baeldung.com/linux/ld_preload-trick-what-is
+# - NSS library problems: https://github.com/probonopd/linuxdeployqt/issues/435
 
 #${CMAKE_BINARY_DIR}/php.ini.install
     #if(SNAP)
