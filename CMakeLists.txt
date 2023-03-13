@@ -118,15 +118,18 @@ message ("CMAKE_INSTALL_PREFIX              : '${CMAKE_INSTALL_PREFIX}'")
 set (DATA_PHP_SRC_DIR ${CMAKE_CURRENT_LIST_DIR}/code/cpp/data/php )
 set (PHP_SLEIPNER_LIB_SRC_DIR ${CMAKE_CURRENT_LIST_DIR}/code/3rdparty/php-${CRAWLER_PHP_VERSION}/linux_64_release/lib)
 configure_file(netcreator.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/netcreator.desktop)
+configure_file(netscavator.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/netscavator.desktop)
 
 install (TARGETS netscavator        DESTINATION bin)
 install (TARGETS netcreator         DESTINATION bin)
 install (TARGETS cpp_crawl          DESTINATION lib)
 install (FILES netcreator.png       DESTINATION share/pixmaps/)
+install (FILES netscavator.png      DESTINATION share/pixmaps/)
 
 install (FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/cpp_crawl.php  DESTINATION lib/ )
 install (FILES ${PHP_SLEIPNER_LIB_SRC_DIR}/libphp-sleipner5.so  DESTINATION lib/ )
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/netcreator.desktop   DESTINATION share/applications/)
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/netscavator.desktop  DESTINATION share/applications/)
 
 
 install (FILES ${CMAKE_BINARY_DIR}/php.ini DESTINATION share/netscavator/)
@@ -153,6 +156,7 @@ endif()
 # -----------
 # --- DOC ---
 # -----------
+# CMD: ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
 # - make uninstall: https://gitlab.kitware.com/cmake/community/-/wikis/FAQ#can-i-do-make-uninstall-with-cmake
 # - AppImage with CMake: https://www.codeintrinsic.com/create-appimage-with-linuxdeploy-and-cmake/
 # - AppImageTool: https://docs.appimage.org/introduction/software-overview.html
@@ -162,6 +166,7 @@ endif()
 # https://docs.appimage.org/packaging-guide/from-source/native-binaries.html#bundle-qtquickapp-with-cmake
 # - LD_PRELOAD: https://www.baeldung.com/linux/ld_preload-trick-what-is
 # - NSS library problems: https://github.com/probonopd/linuxdeployqt/issues/435
+# Meta info for desktop apps XML format: https://www.freedesktop.org/software/appstream/docs/chap-Quickstart.html#sect-Quickstart-DesktopApps
 
 #${CMAKE_BINARY_DIR}/php.ini.install
     #if(SNAP)

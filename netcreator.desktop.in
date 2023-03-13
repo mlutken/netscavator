@@ -10,4 +10,4 @@ Exec=netcreator
 Icon=netcreator
 X-HildonDesk-ShowInToolbar=true
 X-Osso-Type=application/x-executable
-Categories=Network;Application;
+Categories=Network

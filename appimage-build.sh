@@ -28,7 +28,7 @@ cleanup () {
     fi
 }
 
-# trap cleanup EXIT
+trap cleanup EXIT
 
 
 # store repo root as variable
@@ -73,8 +73,20 @@ chmod +x linuxdeploy*.AppImage
 
 
 # initialize AppDir, bundle shared libraries for QtQuickApp, use Qt plugin to bundle additional resources, and build AppImage, all in one single command
+mv AppDir/usr/share/applications/netscavator.desktop AppDir/usr/share/applications/netscavator.desktop.bak
+cp AppDir/usr/share/pixmaps/netcreator.png AppDir/
 ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
-
-
-# move built AppImage back into original CWD
+# move built netcreator AppImage back into original CWD
 mv netcreator*.AppImage "$OLD_CWD"
+
+mv AppDir/usr/share/applications/netscavator.desktop.bak AppDir/usr/share/applications/netscavator.desktop
+rm AppDir/netcreator.png
+rm AppDir/AppRun
+rm AppDir/usr/share/applications/netcreator.desktop
+rm AppDir/usr/share/pixmaps/netcreator.png
+cp AppDir/usr/share/pixmaps/netscavator.png AppDir/
+./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
+# move built netscavator AppImage back into original CWD
+mv netscavator*.AppImage "$OLD_CWD"
+
+
