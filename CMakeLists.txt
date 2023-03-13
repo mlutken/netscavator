@@ -15,7 +15,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cpaf/tools/cmake)
 # --- Crawler version ---
 set ( NETSCAVATOR_VERSION_MAJOR     6   )
 set ( NETSCAVATOR_VERSION_MINOR     6   )
-set ( NETSCAVATOR_VERSION_PATCH     1   )
+set ( NETSCAVATOR_VERSION_PATCH     2   )
 set ( NETSCAVATOR_VERSION_STRING    "${NETSCAVATOR_VERSION_MAJOR}.${NETSCAVATOR_VERSION_MINOR}.${NETSCAVATOR_VERSION_PATCH}"    )
 set ( VERSION_DIR                   ${CMAKE_CURRENT_LIST_DIR}/version)
 
@@ -149,6 +149,17 @@ if(NOT TARGET uninstall)
   add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 endif()
+
+# -----------
+# --- DOC ---
+# -----------
+# - make uninstall: https://gitlab.kitware.com/cmake/community/-/wikis/FAQ#can-i-do-make-uninstall-with-cmake
+# - AppImage with CMake: https://www.codeintrinsic.com/create-appimage-with-linuxdeploy-and-cmake/
+# - AppImageTool: https://docs.appimage.org/introduction/software-overview.html
+# - AppImage repo: https://flathub.org/apps
+# - linuxdeploy: https://docs.appimage.org/packaging-guide/from-source/linuxdeploy-user-guide.html#ref-linuxdeploy
+# - AppImageTool download: https://github.com/AppImage/AppImageKit/releases/continuous
+
 
 #${CMAKE_BINARY_DIR}/php.ini.install
     #if(SNAP)
