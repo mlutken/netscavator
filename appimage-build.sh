@@ -48,6 +48,12 @@ pushd "$BUILD_DIR"
 # configure build files with CMake
 # we need to explicitly set the install prefix, as CMake's default is /usr/local for some reason...
 # build project and install files into AppDir
+
+
+# TODO IMPORTANT: When manually deploying applications that depend on Qt WebEngine, all the files that are required
+# to run the application have to be included: libraries, QML imports, plugins, and translations.
+# see: https://doc.qt.io/qt-6/qtwebengine-deploying.html
+
 cmake "$REPO_ROOT" -DCMAKE_INSTALL_PREFIX=/usr
 make -j$(nproc)
 make install DESTDIR=AppDir
@@ -58,8 +64,10 @@ make install DESTDIR=AppDir
 # # cp /lib/x86_64-linux-gnu/libicudata.so.70 AppDir/usr/lib/
 # # cp /lib/x86_64-linux-gnu/libstdc++.so.6 AppDir/usr/lib/
 # # cp /lib/x86_64-linux-gnu/libgcc_s.so.1 AppDir/usr/lib/
+mkdir -p AppDir/usr/lib/qt6/
 mkdir -p AppDir/usr/lib/x86_64-linux-gnu/qt6/
 cp -r /usr/lib/x86_64-linux-gnu/qt6/plugins/ AppDir/usr/lib/x86_64-linux-gnu/qt6/
+cp -r /usr/lib/qt6/libexec/ AppDir/usr/lib/qt6/
 
 cp /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/* AppDir/usr/lib/
 cp /usr/lib/x86_64-linux-gnu/nss/* AppDir/usr/lib/

@@ -51,7 +51,12 @@ then
 	sudo apt-get install -y libxcb-xkb-dev
 	sudo apt-get install -y libxkbcommon-dev
 	sudo apt-get install -y libxkbcommon-x11-dev
-    sudo apt install -Y libclang-10-dev
+        sudo apt install -Y libclang-10-dev
+	sudo apt-get -y install qt6-base-dev
+	sudo apt-get -y install qt6-webengine-dev
+	sudo apt-get -y install libqt6webchannel6-dev
+	sudo apt-get -y install qt6-webengine-dev-tools
+	sudo apt-get -y install libqt6webenginecore6-bin
 
     # --- For Webengine ---
     # Node js: https://www.techiediaries.com/ubuntu/install-nodejs-npm-on-ubuntu-20-04/

@@ -115,6 +115,7 @@ message ("CMAKE_INSTALL_PREFIX              : '${CMAKE_INSTALL_PREFIX}'")
 # --- install target ---
 # ----------------------
 
+# https://doc.qt.io/qt-6/qtwebengine-deploying.html
 set (DATA_PHP_SRC_DIR ${CMAKE_CURRENT_LIST_DIR}/code/cpp/data/php )
 set (PHP_SLEIPNER_LIB_SRC_DIR ${CMAKE_CURRENT_LIST_DIR}/code/3rdparty/php-${CRAWLER_PHP_VERSION}/linux_64_release/lib)
 configure_file(netcreator.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/netcreator.desktop)
