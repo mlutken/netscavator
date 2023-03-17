@@ -28,7 +28,7 @@ cleanup () {
     fi
 }
 
-trap cleanup EXIT
+# trap cleanup EXIT
 
 
 # store repo root as variable
@@ -52,7 +52,17 @@ cmake "$REPO_ROOT" -DCMAKE_INSTALL_PREFIX=/usr
 make -j$(nproc)
 make install DESTDIR=AppDir
 
-cp /usr/lib/x86_64-linux-gnu/nss/* AppDir/usr/lib
+# # cp /lib/x86_64-linux-gnu/libm.so.6 AppDir/usr/lib/
+# # cp /lib/x86_64-linux-gnu/libc.so.6 AppDir/usr/lib/
+# # cp /lib/x86_64-linux-gnu/libicuuc.so.70 AppDir/usr/lib/
+# # cp /lib/x86_64-linux-gnu/libicudata.so.70 AppDir/usr/lib/
+# # cp /lib/x86_64-linux-gnu/libstdc++.so.6 AppDir/usr/lib/
+# # cp /lib/x86_64-linux-gnu/libgcc_s.so.1 AppDir/usr/lib/
+mkdir -p AppDir/usr/lib/x86_64-linux-gnu/qt6/
+cp -r /usr/lib/x86_64-linux-gnu/qt6/plugins/ AppDir/usr/lib/x86_64-linux-gnu/qt6/
+
+cp /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/* AppDir/usr/lib/
+cp /usr/lib/x86_64-linux-gnu/nss/* AppDir/usr/lib/
 cp ./bin/qtwebengine_devtools_resources.pak AppDir/usr/bin/
 cp ./bin/qtwebengine_resources_100p.pak AppDir/usr/bin/
 cp ./bin/qtwebengine_resources_200p.pak AppDir/usr/bin/
