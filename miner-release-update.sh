@@ -143,8 +143,21 @@ if [ -d ${SRC_DIR_LIBS} ]; then
     cp ${SRC_DIR_EXE}/qtwebengine_resources.pak ${DST_DIR}
 
     ## --- Copy Qt libs, executables and plugins: TEST: See if this works to avoid additional installs ---
+    cp /usr/lib/x86_64-linux-gnu/qt6/plugins/designer/* ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/qt6/plugins/egldeviceintegrations/* ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/qt6/plugins/generic/* ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/qt6/plugins/iconengines/* ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/qt6/plugins/imageformats/* ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/qt6/plugins/networkinformation/* ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/* ${DST_DIR}
     cp /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/* ${DST_DIR}
-    cp -r ${SRC_DIR_QT}/plugins/ ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/qt6/plugins/platformthemes/* ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/qt6/plugins/position/* ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/qt6/plugins/printsupport/* ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/qt6/plugins/qmltooling/* ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/qt6/plugins/sqldrivers/* ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/qt6/plugins/tls/* ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/qt6/plugins/xcbglintegrations/* ${DST_DIR}
     cp /usr/lib/x86_64-linux-gnu/nss/* ${DST_DIR}
     cp -r /usr/lib/qt6/libexec/* ${DST_DIR}
     ## cp ${SRC_DIR_QT}/lib/lib*.so.5 ${DST_DIR}
