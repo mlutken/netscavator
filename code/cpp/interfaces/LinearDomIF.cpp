@@ -2,10 +2,12 @@
 
 #include <ostream>
 #include <iostream>
+#include <ranges>
 #include <QThread>
 
 #include "DomNodeIF.h"
 #include "interfaces_utils.h"
+#include <htmlparser/html/Node.h>
 
 using namespace std;
 
@@ -178,29 +180,21 @@ std::vector<LinearDomIF::size_type> LinearDomIF::childPositionsAll(const size_ty
 std::string LinearDomIF::attribute(const LinearDomIF::size_type pos,
                                    const string& key, const string& default_val) const
 {
-    std::cerr << "TODO FIXME LinearDomIF::attribute()\n";
     const auto elem_pos = thisElementPos(pos);
     if (!posValid(elem_pos)) {
-        return "";
+        return default_val;
+    }
+    const TreeNode* node = (*this)[pos].treeNode();
+
+    const auto& attribs = node->data.attributes();
+    auto finder = [key](const Node::Attribute& attribute) { return attribute.name == key; };
+    const auto it = std::ranges::find_if(attribs, finder);
+
+    if (it != attribs.end()) {
+        return it->value;
     }
 
-    // Loop through attributes and attribute values
-    // looking for an attribute with name 'key'
-    std::string attribute_val = default_val;
-    auto p = elem_pos +1;
-    const auto last_dom_pos = lastDomPos();
-    while ( (p <= last_dom_pos) && ((*this)[p].parentPos() == pos) && ((*this)[p].nodeType() & DomNodeTypes::ATTRIBUTE_NODES)) {
-        const auto& node = (*this)[p];
-        if ( (node.nodeType() & DomNodeTypes::ATTRIBUTE) && node.stringData() == key ) {
-            ++p;
-            if ((p <= last_dom_pos) && ((*this)[p].parentPos() == pos) && ((*this)[p].nodeType() & DomNodeTypes::ATTRIBUTE_VALUE)) {
-                attribute_val = (*this)[p].stringData();
-            }
-        }
-        ++p;
-    }
-
-    return attribute_val;
+    return default_val;
 }
 
 string LinearDomIF::toXPathStringList(const std::vector<int>& domPositions) const
