@@ -162,6 +162,15 @@ if [ -d ${SRC_DIR_LIBS} ]; then
     cp -r /usr/lib/qt6/libexec/* ${DST_DIR}
     ## cp ${SRC_DIR_QT}/lib/lib*.so.5 ${DST_DIR}
 
+    ## Copy OPenSSL libraries
+    cp /usr/lib/x86_64-linux-gnu/libevent_openssl-2.1.so.7 ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/libevent_openssl-2.1.so.7.0.1 ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/libevent_openssl.so ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/libxmlsec1-openssl.so.1 ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/libxmlsec1-openssl.so.1.2.33 ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/apr-util-1/apr_crypto_openssl-1.so ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/apr-util-1/apr_crypto_openssl.so ${DST_DIR}
+
     ## Copy all dynamic dependencies of libqxcb.so # Only needed for custom Qt builds !!
     ${VERIQUIN_CPP_DIR}/bin/copy_dependencies.sh /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqxcb.so ${DST_DIR}
 
