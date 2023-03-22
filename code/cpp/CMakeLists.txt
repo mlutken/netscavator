@@ -13,13 +13,6 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-
-CONFIGURE_FILE ( ${QT_RESOURCES_PATH}/qtwebengine_devtools_resources.pak ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtwebengine_devtools_resources.pak COPYONLY )
-CONFIGURE_FILE ( ${QT_RESOURCES_PATH}/qtwebengine_resources_100p.pak ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtwebengine_resources_100p.pak COPYONLY )
-CONFIGURE_FILE ( ${QT_RESOURCES_PATH}/qtwebengine_resources_200p.pak ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtwebengine_resources_200p.pak COPYONLY )
-CONFIGURE_FILE ( ${QT_RESOURCES_PATH}/qtwebengine_resources.pak ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtwebengine_resources.pak COPYONLY )
-
-#cmake --help-policy CMP0005
 set ( CBS_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR}/../../cpaf/cbs )
 message ( "CBS_ROOT_DIR: ${CBS_ROOT_DIR}" )
 set  ( PHP_VERSION      "${CRAWLER_PHP_VERSION}" )
@@ -32,6 +25,10 @@ set ( CPAF_ROOT_DIR "../../../cpaf" )
 set ( CBS_SHARED_LIBRARY_PATH_PREBUILD ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}    ) # For configuring files like netscavator.cfg.in: TODO: Change .in files to use different var than CBS_SHARED_LIBRARY_PATH_PREBUILD
 set ( RESOURCE_DIR  ${CMAKE_CURRENT_LIST_DIR}/data                          )
 
+
+# --- Set define for hardcoded php.ini file path. Mostly used for debugging/testing purposes ---
+set ( PHP_HARDCODED_INI_FILE_PATH   "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/php.ini" )
+
 if ( ${CMAKE_BUILD_TYPE} STREQUAL "Debug"  )
     set ( CUSTOM_PHP_BASE_DIR       ${BASE_3RD_PARTY_DIR}/php-${PHP_VERSION}/linux_64_debug )
     set ( QT_WEBKIT_LIB_DIR         ${BASE_3RD_PARTY_DIR}/qtlibs/linux_64_release/lib/x86_64-linux-gnu   )
@@ -42,8 +39,15 @@ else ()
     set ( QT_WEBKIT_HDR_DIR         ${BASE_3RD_PARTY_DIR}/qtlibs/linux_64_release/include                )
 endif ()
 
-# --- Set define for hardcoded php.ini file path. Mostly used for debugging/testing purposes ---
-set ( PHP_HARDCODED_INI_FILE_PATH   "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/php.ini" )
+CONFIGURE_FILE ( ${QT_RESOURCES_PATH}/qtwebengine_devtools_resources.pak ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtwebengine_devtools_resources.pak COPYONLY )
+CONFIGURE_FILE ( ${QT_RESOURCES_PATH}/qtwebengine_resources_100p.pak ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtwebengine_resources_100p.pak COPYONLY )
+CONFIGURE_FILE ( ${QT_RESOURCES_PATH}/qtwebengine_resources_200p.pak ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtwebengine_resources_200p.pak COPYONLY )
+CONFIGURE_FILE ( ${QT_RESOURCES_PATH}/qtwebengine_resources.pak ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtwebengine_resources.pak COPYONLY )
+
+CONFIGURE_FILE ( ${CUSTOM_PHP_BASE_DIR}/lib/libphp-sleipner5.so ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libphp-sleipner5.so COPYONLY )
+CONFIGURE_FILE ( ${CUSTOM_PHP_BASE_DIR}/lib/libphp-sleipner5.so ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libphp-sleipner5.so COPYONLY )
+
+#cmake --help-policy CMP0005
 
 # ------------------------------------------
 # --- DEVELOP PHP (crawler PHP) ini file ---

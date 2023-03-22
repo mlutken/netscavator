@@ -114,6 +114,7 @@ if [ -d ${SRC_DIR_LIBS} ]; then
     
     cp -r ${SRC_DIR_MANUAL} ${DST_DIR}
     cp ${SRC_DATA_DIR}/bin/linux/install-xvfb.sh ${DST_DIR}
+    cp ${VERIQUIN_CODE_DIR}/3rdpartysrc/installNeededLibs_RunAsRoot.sh ${DST_DIR}
     cp -r ${SRC_DATA_DIR}/robot/* ${DST_DIR}/robot/
     cp ${SRC_DATA_DIR}/config/php.ini.in ${DST_DIR}
     cp ${SRC_DATA_DIR}/config/testcreator.cfg.in ${DST_DIR}
@@ -130,13 +131,9 @@ if [ -d ${SRC_DIR_LIBS} ]; then
 
     cp ${SRC_DIR_LIBS}/cpp_crawl.php ${DST_DIR}
 
-    ## --- Copy Qt libs and plugins Only needed for custom Qt builds !! ---
-    ## cp -r ${SRC_DIR_QT}/plugins/ ${DST_DIR}
-    ## cp ${SRC_DIR_QT}/lib/lib*.so.5 ${DST_DIR}
 
     # --- Copy Netscavator libraries and executables ---
     cp ${SRC_DIR_LIBS}/cpp_crawl.so ${DST_DIR}
-    # ### cp ${SRC_DIR_LIBS}/libscript_embedding.so ${DST_DIR}  # TODO: Statically built now! If no problems remove this line!
     cp ${SRC_DIR_PHP}/libphp-sleipner5.so ${DST_DIR}
     cp ${SRC_DIR_EXE}/netscavator ${DST_DIR}
     cp ${SRC_DIR_EXE}/netcreator ${DST_DIR}
@@ -145,8 +142,15 @@ if [ -d ${SRC_DIR_LIBS} ]; then
     cp ${SRC_DIR_EXE}/qtwebengine_resources_200p.pak ${DST_DIR}
     cp ${SRC_DIR_EXE}/qtwebengine_resources.pak ${DST_DIR}
 
+    ## --- Copy Qt libs, executables and plugins: TEST: See if this works to avoid additional installs ---
+    cp /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/* ${DST_DIR}
+    cp -r ${SRC_DIR_QT}/plugins/ ${DST_DIR}
+    cp /usr/lib/x86_64-linux-gnu/nss/* ${DST_DIR}
+    cp -r /usr/lib/qt6/libexec/* ${DST_DIR}
+    ## cp ${SRC_DIR_QT}/lib/lib*.so.5 ${DST_DIR}
+
     ## Copy all dynamic dependencies of libqxcb.so # Only needed for custom Qt builds !!
-    ##${VERIQUIN_CPP_DIR}/bin/copy_dependencies.sh ${DST_DIR}/plugins/platforms/libqxcb.so ${DST_DIR}
+    ${VERIQUIN_CPP_DIR}/bin/copy_dependencies.sh /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqxcb.so ${DST_DIR}
 
     # Copy all dynamic dependencies of minercreator
     ${VERIQUIN_CPP_DIR}/bin/copy_dependencies.sh ${SRC_DIR_EXE}/netcreator ${DST_DIR}
@@ -154,7 +158,6 @@ if [ -d ${SRC_DIR_LIBS} ]; then
 # --- strip files ---
     strip ${DST_DIR}/*.so
     strip ${DST_DIR}/cpp_crawl.so
-    # ### strip ${DST_DIR}/libscript_embedding.so # TODO: Statically built now! If no problems remove this line!
     strip ${DST_DIR}/libphp-sleipner5.so
     strip ${DST_DIR}/netscavator
     strip ${DST_DIR}/netcreator

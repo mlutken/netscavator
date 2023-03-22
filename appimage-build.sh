@@ -69,6 +69,9 @@ mkdir -p AppDir/usr/lib/x86_64-linux-gnu/qt6/
 cp -r /usr/lib/x86_64-linux-gnu/qt6/plugins/ AppDir/usr/lib/x86_64-linux-gnu/qt6/
 cp -r /usr/lib/qt6/libexec/ AppDir/usr/lib/qt6/
 
+# TESTME: Try copy also to bin dir
+cp -r /usr/lib/qt6/libexec/* AppDir/usr/bin/
+
 cp /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/* AppDir/usr/lib/
 cp /usr/lib/x86_64-linux-gnu/nss/* AppDir/usr/lib/
 cp ./bin/qtwebengine_devtools_resources.pak AppDir/usr/bin/
