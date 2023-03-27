@@ -1,8 +1,13 @@
 #include "UrlInputUi.h"
 
-#include <stdio.h>
+#include <iostream>
 #include <QComboBox>
 #include <QHBoxLayout>
+#include <QEvent>
+#include <QKeyEvent>
+
+#include <Globals.h>
+#include <GuiActionsMgr.h>
 
 
 UrlInputUi::UrlInputUi(QWidget *parent) :
@@ -15,18 +20,30 @@ UrlInputUi::UrlInputUi(QWidget *parent) :
     QHBoxLayout* layout = new QHBoxLayout;
     layout->addWidget(m_pUrlCombo);
 
-
-
     setLayout(layout);
 
     connect(m_pUrlCombo, SIGNAL(activated(QString)), this, SLOT(urlActivatedSlot(QString) ));
-
-
+    m_pUrlCombo->installEventFilter(this);
 }
 
 QString UrlInputUi::urlString () const
 {
     return m_pUrlCombo->currentText();
+}
+
+bool UrlInputUi::eventFilter(QObject* obj, QEvent* event)
+{
+    if(event->type() == QEvent::KeyPress) {
+        QKeyEvent* key = static_cast<QKeyEvent*>(event);
+        if ( (key->key()==Qt::Key_Enter) || (key->key()==Qt::Key_Return) ) {
+            crawl::g()->guiActionsMgr()->trigger("load_url");
+        } else {
+            return QWidget::eventFilter(obj, event);
+        }
+    } else {
+        return QWidget::eventFilter(obj, event);
+    }
+    return false;
 }
 
 
@@ -47,6 +64,5 @@ void UrlInputUi::urlSetSlot ( const QString& url )
 
 void UrlInputUi::urlActivatedSlot( const QString& url )
 {
-    printf("ML: UrlInputUi::urlActivatedSlot: %s\n", url.toUtf8().data() );
     emit urlChanged(url);
 }
