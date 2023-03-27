@@ -38,6 +38,12 @@ string detect_charset(const std::string& html)
 // DETECT charset regex: (<META|<meta)\s+.*charset=?('|")([^ '"]+)
 // <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 // @todo Make a better function somewhere and for example use an improved QStringFinder for the task.
+//
+// Crash on /miners/scripts/cycling/usa/coloradocyclist.com.php the charset_regex1 when calling
+// the std::regex_search() function, see below function.
+// For some reason std::regex_search in netscavator/code/cpp/htmlparser/html/utils.cpp::detect_charset()
+// function ends up in an infinite loop when trying to detect the charset :(
+
 string detect_charset(const QByteArray& html)
 {
     string charset = "";
