@@ -218,5 +218,13 @@ QAction* GuiActionsMgr::byName  ( const QString& actionName ) const
     if ( it != m_actionsMap.end() )     return it->second;
     else                                return 0;
 
-////    return cpaf::map_find( m_actionsMap, 0, actionName );
+    ////    return cpaf::map_find( m_actionsMap, 0, actionName );
+}
+
+void GuiActionsMgr::trigger(const QString& actionName) const
+{
+    auto* action = byName(actionName);
+    if (action) {
+        action->activate(QAction::Trigger);
+    }
 }

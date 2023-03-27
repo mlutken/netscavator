@@ -14,6 +14,7 @@ public:
     ~GuiActionsMgr();
 
     QAction*            byName  ( const QString& actionName ) const;
+    void                trigger ( const QString& actionName ) const;
 
 private:
     QMainWindow*        m_pMainWindow;
