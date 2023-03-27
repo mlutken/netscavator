@@ -114,6 +114,7 @@ IF ( NOT CBS_BUILD )
     # --------------------------
     get_filename_component(PARENT_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
     target_link_libraries(${library_name} "webkitbrowser;simplebrowser;qscintilla2;script_embedding;scriptfunctions_php;interfaces")
+    target_link_libraries(${library_name} "cpaf_unicode")
 
     set_target_properties(${library_name} PROPERTIES LINKER_LANGUAGE CXX)
     target_include_directories(${library_name} PUBLIC ${Boost_INCLUDE_DIRS} ${Qt5Core_INCLUDE_DIRS} ${PARENT_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
