@@ -10,21 +10,20 @@ class UrlInputUi : public QWidget
     Q_OBJECT
 public:
     explicit UrlInputUi(QWidget *parent = 0);
-    QString     urlString       () const;
+    QString     urlString           () const;
 
+    void        addQuickLoadUrl     (const QString& url);
 
 signals:
-    void        urlChanged      ( const QString& url );
+    void        urlChanged          (const QString& url);
     
 public slots:
-    void        urlSetSlot      ( const QString& url );
+    void        urlSetSlot          (const QString& url);
+    void        clearQuickLoadUrls  ();
 
 protected:
-    bool        eventFilter     (QObject* obj, QEvent* event) override;
+    bool        eventFilter         (QObject* obj, QEvent* event) override;
 
-
-private slots:
-    void        urlActivatedSlot( const QString& url );
     
 private:
     QComboBox*      m_pUrlCombo;

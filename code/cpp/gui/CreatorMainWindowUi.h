@@ -118,6 +118,7 @@ private:
     void    connectSignalsSlots     ();
     void    updateWindowTitle       (const QString& status);
     void    updateDomSequencesView  ();
+    void    updateQuickLoadUrls     ();
 
     crawl::NetscavatorFactoryIF*    m_netscavatorFactory;   // Owned by the "parent" main function
     int                             m_iCurrentView;

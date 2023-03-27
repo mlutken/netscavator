@@ -17,18 +17,28 @@ UrlInputUi::UrlInputUi(QWidget *parent) :
     m_pUrlCombo->setEditable(true);
     m_pUrlCombo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
+
     QHBoxLayout* layout = new QHBoxLayout;
     layout->addWidget(m_pUrlCombo);
 
     setLayout(layout);
-
-    connect(m_pUrlCombo, SIGNAL(activated(QString)), this, SLOT(urlActivatedSlot(QString) ));
+    connect(m_pUrlCombo, &QComboBox::activated, this, [=](int) {crawl::g()->guiActionsMgr()->trigger("load_url");});
     m_pUrlCombo->installEventFilter(this);
 }
 
 QString UrlInputUi::urlString () const
 {
     return m_pUrlCombo->currentText();
+}
+
+void UrlInputUi::clearQuickLoadUrls()
+{
+    m_pUrlCombo->clear();
+}
+
+void UrlInputUi::addQuickLoadUrl(const QString& url)
+{
+    m_pUrlCombo->addItem(url);
 }
 
 bool UrlInputUi::eventFilter(QObject* obj, QEvent* event)
@@ -53,16 +63,4 @@ bool UrlInputUi::eventFilter(QObject* obj, QEvent* event)
 void UrlInputUi::urlSetSlot ( const QString& url )
 {
     m_pUrlCombo->setEditText(url);
-}
-
-
-
-// ----------------------
-// --- private slots: ---
-// ----------------------
-
-
-void UrlInputUi::urlActivatedSlot( const QString& url )
-{
-    emit urlChanged(url);
 }

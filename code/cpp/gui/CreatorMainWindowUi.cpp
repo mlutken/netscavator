@@ -10,6 +10,7 @@
 #include <QMenuBar>
 #include <QToolBar>
 #include <QProgressBar>
+#include <cpaf_libs/unicode/cpaf_u8string_utils.h>
 
 #include <version_info.h>
 #include <utils/utils.h>
@@ -45,6 +46,7 @@
 #include "DomTreeModel.h"
 #include "DomTreeView.h"
 #include "UrlQueueTableModel.h"
+
 
 #include "UrlInputUi.h"
 
@@ -201,7 +203,10 @@ void CreatorMainWindowUi::viewHelpSlot ()
 
 void CreatorMainWindowUi::browserLoadUrlSlot ()
 {
-    m_mainWidget->browserWidgetUi()->urlSet( QUrl(m_pUrlInput->urlString() ) );
+    using namespace cpaf::unicode;
+    const std::string url_raw = toString(m_pUrlInput->urlString());
+    const std::string url = cpaf::unicode::remove_between_brackets_copy(url_raw, cpaf::unicode::post_op::trim);
+    m_mainWidget->browserWidgetUi()->urlSet( QUrl(toQString(url)) );
 }
 
 void CreatorMainWindowUi::exitSlot ()
@@ -216,6 +221,7 @@ void CreatorMainWindowUi::workDoneSlot(crawl::MinerWorkerIF::TaskDone done)
     {
         updateDomSequencesView();
         refreshUrlQueueModelSlot();
+        updateQuickLoadUrls();
         break;
     }
     case MinerWorkerIF::TaskDone::runPhpSnippet:
@@ -682,6 +688,19 @@ void CreatorMainWindowUi::updateDomSequencesView()
         m_domSequencesTreeModel->domSearchMgrSet(miner->domSearchMgr());
         m_mainWidget->domSequencesTreeModelSet(m_domSequencesTreeModel);
         m_domSequencesCompactView->domSequencesTreeModelSet(m_domSequencesTreeModel);
+    }
+}
+
+void CreatorMainWindowUi::updateQuickLoadUrls()
+{
+    m_pUrlInput->clearQuickLoadUrls();
+    m_pUrlInput->addQuickLoadUrl("about:blank");
+    for (int i = 1; i < 20; ++i) {
+        const std::string key = "quick_url#" + std::to_string(i);
+        const std::string quickLoadUrl = m_minerCtrl->miner()->settingGet(key);
+        if (!quickLoadUrl.empty()) {
+            m_pUrlInput->addQuickLoadUrl(QString::fromUtf8(quickLoadUrl.c_str()));
+        }
     }
 }
 
