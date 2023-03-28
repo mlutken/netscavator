@@ -98,7 +98,7 @@ boost::shared_ptr<crawl::LinearDomIF> SimpleBrowser::do_createLinearDom ()
 
     linearDom = boost::shared_ptr<SimpleDomDocumentLinear>(
                 new SimpleDomDocumentLinear(pBrowser, html()) );
-    return std::move(linearDom);
+    return std::move(linearDom); // FIXMENM TODO: std::move() ???
 }
 
 QString SimpleBrowser::do_pageHash() const
