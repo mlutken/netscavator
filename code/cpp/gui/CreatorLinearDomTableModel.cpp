@@ -14,7 +14,7 @@ CreatorLinearDomTableModel::CreatorLinearDomTableModel(QObject *parent)
 int CreatorLinearDomTableModel::rowCount(const QModelIndex & /*parent*/) const
 {
    if (m_linearDom)
-       return m_linearDom->size();
+       return m_linearDom->size() +1; // NOTE: LinearDom starts from postion 1!!!
    return 0;
 }
 
