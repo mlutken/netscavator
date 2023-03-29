@@ -5987,7 +5987,8 @@ void ScriptMiner::doOnPageLoadedMainThread()
     using namespace std;
     m_timeLastPageLoadFinished  = boost::posix_time::second_clock::universal_time();
     cerr << " [" << urlQueue().sizeProcessed() << "/" << urlQueue().size() << "] "
-         << "Loaded " << m_timeLastPageLoadFinished
+         << "Loaded '" << m_sHandlerContextName << "' "
+         << m_timeLastPageLoadFinished
          << " URL: " << currentUrl()
          << "\n";
 
