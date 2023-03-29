@@ -355,6 +355,9 @@ public:
     int         domFindCallPhpFunHelper	(const std::string& sSequence , std::string& sPhpFunRetValOut);
     int			domSeqFindNextParams	( 	int iCount, const crawl::DomSeq& seq, const std::string& sArgs, int iNodeTypes );
 
+    int			domFindNextHelper		(int iCount, std::string& sPhpFunRetVal, const std::string& sSequence,
+                                            const std::string& sArgs, const std::string& sCompareFun,
+                                            int iPostMatchSteps, int iNodeTypes);
     int			domFindNextImpl			(int iCount, std::string& sPhpFunRetVal, const std::string& sSequence,
                                             const std::string& sArgs, const std::string& sCompareFun,
                                             int iPostMatchSteps, int iNodeTypes);

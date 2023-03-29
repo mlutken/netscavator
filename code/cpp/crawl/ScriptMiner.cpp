@@ -1848,6 +1848,84 @@ int	ScriptMiner::domSeqFindNextParams(
     return iPos;
 }
 
+int ScriptMiner::domFindNextHelper(
+        int iCount, std::string& sPhpFunRetVal,
+        const std::string& sSequence,
+        const std::string& sArgs,
+        const std::string& sCompareFun,
+        int iPostMatchSteps,
+        int iNodeTypes)
+{
+    using namespace crawl;
+    using namespace string_compare;
+
+    sPhpFunRetVal = "";
+    // First check if a PHP function exists with the given (sSequence) name
+    if ( scriptFunctionExists(sSequence) ) {
+        boost::any ret = scriptingClass()->callScriptFunction_Any( sSequence );
+        if ( ret.type() == typeid(long) )   return static_cast<int>(boost::any_cast<long>(ret));
+        else {
+            try                                 { sPhpFunRetVal = boost::any_cast<std::string>(ret); }
+            catch (const boost::bad_any_cast&)  { sPhpFunRetVal = ""; }
+        }
+        return domPos();
+    }
+
+    // Take care of special case with choices between more dom sequences typically named like:
+    // 'MyDomSeq#1', 'MyDomSeq#2', ... And used like outputValueFindNext	( 1, "MyDomSeq", "MyFieldName", .... )
+    // Here we must call each of the 'MyDomSeq#n' in turn and the first one to actually return a valid dom position
+    // is the one used.
+    if ( domSearchMgr()->domSeqChoicesExists( sSequence ) ) {
+        DomSearchMgr::DomSeqVecRangeT range = domSearchMgr()->domSeqChoicesGet( sSequence );
+        DomSearchMgr::DomSeqVecRangeT::const_iterator it = range.begin();
+        int domPosStart = domPos();
+        int new_dom_pos = 0;
+        for ( ; it != range.end(); ++it ) {
+            domPosSet(domPosStart); // Restore start domPos for each choice we try!
+            const crawl::DomSeq& seq = *(*it);
+            const auto& seq_name = seq.sequenceGet();
+            new_dom_pos = 0;
+            if ( scriptFunctionExists(seq_name) ) {
+                new_dom_pos = domFindCallPhpFunHelper(seq_name, sPhpFunRetVal);
+            }
+            else {
+                new_dom_pos = domSeqFindNextParams( iCount, seq, sArgs, iNodeTypes );
+            }
+            if ( new_dom_pos != 0 ) {
+                break;
+            }
+        }
+        return new_dom_pos;
+    }
+
+    // Normal case
+    boost::shared_ptr<DomSeq> pDomSeq = domSearchMgr()->domSeqGet( sSequence );
+    if ( pDomSeq ) {
+        const auto& seq_name = pDomSeq->sequenceGet();
+        if ( scriptFunctionExists( seq_name ) ) {
+            boost::any ret = scriptingClass()->callScriptFunction_Any( seq_name );
+            if ( ret.type() == typeid(long) )   return static_cast<int>(boost::any_cast<long>(ret));
+            else {
+                try                                 { sPhpFunRetVal = boost::any_cast<std::string>(ret); }
+                catch (const boost::bad_any_cast&)  { sPhpFunRetVal = ""; }
+            }
+            return domPos();
+        }
+        else {
+            return domSeqFindNextParams( iCount, *pDomSeq, sArgs, iNodeTypes );
+        }
+    }
+    else {
+        // Create a dom sequece directly from the sequence string, unless it ends with __FIND, which
+        // we assume then to be a "real" named" sequence which was accidentially not (yet) defined
+        if (endsWith(sSequence, "__FIND")) {
+            return 0;
+        }
+        pDomSeq = boost::shared_ptr<DomSeq>( new DomSeq( 1, sSequence, sCompareFun, iPostMatchSteps, crawl::DomNodeTypes::ALL_NODE_TYPES, "," ) );
+        return domSeqFindNextParams( iCount, *pDomSeq, sArgs, iNodeTypes );
+    }
+}
+
 
 int ScriptMiner::domFindNextImpl (
       int iCount							///< Stop at iCount occurrence of sequence. Negative values searches backwards. Not applicaple \a sSequence refers to a user defined PHP function
@@ -1859,91 +1937,23 @@ int ScriptMiner::domFindNextImpl (
     , int iNodeTypes						///< Restrict search to certain node types. Typically ALL_NODE_TYPES.
     )
 {
-    sPhpFunRetVal = "";
-    //if ( sSequence == "" ) return 0; // TODO: Move this to domFindNextParams() and test for empty sequence instead
-    // TODO: Also unify the updating of the current dom posistion . I Think we want it to update on domFindNextImpl
-    //       always regardless of wheter we found the position or not. If not found the new dom position should
-    //       be set to ( current ) beginning.
-    //printf("ML: A domFindNext(%d, %s, %s, %d)\n", iCount, sSequence.c_str(), sCompareFun.c_str(), iNodeTypes );
-    using namespace crawl;
-    using namespace string_compare;
-
-    // First check if a PHP function exists with the given (sSequence) name
-    if ( scriptFunctionExists(sSequence) ) {
-        std::cerr << "FIXMENM domFind [ScriptFunction 1]: '" << sSequence << "'\n";
-        boost::any ret = scriptingClass()->callScriptFunction_Any( sSequence );
-        if ( ret.type() == typeid(long) )   return static_cast<int>(boost::any_cast<long>(ret));
-        else {
-            try                                 { sPhpFunRetVal = boost::any_cast<std::string>(ret); }
-            catch (const boost::bad_any_cast&)  { sPhpFunRetVal = ""; }
-        }
-        return domPos();
-    }
-
-
-    // Take care of special case with choices between more dom sequences typically named like:
-    // 'MyDomSeq#1', 'MyDomSeq#2', ... And used like outputValueFindNext	( 1, "MyDomSeq", "MyFieldName", .... )
-    // Here we must call each of the 'MyDomSeq#n' in turn and the first one to actually return a valid dom position
-    // is the one used.
-    if ( domSearchMgr()->domSeqChoicesExists( sSequence ) ) {
-        std::cerr << "FIXMENM domFind [domSeqChoices]: '" << sSequence << "'\n";
-        DomSearchMgr::DomSeqVecRangeT range = domSearchMgr()->domSeqChoicesGet( sSequence );
-        DomSearchMgr::DomSeqVecRangeT::const_iterator it = range.begin();
-        int iPosSave = domPos();
-        for ( ; it != range.end(); ++it ) {
-            const crawl::DomSeq& seq = *(*it);
-            const auto& seq_name = seq.sequenceGet();
-            int new_dom_pos = 0;
-            if ( scriptFunctionExists(seq_name) ) {
-                new_dom_pos = domFindCallPhpFunHelper(seq_name, sPhpFunRetVal);
-            }
-            else {
-                new_dom_pos = domSeqFindNextParams( iCount, seq, sArgs, iNodeTypes );
-            }
-
-            if ( new_dom_pos != 0 ) {
-                return new_dom_pos;
-            }
-            else {
-                domPosSet(iPosSave);
-            }
-        }
+    const int domPosStart = domPos();
+    const int domPosFound = domFindNextHelper(iCount, sPhpFunRetVal, sSequence, sArgs, sCompareFun, iPostMatchSteps, iNodeTypes);
+    if ( (iCount >= 0 && (domPosFound <= domPosStart)) ||
+         (iCount < 0 && (domPosFound >= domPosStart))
+         ) {
+        linearDomSearch()->setCurrentPosToEnd();    // If not found set current postion to last element in linear dom
         return 0;
     }
-
-    // Normal case
-    boost::shared_ptr<DomSeq> pDomSeq = domSearchMgr()->domSeqGet( sSequence );
-    if ( pDomSeq ) {
-        const auto& seq_name = pDomSeq->sequenceGet();
-        if ( scriptFunctionExists( seq_name ) ) {
-            std::cerr << "FIXMENM domFind [ScriptFunction 2](" << sSequence << ") : '" << seq_name << "'\n";
-            boost::any ret = scriptingClass()->callScriptFunction_Any( seq_name );
-            if ( ret.type() == typeid(long) )   return static_cast<int>(boost::any_cast<long>(ret));
-            else {
-                try                             { sPhpFunRetVal = boost::any_cast<std::string>(ret); }
-                catch (const boost::bad_any_cast&)    { sPhpFunRetVal = ""; }
-            }
-            return domPos();
-        }
-        else {
-            std::cerr << "FIXMENM domFind [DomSeq](" << sSequence << ") : '" << seq_name << "'\n";
-            return domSeqFindNextParams( iCount, *pDomSeq, sArgs, iNodeTypes );
-        }
-    }
-    else {
-        // Create a dom sequece directly from the sequence string, unless it end with __FIND, which
-        // we assume then to be a "real" named" sequence which was not defined
-        if (endsWith(sSequence, "__FIND")) {
-            return 0;
-        }
-        //// 	int iCount, const std::string& sPattern, const std::string& sCompareFun, int iPostMatchSteps, int iNodeTypes, const std::string& sCommaChar
-        pDomSeq = boost::shared_ptr<DomSeq>( new DomSeq( 1, sSequence, sCompareFun, iPostMatchSteps, crawl::DomNodeTypes::ALL_NODE_TYPES, "," ) );
-        std::cerr << "FIXMENM domFind [Create DomSeq]: '" << sSequence << "'\n";
-        return domSeqFindNextParams( iCount, *pDomSeq, sArgs, iNodeTypes );
-    }
+    return domPosFound;
 }
 
-int ScriptMiner::domFindNext(int iCount, const std::string &sSequence, const std::string &sCompareFun, int iPostMatchSteps, int iNodeTypes)
+int ScriptMiner::domFindNext(
+        int iCount,
+        const std::string& sSequence,
+        const std::string &sCompareFun,
+        int iPostMatchSteps,
+        int iNodeTypes)
 {
     std::string sPhpFunRetVal;
     return domFindNextImpl( iCount, sPhpFunRetVal, sSequence, "", sCompareFun, iPostMatchSteps, iNodeTypes );
@@ -5972,9 +5982,9 @@ void ScriptMiner::doOnPageLoadedMainThread()
 {
     using namespace std;
     m_timeLastPageLoadFinished  = boost::posix_time::second_clock::universal_time();
-    cerr << "Page loaded " << m_timeLastPageLoadFinished
-         << " currentUrl: " << currentUrl()
-         << " threadid: " << QThread::currentThreadId()
+    cerr << " [" << urlQueue().sizeProcessed() << "/" << urlQueue().size() << "] "
+         << "Loaded " << m_timeLastPageLoadFinished
+         << " URL: " << currentUrl()
          << "\n";
 
     m_bNewPageLoadInitiated = false;
