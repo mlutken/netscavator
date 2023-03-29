@@ -159,6 +159,12 @@ namespace crawl {
             ++index;
         }
 
+        // Insert a special last/end dom node!
+        const int parentPosOfLast = LinearDomNode::no_owner_pos;
+        const std::string lastNodeValue = "__END_OF_NETSCAVATOR_DOM__";
+        auto specialLastDomNode = makeSimpleDomNode(DomNodeTypes::NOTATION, lastNodeValue, AttributesMap{}, browser(), 0, nullptr);
+        pushBackNode (LinearDomNode(nullptr, specialLastDomNode, lastNodeValue, parentPosOfLast, 0, DomNodeTypes::NOTATION));
+
 //        //Print whole DOM tree
 //        cout << dom << endl;
 //        //Dump all links in the tree
