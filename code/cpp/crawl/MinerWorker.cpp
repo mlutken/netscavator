@@ -196,7 +196,6 @@ void MinerWorker::navigateStepSlot()
 
 void MinerWorker::doOnPageLoadedSlot()
 {
-    std::cout << "MinerWorker::doOnPageLoadedSlot: " << QThread::currentThreadId() << std::endl;
     m_isExecutingPhp = false;
     if (!m_miner)
         return;
