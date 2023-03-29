@@ -171,16 +171,56 @@ function helper_TEMPLATE__ItemPage__mine($handlerName)
     outputValueFind ( "item_family__${handlerName}__FIND", "item_family", "item_family__${handlerName}__MOD");
     outputValueFind ( "item_type_text__${handlerName}__FIND", "item_type_text", "item_type_text__${handlerName}__MOD");
     outputValueFind ( "item_subtype_text__${handlerName}__FIND", "item_subtype_text", "item_subtype_text__${handlerName}__MOD");
-    // Get all item data requested for product page
-    outputValuesFindFromList ($handlerName, "TEMPLATE__${handlerName}__outputNames");
 
     $outputValuesFunction = outputValueGet( 'item_family' ) . "__${handlerName}__outputNames";
-	if (function_exists($outputValuesFunction))
+    if (function_exists($outputValuesFunction)) {
 		outputValuesFindFromList ($handlerName, $outputValuesFunction);
+    }
 
     $outputValuesFunction = outputValueGet( 'type_core' ) . "__${handlerName}__outputNames";
-	if (function_exists($outputValuesFunction))
-		outputValuesFindFromList ($handlerName, $outputValuesFunction);
+    if (function_exists($outputValuesFunction)) {
+        outputValuesFindFromList ($handlerName, $outputValuesFunction);
+    }
+
+    $outputValuesFunction = outputValueGet( 'type_core' ) . "__${handlerName}__attributeNames";
+    if (function_exists($outputValuesFunction)) {
+        outputValuesFindFromList ($handlerName, $outputValuesFunction);
+    }
+
+    // Get all item data requested for a product page
+    outputValuesFindFromList ($handlerName, "TEMPLATE__${handlerName}__outputNames");
+
+    // -----------------------------------------
+    // --- Output all attributes for product ---
+    // -----------------------------------------
+    // Find potential start and stop dom postions before finding attributes
+    $domStartPos = 0;
+    $domStopPos  = 0;
+
+    if (domFind("attributeNamesStart__${handlerName}__FIND")) {
+        $domStartPos = domPos();
+        if (domFindNext("attributeNamesStop__${handlerName}__FIND")) {
+            $domStopPos = domPos();
+        }
+    }
+    if ( ($domStopPos == 0) && domFind("attributeNamesStop__${handlerName}__FIND")) {
+        $domStopPos = domPos();
+    }
+
+    if (domFind("attributeNamesContainer__${handlerName}__FIND")) {
+        $domStartPos = domPos();
+        $domStopPos = nodeEndElementPos();
+    }
+
+    // Set potential start and stop dom postions before finding attributes
+    domStartPosSet($domStartPos);
+    domStopPosSet($domStopPos);
+
+    outputValuesFindFromList ($handlerName, "TEMPLATE__${handlerName}__attributeNames");
+
+    domStartPosClear();
+    domStopPosClear();
+    // --- Done: attributes output ---
 
 	outputDirect ( 'crawl_time', infoTimeMiningStartedUtc());
     outputDirect ( 'dbg_navigation_done', "'" . navNavigationDone() . "'" );
