@@ -265,7 +265,7 @@ function TEMPLATE__SearchResults__mine()
     $savePos = domPos();
     if (domFind("itemsAllContainer__SearchResults__FIND")) {
         $logDomFindType = 'itemsAllContainer__SearchResults__FIND';
-        $positions = nodeFindAllChildren();
+        $positions = nodeChildren();
     }
     else {
         if (domSeqExists("itemStart__SearchResults__FIND")) {
@@ -318,17 +318,18 @@ function TEMPLATE__SearchResults__getItem()
     outputValueFind ( "item_subtype__SearchResults__FIND", "item_subtype", "item_subtype__SearchResults__MOD");
 
     // Get all item data requested for a search results (listing) page
-	outputValuesFindFromList ('SearchResults', 'TEMPLATE__SearchResults__outputNames');
+    outputValuesFindFromList ('SearchResults', 'TEMPLATE__SearchResults__outputNames');
+    outputValuesFindFromList ('SearchResults', 'TEMPLATE__SearchResults__attributeNames');
 
 	$outputValuesFunction = outputValueGet( 'item_family' ) . '__SearchResults__outputNames';
-	if (function_exists($outputValuesFunction))
+    if (function_exists($outputValuesFunction)) {
 		outputValuesFindFromList ('SearchResults', $outputValuesFunction);
+    }
 
 	$outputValuesFunction = outputValueGet( 'item_type' ) . '__SearchResults__outputNames';
-	if (function_exists($outputValuesFunction))
+    if (function_exists($outputValuesFunction)) {
 		outputValuesFindFromList ('SearchResults', $outputValuesFunction);
-
-
+    }
 
     // Find item_url and add to URL queue in case we doing 'full' scan!
     outputValueFind ( "item_url__SearchResults__FIND", "item_url", "item_url__SearchResults__MOD");
