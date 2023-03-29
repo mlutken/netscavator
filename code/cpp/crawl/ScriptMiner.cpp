@@ -1859,6 +1859,7 @@ int ScriptMiner::domFindNextHelper(
     using namespace crawl;
     using namespace string_compare;
 
+//    std::cerr << "FIXMENM domFindNext: '" << sSequence << "'\n";
     sPhpFunRetVal = "";
     // First check if a PHP function exists with the given (sSequence) name
     if ( scriptFunctionExists(sSequence) ) {
@@ -1944,6 +1945,9 @@ int ScriptMiner::domFindNextImpl (
          ) {
         linearDomSearch()->setCurrentPosToEnd();    // If not found set current postion to last element in linear dom
         return 0;
+    }
+    else {
+        domPosSet(domPosFound); // Ensure we get the current dom pos updated. Also in case a useed defined function "forgets"
     }
     return domPosFound;
 }
