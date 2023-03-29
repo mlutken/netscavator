@@ -111,6 +111,23 @@ function strValToBool( $val )
     return $boolVal;
 }
 
+function vectorAppend(&$vector, $append_vec_or_elem)
+{
+    if (!is_array($vector)) {
+        $vector = [];
+    }
+
+    if (is_array($append_vec_or_elem)) {
+        foreach($append_vec_or_elem as $element) {
+            $vector[] = $element;
+        }
+    }
+    else {
+        $vector[] = $append_vec_or_elem;
+    }
+}
+
+
 /** Get array value safe. Returns value from array of key given or
 the default value if not found */
 function getArraySafe( $sKeyName, $aArray, $valueIfNotFound='' )
