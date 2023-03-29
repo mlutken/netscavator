@@ -298,8 +298,20 @@ within these two positions.
 are returned as an array from this function.*/
 function nodeLoopAllChildren($loopFunction, $iSearchDir = NEAREST_AUTO)
 {
-    $positions = nodeFindAllChildren($iSearchDir);
-    return loopAllPositions($positions);
+    $positions = nodeChildren($iSearchDir);
+    return loopAllPositions($positions, $loopFunction);
+}
+
+/** Loops all child nodes of the domNode at postion, calling the loop function for each.
+DOM start and stop positions are set to the current (child) position and the next, so
+that one can use domFind(); inside the loopFunction and be sure that searches are confined
+within these two positions.
+\return The loopFunction can optinally return a value, and values from all calls to loopFunction
+are returned as an array from this function.*/
+function posLoopAllChildren($domPos, $loopFunction)
+{
+    $positions = posChildren($domPos);
+    return loopAllPositions($positions, $loopFunction);
 }
 
 /** Loops all positions in array given, calling the loop function for each.
