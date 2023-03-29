@@ -66,11 +66,16 @@ void LinearDomSearch::newSearch ()
     m_itCurElem = itStart();
 }
 
+void LinearDomSearch::setCurrentPosToEnd()
+{
+    m_itCurElem = --(m_linearDom.end());
+}
+
 
 /** */
 LinearDomSearch::size_type
 LinearDomSearch::next	(
-    std::string const& sSearchFor, 			///<
+        std::string const& sSearchFor, 			///<
     StringCompareFunT const& compareFun, 	///<
     int iCount,								///<
     int iNodeTypes,							///<
@@ -366,7 +371,11 @@ LinearDomSearch::nextUpdateAndReturn( LinearDomIF::const_iterator it, bool bUpda
         if ( bUpdateCurrentNode ) m_itCurElem = it;
         pos = iteratorToPos(it);
     }
-    if ( bUpdateCurrentNode ) m_itCurElem = it; // TODO: Observe if it's ok to update also when not found. Seems ok.
+    else {
+        if ( bUpdateCurrentNode ) {
+            setCurrentPosToEnd();
+        }
+    }
     locatedPositionAdd(pos);
     return pos;
 }

@@ -28,7 +28,7 @@ public:
     // --- Search methods ---
     // ----------------------
     void        newSearch           ();
-    void        setCurrentPosToEnd  ()  {	m_itCurElem = m_linearDom.end();	}
+    void        setCurrentPosToEnd  ();
     size_type   next                (std::string const& sSearchFor, StringCompareFunT const& compareFun, int iCount ,
                                      int iNodeTypes, bool bUpdateCurrentNode	);
 
