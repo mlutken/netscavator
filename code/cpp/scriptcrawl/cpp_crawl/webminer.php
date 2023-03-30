@@ -227,10 +227,10 @@ function doActionsFindFromList($handlerContext, $actions)
     else if (is_string($actions)) {
         $actionsArray = explodeTrim(',', $actions);
     }
-	foreach($actionsArray as $action) {
-		$action = $action . '__' . $handlerContext;
-		doActionFind ( "{$action}__FIND", "{$action}__ACTION" );
-	}
+    foreach($actionsArray as $action) {
+        $action = $action . '__' . $handlerContext;
+        doActionFind ( "{$action}__FIND", "{$action}__ACTION" );
+    }
 }
 
 function outputValuesFindFromList($handlerContext, $outputNames)
@@ -244,10 +244,10 @@ function outputValuesFindFromList($handlerContext, $outputNames)
     else if (is_string($outputNames)) {
         $outputNamesArray = explodeTrim(',', $outputNames);
     }
-	foreach($outputNamesArray as $outputName) {
-		$prefix = "{$outputName}__{$handlerContext}";
-		outputValueFind ( "{$prefix}__FIND", $outputName, "{$prefix}__MOD" );
-	}
+    foreach($outputNamesArray as $outputName) {
+        $prefix = "{$outputName}__{$handlerContext}";
+        outputValueFind ( "{$prefix}__FIND", $outputName, "{$prefix}__MOD" );
+    }
 }
 
 
