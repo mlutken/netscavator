@@ -980,7 +980,7 @@ public:
     virtual std::string settingGet              (	const std::string& sName, const std::string& defaultValue = "" ) const = 0;
     virtual bool        settingExists           (	const std::string& sName ) const = 0;
     virtual bool        hasSetting              (	const std::string& sName ) const = 0;
-    virtual bool        settingBoolGet          (   const std::string& sName ) const = 0;
+    virtual bool        settingBoolGet          (   const std::string& sName, bool defaultValue = false ) const = 0;
 
     /*
     ------------------------

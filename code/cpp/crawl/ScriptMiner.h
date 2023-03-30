@@ -102,7 +102,7 @@ private:
     // -------------------------------------
     void                setUrlStartAndUrlSite       ();
     void				readConfig                  ();
-    void                setOutputName           ();
+    void                setOutputName               ();
     void				startMiningInitVars         ();
     void                outputBeginMiningRecord     ();
     void                resetVarsBeforeFirstPageLoad ();
@@ -1089,7 +1089,7 @@ public:
     std::string settingGet              (	const std::string& sName, const std::string& defaultValue = "" ) const override;
     bool        settingExists           (	const std::string& sName ) const;
     bool        hasSetting              (	const std::string& sName ) const;
-    bool        settingBoolGet          (   const std::string& sName ) const override;
+    bool        settingBoolGet          (   const std::string& sName, bool defaultValue = false) const override;
 
     /*
     ------------------------
@@ -1262,6 +1262,7 @@ private:
     std::string                 m_scriptStatus;
     mutable std::mutex          m_scriptStatusMutex;
     bool                        m_showNetworkActivity = false;
+    bool                        m_showDomFindCalls = false;
 };
 
 

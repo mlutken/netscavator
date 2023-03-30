@@ -584,6 +584,7 @@ void ScriptMiner::startMining(bool restart)
 
     domSearchMgr()->prepareForRun();
 
+    m_showDomFindCalls = settingBoolGet("show_dom_find_calls", false);
     std::cerr << "ScriptMiner::startMining Url: " << m_urlStart << "\n";
     m_curMiningStepE = crawl::MiningStepE::stepLoadPageE;
     urlLoad( m_urlStart.string() );  // Load initial page.
@@ -1859,7 +1860,6 @@ int ScriptMiner::domFindNextHelper(
     using namespace crawl;
     using namespace string_compare;
 
-//    std::cerr << "FIXMENM domFindNext: '" << sSequence << "'\n";
     sPhpFunRetVal = "";
     // First check if a PHP function exists with the given (sSequence) name
     if ( scriptFunctionExists(sSequence) ) {
@@ -1938,8 +1938,14 @@ int ScriptMiner::domFindNextImpl (
     , int iNodeTypes						///< Restrict search to certain node types. Typically ALL_NODE_TYPES.
     )
 {
+
     const int domPosStart = domPos();
     const int domPosFound = domFindNextHelper(iCount, sPhpFunRetVal, sSequence, sArgs, sCompareFun, iPostMatchSteps, iNodeTypes);
+    if (m_showDomFindCalls) {
+        std::cerr << "DBG: domFindNext('" << sSequence << "', '" << sCompareFun << "')"
+                  << "; Pos (start, found) => [" <<  domPosStart << ", " << domPosFound << "]"
+                  << "\n";
+    }
     if ( (iCount >= 0 && (domPosFound <= domPosStart)) ||
          (iCount < 0 && (domPosFound >= domPosStart))
          ) {
@@ -5209,6 +5215,10 @@ int	ScriptMiner::outputValueFindNextImpl(
 
     int iPosSave = 0;
     if ( !bUpdateDomPos )	iPosSave = domPos();
+//    std::cerr << "1 outputValueFindNextImpl( '" << sSequence
+//              << "', '" << sFieldName
+//              << "', '" << sModifierID
+//              << "')\n";
 
     std::string sPhpFunRetVal = "";
     int iDomPos = domFindNextImpl ( iCount, sPhpFunRetVal, sSequence, "", DefaultCompareFun, postMatchStepsZero, crawl::DomNodeTypes::ALL_NODE_TYPES  );
@@ -5631,10 +5641,10 @@ bool ScriptMiner::hasSetting (
     return settingsMgr()->settingExists( sName );
 }
 
-bool ScriptMiner::settingBoolGet(const std::string& sName) const
+bool ScriptMiner::settingBoolGet(const std::string& sName, bool defaultValue) const
 {
     const auto& val = settingGet(sName);
-    if (val.empty()) return false;
+    if (val.empty()) return defaultValue;
     return stringToBool(val);
 }
 
@@ -6234,17 +6244,15 @@ std::string	ScriptMiner::manipulateValueHelper (
         sVal = scriptingClass()->callScriptFunction_String( sModifierID, sVal, sManipParam1, sManipParam2, sManipParam3 /*, sManipParam4 reserved */ );
     }
     // Next see if sModifierID refers to a named modifier created using modifierCreate()
-    else if ( modifierMgr()->modifierExists(sModifierID) ) {
-        boost::shared_ptr<crawl::ModifierMgr::Modifier> pModifier = modifierMgr()->modifierGet( sModifierID );
-        if ( pModifier ) {
-            if ( scriptFunctionExists( pModifier->sManipFunID) ) {
-                sVal = scriptingClass()->callScriptFunction_String( pModifier->sManipFunID, sVal,  pModifier->sParam1, pModifier->sParam2, pModifier->sParam3  /*, pModifier->sParam4 reserved */  );
-            }
-            else {
-                boost::shared_ptr<crawl::StrModifierAbstraction> pManip = G_StringManipLookUp::fromAliasAny( pModifier->sManipFunID );
-                if ( pManip ) {
-                    sVal = pManip->callMeStr( config(), sVal, pModifier->sParam1, pModifier->sParam2, pModifier->sParam3  /*, pModifier->sParam4 reserved */ );
-                }
+    else if (auto pModifier = modifierMgr()->modifierGet(sModifierID)) {
+        if ( scriptFunctionExists( pModifier->sManipFunID) ) {
+            //std::cerr << "FIXMENM manipulateValue call PHP function: '" << pModifier->sManipFunID << "'\n";
+            sVal = scriptingClass()->callScriptFunction_String( pModifier->sManipFunID, sVal,  pModifier->sParam1, pModifier->sParam2, pModifier->sParam3  /*, pModifier->sParam4 reserved */  );
+        }
+        else {
+            boost::shared_ptr<crawl::StrModifierAbstraction> pManip = G_StringManipLookUp::fromAliasAny( pModifier->sManipFunID );
+            if ( pManip ) {
+                sVal = pManip->callMeStr( config(), sVal, pModifier->sParam1, pModifier->sParam2, pModifier->sParam3  /*, pModifier->sParam4 reserved */ );
             }
         }
     }
