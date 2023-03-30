@@ -69,14 +69,21 @@ void DomSearchMgr::domSeqAdd( const std::string& sName, boost::shared_ptr<DomSeq
     // as lookup key in the choices map. (Each entry in the choices map has a vector of domSeqs )
     uint32_t domSeqChoiceNumber = 0;  // Sort as first if no number is given. Assume it's 0!
     splitv ( vec, sName, "#" );
+    bool hasDomSeqChoiceNumber = false;
     if ( vec.size() >= 1 ) {
         int seqNum = 0;
         if ( vec.size() > 1 ) {
+            hasDomSeqChoiceNumber = true;
             seqNum = cpaf::parse_int(vec[1], 0);
             domSeqChoiceNumber = seqNum < 0 ? 0 : static_cast<uint32_t>(seqNum);
         }
         const auto domSeqName = vec[0];
         pDomSeq->nameSet(domSeqName);
+        if (!hasDomSeqChoiceNumber) {
+            // If no '#' in DomSeq, then delete all choices and insert this new as number 1
+            domSeqChoiceNumber = 1;
+            m_domSeqChoicesMap[domSeqName].clear();
+        }
         pDomSeq->choicesSortOrderSet(domSeqChoiceNumber);
         auto optIt = findDomSeqChoice(domSeqName, domSeqChoiceNumber);
         if (optIt) {
@@ -86,7 +93,6 @@ void DomSearchMgr::domSeqAdd( const std::string& sName, boost::shared_ptr<DomSeq
         else {
             m_domSeqChoicesMap[domSeqName].push_back(pDomSeq);
         }
-//        std::cerr << "FIXMENM domSedAdd: " << domSeqName << " # " << seqNum << "  cnt: " << counter << "\n";
     }
     m_domSequences[sName] = pDomSeq;
 }
