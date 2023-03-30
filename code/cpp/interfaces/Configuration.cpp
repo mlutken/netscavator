@@ -399,7 +399,7 @@ bool Configuration::parseCommandLine ( const std::string& sAppTypeName, int argc
         }
 
         if (m_vm.count("version")) {
-            string sAppName  = sAppTypeName == "crawler" ? "Sleipner crawler" : "Sleipner miner creator" ;
+            string sAppName  = sAppTypeName == "crawler" ? "Netscavator crawler" : "Netscavator IDE (Net)creator" ;
             cout << sAppName << ", version " << versionString() << " , Using embedded PHP version " << crawler_php_version_string() <<  "\n";
             return false;
         }
