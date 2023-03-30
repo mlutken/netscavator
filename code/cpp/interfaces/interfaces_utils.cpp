@@ -59,7 +59,6 @@ namespace crawl {
     bool stringToBool ( const std::string& sValue )
     {
         std::string sVal = boost::algorithm::to_lower_copy( sValue );
-//        if ( sVal == "yes" || sVal == "true" )  return true;
         if ( sVal == "" || sVal == "no" || sVal == "false" || sVal == "0" )  return false;
         return true;
     }
