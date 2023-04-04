@@ -4,6 +4,7 @@
 #include <QString>
 
 class QComboBox;
+class QUrl;
 
 class UrlInputUi : public QWidget
 {
@@ -20,7 +21,8 @@ signals:
 public slots:
     void        urlSetSlot          (const QString& url);
     void        clearQuickLoadUrls  ();
-
+    void        setCurrentUrl       (const QString& url);
+    void        setCurrentUrl       (const QUrl& url);
 protected:
     bool        eventFilter         (QObject* obj, QEvent* event) override;
 

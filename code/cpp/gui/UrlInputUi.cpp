@@ -5,6 +5,7 @@
 #include <QHBoxLayout>
 #include <QEvent>
 #include <QKeyEvent>
+#include <QUrl>
 
 #include <Globals.h>
 #include <GuiActionsMgr.h>
@@ -34,6 +35,16 @@ QString UrlInputUi::urlString () const
 void UrlInputUi::clearQuickLoadUrls()
 {
     m_pUrlCombo->clear();
+}
+
+void UrlInputUi::setCurrentUrl(const QString& url)
+{
+    m_pUrlCombo->setCurrentText(url);
+}
+
+void UrlInputUi::setCurrentUrl(const QUrl& url)
+{
+    m_pUrlCombo->setCurrentText(url.toString());
 }
 
 void UrlInputUi::addQuickLoadUrl(const QString& url)

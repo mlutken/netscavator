@@ -693,6 +693,7 @@ void CreatorMainWindowUi::updateDomSequencesView()
 
 void CreatorMainWindowUi::updateQuickLoadUrls()
 {
+    auto curUrl = m_mainWidget->browserWidgetUi()->url();
     m_pUrlInput->clearQuickLoadUrls();
     m_pUrlInput->addQuickLoadUrl("about:blank");
     for (int i = 1; i < 20; ++i) {
@@ -702,5 +703,6 @@ void CreatorMainWindowUi::updateQuickLoadUrls()
             m_pUrlInput->addQuickLoadUrl(QString::fromUtf8(quickLoadUrl.c_str()));
         }
     }
+    m_pUrlInput->setCurrentUrl(curUrl);
 }
 
