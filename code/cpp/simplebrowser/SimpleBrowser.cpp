@@ -196,8 +196,27 @@ string_view SimpleBrowser::do_html() const
 
 bool SimpleBrowser::do_nodeClick(const std::string& xpath)
 {
-    std::cerr << " TODO SimpleBrowser::do_nodeClick\n";
-    return true; // TODO: Fix this. We can make it work for at least <A href= ... tags
+    // https://doc.qt.io/qt-6/qurl.html#toString
+    const auto schemeHost = toString(currentUrl().toString(QUrl::RemovePath));
+    const auto* rootNode = currentLinearDom()->rootNode();
+    const auto* treeNode = crawl::xPathToTreeNode(rootNode, crawl::XPath(xpath));
+
+    std::string href = "";
+    if (treeNode) {
+        const auto opt = treeNode->data.attribute_value("href");
+        if (opt) href = *opt;
+    }
+    if (href.empty()) {
+        return false;
+    }
+
+    if (!boost::algorithm::starts_with(href, schemeHost)) {
+        href = schemeHost + "/" + href;
+        boost::algorithm::replace_all(href, "//", "/");
+    }
+
+    loadUri(href);
+    return true;
 }
 
 bool SimpleBrowser::do_inputSet(const std::string& xpath, const std::string& input)
