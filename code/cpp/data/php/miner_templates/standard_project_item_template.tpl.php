@@ -186,23 +186,27 @@ function TEMPLATE__getStatus()
 // ------------------------------------------
 function TEMPLATE__SearchStep__match()
 {
+//     printf("FIXMENM TEMPLATE__SearchStep__match()");
     return removeTrailingSlash(urlCurrent()) == removeTrailingSlash(settingGet("DoSearchUrl"));
 }
 
 function TEMPLATE__SearchResultsCategories__match()
 {
+//     printf("FIXMENM TEMPLATE__SearchResultsCategories__match()");
     return  domFind("match__SearchResultsCategories__FIND") ||
             domFind("itemStart__SearchResultsCategories__FIND");
 }
 
 function TEMPLATE__SearchResults__match()
 {
+//     printf("FIXMENM TEMPLATE__SearchResults__match()");
     return  domFind("match__SearchResults__FIND") ||
             domFind("itemStart__SearchResults__FIND");
 }
 
 function TEMPLATE__ItemPage__match()
 {
+//     printf("FIXMENM TEMPLATE__ItemPage__match()");
     return  domFind("match__ItemPage__FIND") ||
             domFind("description_html__ItemPage__FIND");
 }
