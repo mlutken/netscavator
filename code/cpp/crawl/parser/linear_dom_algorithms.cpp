@@ -229,17 +229,16 @@ namespace crawl {
     // -----------------------
 
     void debugPrint (
-                    LinearDomIF::const_iterator const& /*itBegin*/, ///< Beginning of interval
-                    LinearDomIF::const_iterator const& /*itEnd*/, 	///< End of interval
-                    bool /*bTrimBlanks*/,
-                    bool /*bPrintNodeTypes*/ )						///< Should we print node types as well
+                    LinearDomIF::const_iterator const& itBegin, ///< Beginning of interval
+                    LinearDomIF::const_iterator const& itEnd, 	///< End of interval
+                    bool bTrimBlanks,
+                    bool bPrintNodeTypes )						///< Should we print node types as well
     {
-
-        printf("TODO: Implement dom debugPrint with printf\n");
-        //	for ( LinearDomIF::const_iterator it = itBegin; it != itEnd; ++it	) {
-        //		LinearDomIF::printNode( *it, std::cout, bTrimBlanks, bPrintNodeTypes );
-        //	}
-        //	std::cout << std::endl;
+//        std::cerr << "TODO: Implement dom debugPrint with printf\n";
+        for ( LinearDomIF::const_iterator it = itBegin; it != itEnd; ++it	) {
+            LinearDomIF::printNode( it->node(), std::cerr, bTrimBlanks, bPrintNodeTypes );
+        }
+        std::cerr << "\n";
     }
 
     std::string getDebugPrintString(
