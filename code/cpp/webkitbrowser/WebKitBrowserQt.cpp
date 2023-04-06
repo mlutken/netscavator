@@ -114,28 +114,28 @@ static Qt::Key keyStringToKey(const std::string& key)
 // https://stackoverflow.com/questions/6157929/how-to-simulate-a-mouse-click-using-javascript
 static const auto webChannelInitialize = QStringLiteral (R"<<<(
 
-function nodeClick(xpath)
+function netscavatorNodeClick(xpath)
 {
-    let elem1 = elementFromXPath(xpath);
-    simulateMouseEvent(elem1, "mouseover");
-    simulateMouseEvent(elem1, "click");
+    let elem1 = netscavatorElementFromXPath(xpath);
+    netscavatorSimulateMouseEvent(elem1, "mouseover");
+    netscavatorSimulateMouseEvent(elem1, "click");
 }
 
-function inputSet(xpath, input)
+function netscavatorInputSet(xpath, input)
 {
-    let elem1 = elementFromXPath(xpath);
+    let elem1 = netscavatorElementFromXPath(xpath);
     elem1.value = input;
 }
 
 
-function simulateMouseEvent(element, eventName)
+function netscavatorSimulateMouseEvent(element, eventName)
 {
-    var options = extend(defaultOptions, arguments[2] || {});
+    var options = netscavatorExtendObject(netscavatorDefaultOptions, arguments[2] || {});
     var oEvent, eventType = null;
 
-    for (var name in eventMatchers)
+    for (var name in netscavatorEventMatchers)
     {
-        if (eventMatchers[name].test(eventName)) { eventType = name; break; }
+        if (netscavatorEventMatchers[name].test(eventName)) { eventType = name; break; }
     }
 
     if (!eventType)
@@ -161,23 +161,23 @@ function simulateMouseEvent(element, eventName)
         options.clientX = options.pointerX;
         options.clientY = options.pointerY;
         var evt = document.createEventObject();
-        oEvent = extend(evt, options);
+        oEvent = netscavatorExtendObject(evt, options);
         element.fireEvent('on' + eventName, oEvent);
     }
     return element;
 }
 
-function extend(destination, source) {
+function netscavatorExtendObject(destination, source) {
     for (var property in source)
       destination[property] = source[property];
     return destination;
 }
 
-var eventMatchers = {
+var netscavatorEventMatchers = {
     'HTMLEvents': /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
     'MouseEvents': /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/
 }
-var defaultOptions = {
+var netscavatorDefaultOptions = {
     pointerX: 0,
     pointerY: 0,
     button: 0,
@@ -189,13 +189,13 @@ var defaultOptions = {
     cancelable: true
 }
 
-function nodeClickSimple(xpath)
+function netscavatorNodeClickSimple(xpath)
 {
-    let elem1 = elementFromXPath(xpath);
+    let elem1 = netscavatorElementFromXPath(xpath);
     elem1.click();
 }
 
-function elementFromXPath(xpath) {
+function netscavatorElementFromXPath(xpath) {
     let elem = document.evaluate(
       xpath,
       document,
@@ -212,13 +212,13 @@ new QWebChannel(qt.webChannelTransport, function(channel)
     channel.objects.webChannelBridge.inputSet.connect(function() {
         let xpath = arguments[0];
         let input = arguments[1];
-        inputSet(xpath, input);
+        netscavatorInputSet(xpath, input);
         channel.objects.webChannelBridge.browserToCpp(input, 34);
     });
 
     channel.objects.webChannelBridge.nodeClick.connect(function() {
         let xpath = arguments[0];
-        nodeClick(xpath);
+        netscavatorNodeClick(xpath);
         channel.objects.webChannelBridge.browserToCpp(xpath, 33);
     });
 
@@ -226,13 +226,13 @@ new QWebChannel(qt.webChannelTransport, function(channel)
         // This callback will be invoked whenever the signal is emitted on the C++/QML side.
         let xpathList = arguments[0];
         let clearCurrentlyMarked = arguments[1];
-        markElements(xpathList, clearCurrentlyMarked);
+        netscavatorMarkElements(xpathList, clearCurrentlyMarked);
         ///channel.objects.webChannelBridge.browserToCpp(xpathList, 33);
     });
 
     channel.objects.webChannelBridge.hoverPosition.connect(function() {
         let xpath = arguments[0];
-        hoverElement(xpath);
+        netscavatorHoverElement(xpath);
     });
 
     channel.objects.webChannelBridge.cppToBrowser.connect(function() {
@@ -253,7 +253,7 @@ new QWebChannel(qt.webChannelTransport, function(channel)
 static const auto creatorJavascript = QStringLiteral (R"<<<(
 
 
-function indexOfChildNode(parentNode, childNode)
+function netscavatorIndexOfChildNode(parentNode, childNode)
 {
     if (parentNode === undefined || parentNode === null) {
         return -1;
@@ -292,7 +292,7 @@ function netscavatorXPathFromElement(treeNode)
     while (n) {
         if (n.nodeType == 1) { // is tag
             var tagName = n.localName;
-            var index = indexOfChildNode(n.parentNode, n);
+            var index = netscavatorIndexOfChildNode(n.parentNode, n);
             if (index == 0) {
                 xp.unshift(tagName);
             }
@@ -312,14 +312,14 @@ function netcreatorMouseClick(event, element) {
         let xpath = netscavatorXPathFromElement(element);
         event.cancelBubble = true;
         let clearCurrentlyMarked = false;
-        markElements(xpath, clearCurrentlyMarked);
+        netscavatorMarkElements(xpath, clearCurrentlyMarked);
         window.webChannelBridge.jsDomPosSelectedSlot(xpath, element.innerText);
     }
     else if (event.altKey) {
         let xpath = netscavatorXPathFromElement(element);
         event.cancelBubble = true;
         let clearCurrentlyMarked = true;
-        markElements(xpath, clearCurrentlyMarked);
+        netscavatorMarkElements(xpath, clearCurrentlyMarked);
         window.webChannelBridge.jsDomPosSelectedSlot(xpath, element.innerText);
     }
 };
@@ -327,7 +327,7 @@ function netcreatorMouseClick(event, element) {
 function netcreatorMouseHover(event, element) {
     let xpath = netscavatorXPathFromElement(element);
     event.cancelBubble = true;
-    hoverElement(element);
+    netscavatorHoverElement(element);
     window.webChannelBridge.jsDomPosHoverSlot(xpath, element.innerText);
 };
 
@@ -345,7 +345,7 @@ function netcreatorAddOnClickToAllElements() {
     }
 }
 
-function clearMarkedElements() {
+function netscavatorClearMarkedElements() {
     for (let i = 0; i < netscavator.markedElements.length; i++) {
         let elem = netscavator.markedElements[i][0];
         let color = netscavator.markedElements[i][1];
@@ -354,7 +354,7 @@ function clearMarkedElements() {
     netscavator.markedElements = [];
 }
 
-function clearHoverElements() {
+function netscavatorClearHoverElements() {
     for (let i = 0; i < netscavator.hoverElements.length; i++) {
         let elem = netscavator.hoverElements[i][0];
         let border = netscavator.hoverElements[i][1];
@@ -364,25 +364,25 @@ function clearHoverElements() {
 }
 
 
-function markElements(xpathList, clearCurrentlyMarked) {
+function netscavatorMarkElements(xpathList, clearCurrentlyMarked) {
     if (clearCurrentlyMarked) {
-        clearMarkedElements();
+        netscavatorClearMarkedElements();
     }
     let xpaths = xpathList.split(',');
     for (let i = 0; i < xpaths.length; i++) {
-        markElement(xpaths[i]);
+        netscavatorMarkElement(xpaths[i]);
     }
 }
 
-function markElement(xpath) {
-    let elem = elementFromXPath(xpath);
+function netscavatorMarkElement(xpath) {
+    let elem = netscavatorElementFromXPath(xpath);
     if (elem == undefined) { return; }
     netscavator.markedElements.push([elem, elem.style.backgroundColor]);
     elem.style.backgroundColor = 'yellow';
 }
 
-function hoverElement(elem) {
-    clearHoverElements();
+function netscavatorHoverElement(elem) {
+    netscavatorClearHoverElements();
     if (elem == undefined) { return; }
     netscavator.hoverElements.push([elem, elem.style.border]);
     elem.style.border = '1px solid red';
@@ -477,7 +477,6 @@ void WebKitBrowserQt::do_initDerived()
 
 void WebKitBrowserQt::do_setWebView(BrowserViewIF* browserView)
 {
-    std::cerr << "FIXMENMWebKitBrowserQt::do_setWebView()\n";
     // TODO: FIXME: Assigning twice connect ??
 
     bool firstAssign = true;
@@ -562,7 +561,6 @@ bool WebKitBrowserQt::do_loadUri ( const std::string& sUri)
         url.setScheme("http");
     }
     m_pWebView->load( url );
-//    m_pWebView->load( QUrl("https://www.qt.io") ); //FIXMENM
     return true;
 }
 
@@ -977,7 +975,7 @@ void WebKitBrowserQt::slotLoadFinished ( bool bOk )
         m_pWebView->page()->toHtml([this](const QString& html) {
             m_pageHtml = html.toUtf8().constData();
             m_delayPageLoadedSignalTimer->start(delayPageLoadedSignalTimeInMs());
-        });    // FIXMENM
+        });
     }
 
 }
