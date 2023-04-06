@@ -20,7 +20,7 @@ QUrl commandLineUrlArgument()
         if (!arg.startsWith(QLatin1Char('-')))
             return QUrl::fromUserInput(arg);
     }
-    return QUrl(QStringLiteral("https://www.qt.io"));
+    return QUrl(QStringLiteral("https://cykelshoppen.dk/"));
 }
 
 int main(int argc, char *argv[])
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 //QCoreApplication::applicationDirPath() + QDir::separator() + "qt.conf"
     QApplication app(argc, argv);
 
-    cerr << "QCoreApplication::applicationDirPath(): '" << QCoreApplication::applicationDirPath().toUtf8().constData() << "'\n";
+    cerr << "QCoreApplication::applicatkionDirPath(): '" << QCoreApplication::applicationDirPath().toUtf8().constData() << "'\n";
     cerr << "QLibraryInfo::PrefixPath: '" << QLibraryInfo::location(QLibraryInfo::PrefixPath).toUtf8().constData() << "'\n";
     cerr << "QLibraryInfo::DocumentationPath: '" << QLibraryInfo::location(QLibraryInfo::DocumentationPath).toUtf8().constData() << "'\n";
     cerr << "QLibraryInfo::HeadersPath: '" << QLibraryInfo::location(QLibraryInfo::HeadersPath).toUtf8().constData() << "'\n";

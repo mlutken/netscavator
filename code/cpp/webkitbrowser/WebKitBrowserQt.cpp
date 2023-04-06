@@ -308,6 +308,8 @@ function netscavatorXPathFromElement(treeNode)
 
 // https://www.w3schools.com/jsreF/obj_event.asp
 function netcreatorMouseClick(event, element) {
+    if (!element) { return; }
+
     if (event.ctrlKey) {
         let xpath = netscavatorXPathFromElement(element);
         event.cancelBubble = true;
@@ -325,6 +327,7 @@ function netcreatorMouseClick(event, element) {
 };
 
 function netcreatorMouseHover(event, element) {
+    if (!element) { return; }
     let xpath = netscavatorXPathFromElement(element);
     event.cancelBubble = true;
     netscavatorHoverElement(element);
@@ -332,16 +335,35 @@ function netcreatorMouseHover(event, element) {
 };
 
 
+function netcreatorAppendMouseClick(element) {
+    if (!element) { return; }
+    let currentOnClick = element.onclick;
+    element.onclick = function() {
+        if (currentOnClick) {
+            currentOnClick();
+        }
+        netcreatorMouseClick(event, this);
+    }
+}
+
+function netcreatorAppendMouseHover(element) {
+    if (!element) { return; }
+    let currentOnHover = element.onmouseover;
+    element.onmouseover = function() {
+        if (currentOnHover) {
+            currentOnHover();
+        }
+        netcreatorMouseHover(event, this);
+    }
+}
+
 function netcreatorAddOnClickToAllElements() {
     let elements = document.getElementsByTagName("*");
     for (var i=0; i < elements.length; i++)
     {
-        elements[i].onclick = function(event){
-            netcreatorMouseClick(event, this);
-        }
-        elements[i].onmouseover = function(event){
-            netcreatorMouseHover(event, this);
-        }
+        let element = elements[i];
+        netcreatorAppendMouseClick(element);
+        netcreatorAppendMouseHover(element);
     }
 }
 
@@ -365,6 +387,7 @@ function netscavatorClearHoverElements() {
 
 
 function netscavatorMarkElements(xpathList, clearCurrentlyMarked) {
+    if (!xpathList) { return; }
     if (clearCurrentlyMarked) {
         netscavatorClearMarkedElements();
     }
