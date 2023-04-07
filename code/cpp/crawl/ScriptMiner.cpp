@@ -6041,6 +6041,13 @@ void ScriptMiner::slotPageLoaded(
     crawl::WebBrowserIF&  	///< Pointer to MozBrowser
 )
 {
+    if (webBrowser()->requestedUri().empty() ||  webBrowser()->currentUri() == "about:blank") {
+        std::cerr << "INFO: IGNORE LOAD OF empty URL\n";
+        return; // Avoid premature script end since the loading of and initial empty URL ("" / "about:blank")
+                // will happen before the actual first script start URL in release build for
+                // netscavator (crawler) in webkit mode
+    }
+
     using namespace std;
     if (m_showNetworkActivity) {
         cerr << "Network: Page Loaded Event\n";
