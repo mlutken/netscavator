@@ -54,6 +54,7 @@ private:
     // --- PRIVATE: Url functions ---
     // ------------------------------
     std::string 	do_currentUriGet        () const override;
+    std::string 	do_requestedUriGet      () const override;
     bool            do_loadUri              ( const std::string& sUri ) override;
     void 			do_cancelPageLoad       () override;
     //        std::string     do_currentLoadingUrl() const override;

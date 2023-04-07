@@ -116,6 +116,11 @@ std::string SimpleBrowser::do_currentUriGet () const
     return m_currentUri;    // TODO: Decoding ??
 }
 
+string SimpleBrowser::do_requestedUriGet() const
+{
+    return m_currentLoadingUri;
+}
+
 bool SimpleBrowser::do_loadUri ( const std::string& sUri)
 {
     m_currentLoadingUri = sUri;

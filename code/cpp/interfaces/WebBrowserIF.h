@@ -76,6 +76,7 @@ namespace crawl {
         // ---------------------
         QUrl            currentUrl              () const;
         std::string 	currentUri              () const                    { return do_currentUriGet(); }
+        std::string 	requestedUri            () const                    { return do_requestedUriGet(); }
         bool 			loadUri                 (const std::string& sUri);
         bool 			loadUrl                 (const QUrl& url);
         void 			cancelPageLoad          ()                          { do_cancelPageLoad();  }
@@ -222,6 +223,7 @@ namespace crawl {
         // --- PRIVATE: Url functions ---
         // ------------------------------
         virtual std::string     do_currentUriGet            () const = 0;
+        virtual std::string     do_requestedUriGet          () const = 0;
         virtual bool 			do_loadUri                  (const std::string& sUri) = 0;
         virtual void 			do_cancelPageLoad           () = 0;
 

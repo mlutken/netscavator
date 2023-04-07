@@ -566,6 +566,12 @@ std::string WebKitBrowserQt::do_currentUriGet () const
     return m_pWebView->url().toEncoded().data();
 }
 
+string WebKitBrowserQt::do_requestedUriGet() const
+{
+    if (!m_pWebView) { return ""; }
+    return toString(m_pWebView->page()->requestedUrl().toString());
+}
+
 bool WebKitBrowserQt::do_loadUri ( const std::string& sUri)
 {
     if (!m_pWebView) {
@@ -971,8 +977,7 @@ nodeClick();
 // ----------------------------------------
 void WebKitBrowserQt::slotLoadStarted ()
 {
-    std::string sUrl = ""; // TODO: Get the Url about to be loaded
-    bool bAbortOpen = signalsManager()->signalOnLoadUri( *this,  sUrl);
+    const bool bAbortOpen = signalsManager()->signalOnLoadUri( *this,  requestedUri());
 }
 
 void WebKitBrowserQt::slotLoadProgress  (int iProgress)
