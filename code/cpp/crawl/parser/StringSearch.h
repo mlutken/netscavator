@@ -103,6 +103,7 @@ public:
 	std::string 			setValueRegex			( std::string const& sRegex )	;
 	std::string const& 		getValue				() const						;
 	void					setValue				( std::string const& sValue )	;
+    void                    valueWasSetExplicitlyClear();
 	void					setValueToPageUrl		()								;
 	void					setValueToSiteUrl		()								;
 	std::string 			getParseMatch			( int iMatchNumber ) const		;
@@ -137,12 +138,12 @@ public:
 	
 	/// This function is only intended for scriptcrawl modifyValue functions, since if we use a StringSearch member
 	/// for this we would also need here to know the lookup map where the manipulation functions are stored 
-	// in order for us to be able to prefer a user defined function over the built-ins. Since this 
+    /// in order for us to be able to prefer a user defined function over the built-ins. Since this
 	/// map (as well as the functionality to call PHP functions) is in scriptcrawl project , which depends on 
-	/// this one, it seems better for now not to rip everthig apart or 
+    /// this one, it seems better for now not to rip everthing apart or
 	/// introducing cyclic dependencies :~(
 	/// \note This function is is }not} equivalent to setValue()
-	void					currentValueSetDirect	( const std::string& sNewCurrentVal )	{  m_sCurrentValue = sNewCurrentVal;	}
+    void					currentValueSetDirect	( const std::string& sNewCurrentVal );
 	const std::string&		currentValue			() const 								{	return m_sCurrentValue;				}
 	
     // ----------------------
@@ -241,6 +242,7 @@ private:
     bool                                    m_bDoContinueMode;  // True if continue scanning has been requested from the command line (-c). Only used in crawler, never in creator
     std::string                             m_autoListSuffix = "_list";
     OutputListsT                            m_outputLists;  // For each output field name that is a list we keep a vector of the elements, which is written to output when we pop the current context.
+    bool                                    m_valueWasSetExplicitlyFromScript = false;
 };
 
 // -------------------------------

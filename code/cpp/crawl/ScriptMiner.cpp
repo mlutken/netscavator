@@ -1955,6 +1955,13 @@ int ScriptMiner::domFindNextImpl (
     else {
         domPosSet(domPosFound); // Ensure we get the current dom pos updated. Also in case a useed defined function "forgets"
     }
+    // In the rare case that user has explicitly used setValue() in a domFind function to force a specific value, then
+    // make sure to reset this so that next call to domFindNextImpl() will allow the normal Crawler::domNodeToCurrentValue()
+    // to call StringSearch::newSearchString() and actually set the value to that of the current dom position and not
+    // use the user explicitly set anymore.
+    // To sum up: The idea is that if a domFind() PHP function uses setValue it must only affect that current domFind and
+    // not the next one(s).
+    stringSearch().valueWasSetExplicitlyClear();
     return domPosFound;
 }
 

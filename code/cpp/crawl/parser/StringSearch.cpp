@@ -146,12 +146,16 @@ void StringSearch::reset ()
 // --- Parser Functions ---
 // ------------------------
 /** Initiate a new parse. */
-void
-StringSearch::newSearchString ( 
+void StringSearch::newSearchString (
         std::string const& sSearchIn, 		///< [in] String to search in
         std::string const& sFieldName 		///< [in] Database field name of new value
         )
 {
+    // Set from setValue() in turn set explicitly from user via ScriptMiner::valueSet()
+    // cleared always at the end of ScriptMiner::domFindNextImpl(), using valueWasSetExplicitlyClear()
+    if (m_valueWasSetExplicitlyFromScript) {
+        return;
+    }
     m_sSearchIn = sSearchIn;
     newSearch( sFieldName );
     resetMarkersBeginEnd();	// Also assigns current value from m_sSearchIn
@@ -577,7 +581,13 @@ void StringSearch::setValue(
         )
 {
     m_sSearchIn		= sValue;
+    m_valueWasSetExplicitlyFromScript = true;
     resetMarkersBeginEnd();	// Also assigns current value from m_sSearchIn
+}
+
+void StringSearch::valueWasSetExplicitlyClear()
+{
+    m_valueWasSetExplicitlyFromScript = false;
 }
 
 
@@ -756,6 +766,10 @@ void StringSearch::outputValueDirectUnit(
     else {
         dwOutputValueDirect( sFieldName, sValue );
     }
+}
+
+void StringSearch::currentValueSetDirect(const std::string& sNewCurrentVal)	{
+    m_sCurrentValue = sNewCurrentVal;
 }
 
 
