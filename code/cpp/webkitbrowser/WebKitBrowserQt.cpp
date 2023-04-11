@@ -213,13 +213,13 @@ new QWebChannel(qt.webChannelTransport, function(channel)
         let xpath = arguments[0];
         let input = arguments[1];
         netscavatorInputSet(xpath, input);
-        channel.objects.webChannelBridge.browserToCpp(input, 34);
+        ///channel.objects.webChannelBridge.browserToCpp(input, 34);
     });
 
     channel.objects.webChannelBridge.nodeClick.connect(function() {
         let xpath = arguments[0];
         netscavatorNodeClick(xpath);
-        channel.objects.webChannelBridge.browserToCpp(xpath, 33);
+        ///channel.objects.webChannelBridge.browserToCpp(xpath, 33);
     });
 
     channel.objects.webChannelBridge.markPositions.connect(function() {
@@ -619,14 +619,12 @@ string_view WebKitBrowserQt::do_html() const
 // https://stackoverflow.com/questions/6157929/how-to-simulate-a-mouse-click-using-javascript
 bool WebKitBrowserQt::do_nodeClick(const std::string& xpath)
 {
-    std::cerr << "TODO WebKitBrowserQt::do_nodeClick\n";
     m_webChannelBridge.nodeClick(toQString(xpath));
     return true;
 }
 
 bool WebKitBrowserQt::do_inputSet(const std::string& xpath, const std::string& input)
 {
-    std::cerr << "TODO WebKitBrowserQt::do_nodeClick\n";
     m_webChannelBridge.inputSet(toQString(xpath), toQString(input));
     return true;
 }
