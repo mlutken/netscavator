@@ -1944,6 +1944,7 @@ int ScriptMiner::domFindNextImpl (
     if (m_showDomFindCalls) {
         std::cerr << "DBG: domFindNext('" << sSequence << "', '" << sCompareFun << "')"
                   << "; Pos (start, found) => [" <<  domPosStart << ", " << domPosFound << "]"
+                  << "; value: " <<  nodeValue()
                   << "\n";
     }
     if ( (iCount >= 0 && (domPosFound <= domPosStart)) ||
