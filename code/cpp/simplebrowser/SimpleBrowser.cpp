@@ -216,10 +216,8 @@ bool SimpleBrowser::do_nodeClick(const std::string& xpath)
     }
 
     if (!boost::algorithm::starts_with(href, schemeHost)) {
-        href = schemeHost + "/" + href;
-        boost::algorithm::replace_all(href, "//", "/");
+        href = schemeHost + boost::algorithm::replace_all_copy("/" + href, "//", "/");
     }
-
     loadUri(href);
     return true;
 }
