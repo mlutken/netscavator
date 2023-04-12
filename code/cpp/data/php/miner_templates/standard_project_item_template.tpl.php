@@ -206,9 +206,13 @@ function TEMPLATE__SearchResults__match()
 
 function TEMPLATE__ItemPage__match()
 {
-//     printf("FIXMENM TEMPLATE__ItemPage__match()");
-    return  domFind("match__ItemPage__FIND") ||
-            domFind("description_html__ItemPage__FIND");
+    return  domFindPos("match__ItemPage__FIND") ||
+            (
+                domFindPos("item_price__ItemPage__FIND") &&
+                domFindPos("item_title__ItemPage__FIND") &&
+                domFindPos("description_html__ItemPage__FIND")
+            )
+            ;
 }
 
 function TEMPLATE__DefaultHandler__match()
