@@ -22,7 +22,7 @@ MainToolBarUI::MainToolBarUI(const QString& title, GuiActionsMgr* pAMgr, QWidget
 void MainToolBarUI::wheelEvent(QWheelEvent* event)
 {
     if (event->modifiers() && Qt::ControlModifier ) {
-        int zoomDelta = cpaf::math::clamp_copy(event->pixelDelta().manhattanLength(), -2, 2);
+        const int zoomDelta = cpaf::math::clamp_copy(event->angleDelta().y(), -2, 2);
         int iconSize = m_guiGlobals->mainToolBarIconSize();
         iconSize = iconSize + zoomDelta;
         m_guiGlobals->mainToolBarIconSizeSet(iconSize);

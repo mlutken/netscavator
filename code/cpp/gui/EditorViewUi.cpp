@@ -244,7 +244,7 @@ void EditorViewUi::findTextNextSlot(const QString& /*text*/)
 void EditorViewUi::wheelEvent(QWheelEvent* event)
 {
     if (event->modifiers() && Qt::ControlModifier ) {
-        int zoomDelta = cpaf::math::clamp_copy(event->pixelDelta().manhattanLength(), -1, 1);
+        const int zoomDelta = cpaf::math::clamp_copy(event->angleDelta().y(), -1, 1);
         m_guiGlobals->mainEditorZoomLevelSet(m_guiGlobals->mainEditorZoomLevel() + zoomDelta);
         zoomTo(m_guiGlobals->mainEditorZoomLevel());
         event->accept();

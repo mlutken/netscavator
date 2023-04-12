@@ -74,7 +74,7 @@ QString PhpQuickUi::phpString() const
 void PhpQuickUi::wheelEvent(QWheelEvent* event)
 {
     if (event->modifiers() && Qt::ControlModifier ) {
-        int zoomDelta = cpaf::math::clamp_copy(event->pixelDelta().manhattanLength(), -1, 1);
+        const int zoomDelta = cpaf::math::clamp_copy(event->angleDelta().y(), -1, 1);
         event->accept();
         m_guiGlobals->phpQuickZoomLevelSet(m_guiGlobals->phpQuickZoomLevel() + zoomDelta);
         m_pPhpEdit->zoomTo(m_guiGlobals->phpQuickZoomLevel());

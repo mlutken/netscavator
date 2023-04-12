@@ -33,7 +33,7 @@ void DebugToolBarUI::matchLabelTextSet(const QString& text)
 void DebugToolBarUI::wheelEvent(QWheelEvent* event)
 {
     if (event->modifiers() && Qt::ControlModifier ) {
-        int zoomDelta = cpaf::math::clamp_copy(event->pixelDelta().manhattanLength(), -2, 2);
+        const int zoomDelta = cpaf::math::clamp_copy(event->angleDelta().y(), -1, 1);
         int iconSize = m_guiGlobals->debugToolBarIconSize();
         iconSize = iconSize + zoomDelta;
         m_guiGlobals->debugToolBarIconSizeSet(iconSize);

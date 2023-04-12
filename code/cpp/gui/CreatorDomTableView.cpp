@@ -9,6 +9,7 @@
 #include <QHeaderView>
 #include <QFontMetrics>
 
+#include <math/base/utils.hpp>
 #include <interfaces/Globals.h>
 #include <GuiGlobals.h>
 #include "CreatorLinearDomTableModel.h"
@@ -118,9 +119,8 @@ void CreatorDomTableView::cellClickedSlot(const QModelIndex& index)
 void CreatorDomTableView::wheelEvent(QWheelEvent* event)
 {
     if (event->modifiers() & Qt::ControlModifier ) {
-//        const int deltaPointSize = event->delta() < 0 ? -1 : 1;
-        const int deltaPointSize = event->pixelDelta().manhattanLength() < 0 ? -1 : 1;
-        fontPointSizeChange(deltaPointSize);
+        const int zoomDelta = cpaf::math::clamp_copy(event->angleDelta().y(), -1, 1);
+        fontPointSizeChange(zoomDelta);
         event->accept();
         return;
     }
