@@ -11,6 +11,7 @@ class QProgressBar;
 
 // https://www.qt.io/blog/qt-webengine-in-qt-6
 // https://doc.qt.io/qt-6/qtwebenginewidgets-module.html
+// https://stackoverflow.com/questions/57011407/qt-event-propagation-in-qwebengineview
 
 class WebkitWebView : public QWebEngineView
 {
