@@ -259,10 +259,31 @@ function TEMPLATE__SearchStep__navigate()
 // -----------------------------------
 // --- __SearchResults__ functions ---
 // -----------------------------------
+function TEMPLATE__SearchResults__addUrl()
+{
+	if (domFind("url__SearchResults__FIND")) {
+		$url = valueGet("ensureAbsoluteUrl");
+		urlQueueAppendUnique($url);
+        clog(CrawlerLog::PROGRESS, "TEMPLATE__SearchResults__addUrl: $url\n");
+	}
+}
 
 function TEMPLATE__SearchResults__mine()
 {
     global $g_curPageHashID, $g_prevPageHashID;   // used to detect end of searchlistings in case the last page has a next button, but does not load a new page, but just the last again. CdonDk has this problem
+
+    // Check for a quick SearchResults where we simply add URLs to the queue
+    if (domFind("urlsContainer__SearchResults__FIND")) {
+        clog(CrawlerLog::PROGRESS, "urlsContainer__SearchResults__FIND: Only add urls from SearchResults.\n");
+       	$urlQueueSizeBefore = urlQueueSize();
+    	loopAllChildren('urlsContainer__SearchResults__FIND', 'TEMPLATE__SearchResults__addUrl');
+
+       	$urlsAddedCount = urlQueueSize() - $urlQueueSizeBefore;
+        clog(CrawlerLog::PROGRESS, "urlsContainer__SearchResults__FIND: Added {$urlsAddedCount} URLs.\n");
+
+        return;
+    }
+
 
     $g_prevPageHashID = $g_curPageHashID;
     $g_curPageHashID = "";
@@ -321,9 +342,7 @@ function TEMPLATE__SearchResults__getItem()
         return;
     }
 
-    outputValueFind ( "item_family__SearchResults__FIND", "item_family", "item_family__SearchResults__MOD");
     outputValueFind ( "item_type__SearchResults__FIND", "item_type", "item_type__SearchResults__MOD");
-    outputValueFind ( "item_subtype__SearchResults__FIND", "item_subtype", "item_subtype__SearchResults__MOD");
 
     // Get all item data requested for a search results (listing) page
     outputValuesFindFromList ('SearchResults', 'TEMPLATE__SearchResults__outputNames');
