@@ -17,10 +17,34 @@ function parseYesNo($text, $language_code = '')
 			'yes' => 'y',
 			'no'  => 'n'
 		],
-		'da' => [
-			'ja'  => 'y',
-			'nej' => 'n'
-		]
+        'da' => [
+            'ja'  => 'y',
+            'nej' => 'n'
+        ],
+        'de' => [
+            'ja'  => 'y',
+            'nein' => 'n'
+        ],
+        'fr' => [
+            'oui'  => 'y',
+            'non' => 'n'
+        ],
+        'nl' => [
+            'ja'  => 'y',
+            'nee' => 'n'
+        ],
+        'pl' => [
+            'tak'  => 'y',
+            'nie' => 'n'
+        ],
+        'nb' => [
+            'ja'  => 'y',
+            'nei' => 'n'
+        ],
+        'sv' => [
+            'ja'  => 'y',
+            'nej' => 'n'
+        ]
 
 	];
 
