@@ -29,7 +29,6 @@ using namespace boost::assign; // bring 'list_of()' into scope
 
 WebkitWebView::WebkitWebView(QWidget *parent)
     : QWebEngineView(parent)
-//FIXME OLD QWebView   , m_selectedElement()
 {
     m_guiGlobals = g()->gui();
     connect(this, SIGNAL(loadFinished(bool)), this, SLOT(loadFinishedSlot(bool) ) );
@@ -39,10 +38,6 @@ WebkitWebView::~WebkitWebView()
 {
 }
 
-//QWebElement WebkitWebView::selectedElement() const
-//{
-////FIXME OLD QWebView     return m_selectedElement;
-//}
 
 // ----------------------------
 // --- PROTECTED: overrides ---
@@ -105,8 +100,11 @@ void WebkitWebView::mousePressEvent(QMouseEvent* event)
 
 void WebkitWebView::wheelEvent(QWheelEvent* event)
 {
+    std::cerr << "FIXMENM WebkitWebView::wheelEvent() Seems to not be called :(!\n";
     if (event->modifiers() & Qt::ControlModifier ) {
-        setZoomFactor(zoomFactor() + (static_cast<float>(event->pixelDelta().manhattanLength()) / 1200.0f) );
+        const int zoomDelta = cpaf::math::clamp_copy(event->angleDelta().y(), -1, 1);
+        const auto zoomFac = zoomFactor() + zoomDelta;
+        setZoomFactor(zoomFac);
         m_guiGlobals->browserZoomLevelSet(zoomFactor());
         event->accept();
         return;
