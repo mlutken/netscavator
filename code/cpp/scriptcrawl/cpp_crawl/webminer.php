@@ -20,6 +20,33 @@ function contains($haystack, $needle, $case = true)
     return stripos($haystack, $needle, 0) !== false;
 }
 
+function containsAnyOf($haystack, $aNeedles)
+{
+    $bFoundOne = false;
+    foreach ($aNeedles as $needle) {
+        $pos = strpos($haystack, $needle);
+        if ($pos !== false) {
+            $bFoundOne = true;
+            break;
+        }
+    }
+    return $bFoundOne;
+}
+
+function icontainsAnyOf($haystack, $aNeedles)
+{
+    $bFoundOne = false;
+    foreach ($aNeedles as $needle) {
+        $pos = stripos($haystack, $needle);
+        if ($pos !== false) {
+            $bFoundOne = true;
+            break;
+        }
+    }
+    return $bFoundOne;
+}
+
+
 function startsWith($haystack, $needle, $case = true)
 {
     if ($case)
