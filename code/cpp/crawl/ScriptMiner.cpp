@@ -1922,7 +1922,7 @@ int ScriptMiner::domFindNextHelper(
         if (endsWith(sSequence, "__FIND")) {
             return 0;
         }
-        pDomSeq = boost::shared_ptr<DomSeq>( new DomSeq( 1, sSequence, sCompareFun, iPostMatchSteps, crawl::DomNodeTypes::ALL_NODE_TYPES, "," ) );
+        pDomSeq = boost::shared_ptr<DomSeq>( new DomSeq( iCount, sSequence, sCompareFun, iPostMatchSteps, crawl::DomNodeTypes::ALL_NODE_TYPES, "," ) );
         return domSeqFindNextParams( iCount, *pDomSeq, sArgs, iNodeTypes );
     }
 }
