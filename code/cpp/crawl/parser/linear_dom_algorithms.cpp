@@ -150,19 +150,22 @@ namespace crawl {
     {
         if ( seq.subSequences().empty() ) return itEnd;
         LinearDomIF::const_iterator itFoundPos;
-        //    printf("ML: findPredStopAt('%s')  subranges count: %d\n", seq.sequenceGet().c_str(), (int)seq.subSequences().size() );
-        //    DomSeq::SubSequenceVecT::const_iterator itSubSeqs = seq.subSequences().begin();
-        //    for (   ; itSubSeqs != seq.subSequences().end();  ++itSubSeqs ){
-        //        DomSeq::StringComparePairVecT::const_iterator itSeqBeg = itSubSeqs->first;
-        //        DomSeq::StringComparePairVecT::const_iterator itSeqEnd = itSubSeqs->second;
-        //        DomSeq::StringComparePairVecT::const_iterator itSeq = itSubSeqs->first;
-        //        std::cout << "ML: sub sequence: ";
-        //        for ( ; itSeq != itSeqEnd; ++itSeq ) {
-        //            std::cout << itSeq->pattern() << ", ";
-        //        }
-        //        std::cout << std::endl;
-        //    }
 
+//        // DEBUG BEGIN
+//        std::cerr << "DEBUG: findPredStopAt('" <<seq.sequenceGet() << "')"
+//                  << "subranges count: " << (int)seq.subSequences().size()
+//                  << "\n";
+//        DomSeq::SubSequenceVecT::const_iterator itSubSeqs = seq.subSequences().begin();
+//        for (   ; itSubSeqs != seq.subSequences().end();  ++itSubSeqs ){
+//            DomSeq::StringComparePairVecT::const_iterator itSeqEnd = itSubSeqs->second;
+//            DomSeq::StringComparePairVecT::const_iterator itSeq = itSubSeqs->first;
+//            std::cerr << "DEBUG: sub sequence: ";
+//            for ( ; itSeq != itSeqEnd; ++itSeq ) {
+//                std::cerr << itSeq->pattern() << ", ";
+//            }
+//            std::cerr << "\n";
+//        }
+//        // DEBUG END
 
         DomSeq::SubSequenceVecT::const_iterator itSubSeqs = seq.subSequences().begin();
         DomSeq::StringComparePairVecT::const_iterator itSeqBeg = itSubSeqs->first;
