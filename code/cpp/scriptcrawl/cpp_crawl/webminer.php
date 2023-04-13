@@ -478,7 +478,7 @@ function getSimpleHtmlText__MOD()
 //		printf ("FIXMNM: dompos [%d] [%d]: %s\n<br>" , domPos(), nodeLevel(), valueGet() );
 
 		if (nodeType() == TEXT_NODE) {
-			$text .= valueGet();
+            $text .= valueGet() . ' ';
 		}
 		else if (in_array(valueGet(), $g_allAllowedTags, true)) {
 			$text .= '<' . valueGet() . '>';
