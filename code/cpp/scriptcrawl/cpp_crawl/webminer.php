@@ -451,7 +451,7 @@ function getSimpleHtmlToPos($endHtmlPos)
 //      printf ("FIXMNM: dompos [%d] [%d]: %s\n<br>" , domPos(), valueGet() );
 
         if (nodeType() == TEXT_NODE) {
-            $text .= valueGet();
+            $text .= valueGet() . ' ';
         }
         else if (in_array(valueGet(), $g_allAllowedTags, true)) {
             $text .= '<' . valueGet() . '>';
