@@ -201,6 +201,7 @@ function TEMPLATE__SearchResults__match()
 {
 //     printf("FIXMENM TEMPLATE__SearchResults__match()");
     return  domFind("match__SearchResults__FIND") ||
+            domFind("urlsContainer__SearchResults__FIND") ||
             domFind("itemStart__SearchResults__FIND");
 }
 
@@ -270,6 +271,7 @@ function TEMPLATE__SearchResults__addUrl()
 
 function TEMPLATE__SearchResults__mine()
 {
+    clog(CrawlerLog::PROGRESS, "TEMPLATE__SearchResults__mine()\n");
     global $g_curPageHashID, $g_prevPageHashID;   // used to detect end of searchlistings in case the last page has a next button, but does not load a new page, but just the last again. CdonDk has this problem
 
     // Check for a quick SearchResults where we simply add URLs to the queue
