@@ -28,6 +28,7 @@ public:
 
     static bool isGzCompressed  (const QString& filename);
     static QString saveFileName (const QUrl& url);
+    static QString baseName     (const QUrl& url);
     static bool saveToDisk      (const QString& filename, QIODevice* data);
 
     QtHttpDownloader            ();

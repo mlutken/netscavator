@@ -33,8 +33,9 @@ QByteArray gUncompress(const QByteArray& data)
     strm.next_in = reinterpret_cast<Bytef*>(non_const_data);
 
     ret = inflateInit2(&strm, 15 +  32); // gzip decoding
-    if (ret != Z_OK)
+    if (ret != Z_OK) {
         return QByteArray();
+    }
 
     // run inflate()
     do {

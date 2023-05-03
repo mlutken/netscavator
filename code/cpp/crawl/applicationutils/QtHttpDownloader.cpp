@@ -35,6 +35,12 @@ QString QtHttpDownloader::saveFileName(const QUrl &url)
     return basename;
 }
 
+QString QtHttpDownloader::baseName(const QUrl& url)
+{
+    QString path = url.path();
+    return QFileInfo(path).fileName();
+}
+
 bool QtHttpDownloader::saveToDisk(const QString& filename, QIODevice* data)
 {
     QFile file(filename);
@@ -175,7 +181,7 @@ void QtHttpDownloader::handleComplete(QNetworkReply* reply)
     const QUrl url = reply->url();
     emit complete(reply, url);
     if (m_completeByteArrayCallbackMove) {
-        if (isGzCompressed(saveFileName(url))) {
+        if (isGzCompressed(baseName(url))) {
             m_replyData = crawl::gUncompress(reply->readAll());
         }
         else {
@@ -184,7 +190,7 @@ void QtHttpDownloader::handleComplete(QNetworkReply* reply)
         m_completeByteArrayCallbackMove(std::move(m_replyData), url, true);
     }
     else if (m_completeByteArrayCallback) {
-        if (isGzCompressed(saveFileName(url))) {
+        if (isGzCompressed(baseName(url))) {
             m_replyData = crawl::gUncompress(reply->readAll());
         }
         else {
