@@ -166,6 +166,10 @@ void UrlQueue::clearQueue  ()
 // ----------------------
 void UrlQueue::writeQueueToFile () const
 {
+    if (m_urlQueue.empty()) {
+        m_write_url_queue_to_disk_counter = 0;
+        return;
+    }
     if (m_write_url_queue_to_disk_counter++ % m_write_url_queue_to_disk_modulus != 0) {
         return;
     }
